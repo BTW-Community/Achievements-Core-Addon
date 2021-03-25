@@ -86,8 +86,7 @@ src/minecraft/net/minecraft/src/AABBLocalPool.java
 src/minecraft/net/minecraft/src/AABBPool.java
 src/minecraft/net/minecraft/src/AaaFCBlockTemplate.java
 src/minecraft/net/minecraft/src/AaaFCItemTemplate.java
-src/minecraft/net/minecraft/src/AchievementList.java
-src/minecraft/net/minecraft/src/AchievementMap.java
+
 src/minecraft/net/minecraft/src/ActiveRenderInfo.java
 src/minecraft/net/minecraft/src/AnvilChunkLoader.java
 src/minecraft/net/minecraft/src/AnvilChunkLoaderPending.java
