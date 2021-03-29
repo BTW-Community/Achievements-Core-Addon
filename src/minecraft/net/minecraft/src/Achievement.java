@@ -41,6 +41,16 @@ public class Achievement extends StatBase
      * achieve.
      */
     private boolean isSpecial;
+    
+    public Achievement(String par2Str, int par3, int par4, Item par5Item, Achievement par6Achievement)
+    {
+        this(0, par2Str, par3, par4, new ItemStack(par5Item), par6Achievement);
+    }
+
+    public Achievement(String par2Str, int par3, int par4, Block par5Block, Achievement par6Achievement)
+    {
+        this(0, par2Str, par3, par4, new ItemStack(par5Block), par6Achievement);
+    }
 
     public Achievement(int par1, String par2Str, int par3, int par4, Item par5Item, Achievement par6Achievement)
     {
@@ -52,32 +62,32 @@ public class Achievement extends StatBase
         this(par1, par2Str, par3, par4, new ItemStack(par5Block), par6Achievement);
     }
 
-    public Achievement(int par1, String par2Str, int par3, int par4, ItemStack par5ItemStack, Achievement par6Achievement)
+    public Achievement(int id, String name, int displayColumn, int displayRow, ItemStack par5ItemStack, Achievement par6Achievement)
     {
-        super(5242880 + par1, "achievement." + par2Str);
+        super(5242880 + AchievementTabList.counter++, "achievement." + name);
         this.theItemStack = par5ItemStack;
-        this.achievementDescription = "achievement." + par2Str + ".desc";
-        this.displayColumn = par3;
-        this.displayRow = par4;
+        this.achievementDescription = "achievement." + name + ".desc";
+        this.displayColumn = displayColumn;
+        this.displayRow = displayRow;
 
-        if (par3 < AchievementList.minDisplayColumn)
+        if (displayColumn < AchievementList.minDisplayColumn)
         {
-            AchievementList.minDisplayColumn = par3;
+            AchievementList.minDisplayColumn = displayColumn;
         }
 
-        if (par4 < AchievementList.minDisplayRow)
+        if (displayRow < AchievementList.minDisplayRow)
         {
-            AchievementList.minDisplayRow = par4;
+            AchievementList.minDisplayRow = displayRow;
         }
 
-        if (par3 > AchievementList.maxDisplayColumn)
+        if (displayColumn > AchievementList.maxDisplayColumn)
         {
-            AchievementList.maxDisplayColumn = par3;
+            AchievementList.maxDisplayColumn = displayColumn;
         }
 
-        if (par4 > AchievementList.maxDisplayRow)
+        if (displayRow > AchievementList.maxDisplayRow)
         {
-            AchievementList.maxDisplayRow = par4;
+            AchievementList.maxDisplayRow = displayRow;
         }
 
         this.parentAchievement = par6Achievement;
@@ -102,7 +112,7 @@ public class Achievement extends StatBase
         this.isSpecial = true;
         return this;
     }
-
+    
     /**
      * Adds the achievement on the internal list of registered achievements, also, it's check for duplicated id's.
      */
@@ -110,6 +120,37 @@ public class Achievement extends StatBase
     {
         super.registerStat();
         AchievementList.achievementList.add(this);
+        return this;
+    }
+    
+    /**
+     * Adds the achievement on the internal list of registered achievements, also, it's check for duplicated id's.
+     */
+    public Achievement registerAchievement(AchievementTab tab)
+    {
+        super.registerStat();
+        
+        if (displayColumn < tab.minDisplayColumn)
+        {
+            tab.minDisplayColumn = displayColumn;
+        }
+
+        if (displayRow < tab.minDisplayRow)
+        {
+            tab.minDisplayRow = displayRow;
+        }
+
+        if (displayColumn > tab.maxDisplayColumn)
+        {
+            tab.maxDisplayColumn = displayColumn;
+        }
+
+        if (displayRow > tab.maxDisplayRow)
+        {
+            tab.maxDisplayRow = displayRow;
+        }
+        
+        tab.achievementList.add(this);
         return this;
     }
 
@@ -153,6 +194,14 @@ public class Achievement extends StatBase
     public StatBase registerStat()
     {
         return this.registerAchievement();
+    }
+    
+    /**
+     * Register the stat into StatList.
+     */
+    public StatBase registerStat(AchievementTab tab)
+    {
+        return this.registerAchievement(tab);
     }
 
     /**
