@@ -1495,8 +1495,6 @@ src/minecraft/net/minecraft/src/GenLayerSwampRivers.java
 src/minecraft/net/minecraft/src/GenLayerVoronoiZoom.java
 src/minecraft/net/minecraft/src/GenLayerZoom.java
 src/minecraft/net/minecraft/src/Gui.java
-src/minecraft/net/minecraft/src/GuiAchievement.java
-src/minecraft/net/minecraft/src/GuiAchievements.java
 src/minecraft/net/minecraft/src/GuiBeacon.java
 src/minecraft/net/minecraft/src/GuiBeaconButton.java
 src/minecraft/net/minecraft/src/GuiBeaconButtonCancel.java

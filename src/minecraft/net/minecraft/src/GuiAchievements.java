@@ -1,5 +1,7 @@
 package net.minecraft.src;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import org.lwjgl.input.Mouse;
@@ -10,6 +12,11 @@ import net.minecraft.client.Minecraft;
 
 public class GuiAchievements extends GuiScreen
 {
+	// AA
+	List tabList = AchievementTabList.tabList;
+	AchievementTab achievementTab = (AchievementTab) tabList.get(0);
+	List achievementList = achievementTab.achievementList;
+	
 	/** The top x coordinate of the achievement map */
     private static final int guiMapTop = AchievementTabList.minDisplayColumn * 24 - 112;
 
@@ -293,9 +300,9 @@ public class GuiAchievements extends GuiScreen
         int flash;
         int x2;
 
-        for (i = 0; i < AchievementList.achievementList.size(); ++i)
+        for (i = 0; i < achievementList.size(); ++i)
         {
-            Achievement achievement = (Achievement)AchievementList.achievementList.get(i);
+            Achievement achievement = (Achievement) achievementList.get(i);
 
             if (achievement.parentAchievement != null)
             {
@@ -331,9 +338,9 @@ public class GuiAchievements extends GuiScreen
         int stringWidth;
         int tooltipY;
 
-        for (x1 = 0; x1 < AchievementList.achievementList.size(); ++x1)
+        for (x1 = 0; x1 < achievementList.size(); ++x1)
         {
-            Achievement achievement = (Achievement)AchievementList.achievementList.get(x1);
+            Achievement achievement = (Achievement) achievementList.get(x1);
             x2 = achievement.displayColumn * 24 - windowY;
             y2 = achievement.displayRow * 24 - windowX;
 
