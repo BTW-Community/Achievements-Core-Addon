@@ -23,10 +23,10 @@ public class AchievementsMod extends AddonExt {
 	public void Initialize() {
 		FCAddOnHandler.LogMessage(this.getName() + " Version " + this.getVersionString() + " Initializing...");
 		
-		AchievementTab tab = new AchievementTab("Test Category");
-		Achievement test = (new Achievement("test", 0, 0, FCBetterThanWolves.fcCompanionCube, null)).setIndependent().registerAchievement(tab);
+		//AchievementTab tab = new AchievementTab("Test Category");
+		//Achievement test = (new Achievement("test", 0, 0, FCBetterThanWolves.fcCompanionCube, null)).setIndependent().registerAchievement(tab);
 		
-		tab.printSize();
+		//tab.printSize();
 		
 		FCAddOnHandler.LogMessage(this.getName() + " Initialized");
 	}

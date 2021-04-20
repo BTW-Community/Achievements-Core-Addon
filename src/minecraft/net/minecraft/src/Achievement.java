@@ -62,35 +62,35 @@ public class Achievement extends StatBase
         this(par1, par2Str, par3, par4, new ItemStack(par5Block), par6Achievement);
     }
 
-    public Achievement(int id, String name, int displayColumn, int displayRow, ItemStack par5ItemStack, Achievement par6Achievement)
+    public Achievement(int id, String name, int displayColumn, int displayRow, ItemStack theItemStack, Achievement parentAchievement)
     {
         super(5242880 + AchievementTabList.counter++, "achievement." + name);
-        this.theItemStack = par5ItemStack;
+        this.theItemStack = theItemStack;
         this.achievementDescription = "achievement." + name + ".desc";
         this.displayColumn = displayColumn;
         this.displayRow = displayRow;
 
-        if (displayColumn < AchievementList.minDisplayColumn)
+        if (displayColumn < AchievementTabList.minDisplayColumn)
         {
-            AchievementList.minDisplayColumn = displayColumn;
+        	AchievementTabList.minDisplayColumn = displayColumn;
         }
 
-        if (displayRow < AchievementList.minDisplayRow)
+        if (displayRow < AchievementTabList.minDisplayRow)
         {
-            AchievementList.minDisplayRow = displayRow;
+        	AchievementTabList.minDisplayRow = displayRow;
         }
 
-        if (displayColumn > AchievementList.maxDisplayColumn)
+        if (displayColumn > AchievementTabList.maxDisplayColumn)
         {
-            AchievementList.maxDisplayColumn = displayColumn;
+        	AchievementTabList.maxDisplayColumn = displayColumn;
         }
 
-        if (displayRow > AchievementList.maxDisplayRow)
+        if (displayRow > AchievementTabList.maxDisplayRow)
         {
-            AchievementList.maxDisplayRow = displayRow;
+        	AchievementTabList.maxDisplayRow = displayRow;
         }
 
-        this.parentAchievement = par6Achievement;
+        this.parentAchievement = parentAchievement;
     }
 
     /**
@@ -129,27 +129,6 @@ public class Achievement extends StatBase
     public Achievement registerAchievement(AchievementTab tab)
     {
         super.registerStat();
-        
-        if (displayColumn < tab.minDisplayColumn)
-        {
-            tab.minDisplayColumn = displayColumn;
-        }
-
-        if (displayRow < tab.minDisplayRow)
-        {
-            tab.minDisplayRow = displayRow;
-        }
-
-        if (displayColumn > tab.maxDisplayColumn)
-        {
-            tab.maxDisplayColumn = displayColumn;
-        }
-
-        if (displayRow > tab.maxDisplayRow)
-        {
-            tab.maxDisplayRow = displayRow;
-        }
-        
         tab.achievementList.add(this);
         return this;
     }
