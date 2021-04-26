@@ -24,7 +24,8 @@ public class GuiAchievements extends GuiScreen
     /** The right y coordinate of the achievement map */
     private static final int guiMapRight = AchievementTabList.maxDisplayRow * 24 - 77;
     protected int achievementsPaneWidth = 256;
-    protected int achievementsPaneHeight = 202 - 50;  // 202 AA
+    protected int shift = 50;  // AA
+    protected int achievementsPaneHeight = 202 - shift;  // 202 AA
 
     /** The current mouse x coordinate */
     protected int mouseX = 0;
@@ -197,7 +198,7 @@ public class GuiAchievements extends GuiScreen
     protected void genAchievementBackground(int posX, int posY, float par3)
     {
         int windowY = MathHelper.floor_double(this.field_74117_m + (this.guiMapX - this.field_74117_m) * (double)par3);
-        int windowX = MathHelper.floor_double(this.field_74115_n + (this.guiMapY - this.field_74115_n) * (double)par3) - 25;
+        int windowX = MathHelper.floor_double(this.field_74115_n + (this.guiMapY - this.field_74115_n) * (double)par3) - this.shift / 2;
 
         if (windowY < guiMapTop)
         {
@@ -222,7 +223,7 @@ public class GuiAchievements extends GuiScreen
         int guiLeft = (this.width - this.achievementsPaneWidth) / 2;
         int guiTop = (this.height - this.achievementsPaneHeight) / 2;
         int var8 = guiLeft + 16;
-        int var9 = guiTop + 17 - 50;  // AA
+        int var9 = guiTop + 17 - this.shift;  // AA
         this.zLevel = 0.0F;
         GL11.glDepthFunc(GL11.GL_GEQUAL);
         GL11.glPushMatrix();
@@ -235,7 +236,7 @@ public class GuiAchievements extends GuiScreen
         int var10 = windowY + 288 >> 4;
         int var11 = windowX + 288 >> 4;
         int var12 = (windowY + 288) % 16;
-        int var13 = (windowX + 288) % 16 - 50;  // AA
+        int var13 = (windowX + 288) % 16 - this.shift;  // AA
         Random random = new Random();
         int i;
         int x1;
