@@ -23,8 +23,8 @@ public class GuiAchievements extends GuiScreen
 
     /** The right y coordinate of the achievement map */
     private static final int guiMapRight = AchievementTabList.maxDisplayRow * 24 - 77;
-    protected int achievementsPaneWidth = 256;  // 256
-    protected int achievementsPaneHeight = 202;  // 202
+    protected int achievementsPaneWidth = 256;
+    protected int achievementsPaneHeight = 202 - 50;  // 202 AA
 
     /** The current mouse x coordinate */
     protected int mouseX = 0;
@@ -105,10 +105,10 @@ public class GuiAchievements extends GuiScreen
     {
         if (Mouse.isButtonDown(0))
         {
-            int var4 = (this.width - this.achievementsPaneWidth) / 2;
-            int var5 = (this.height - this.achievementsPaneHeight) / 2;
-            int var6 = var4 + 8;
-            int var7 = var5 + 17;
+            int guiLeft = (this.width - this.achievementsPaneWidth) / 2;
+            int guiTop = (this.height - this.achievementsPaneHeight) / 2;
+            int var6 = guiLeft + 8;
+            int var7 = guiTop + 17;
 
             if ((this.isMouseButtonDown == 0 || this.isMouseButtonDown == 1) && mouseX >= var6 && mouseX < var6 + 224 && mouseY >= var7 && mouseY < var7 + 155)
             {
@@ -189,15 +189,15 @@ public class GuiAchievements extends GuiScreen
      */
     protected void drawTitle()
     {
-        int var1 = (this.width - this.achievementsPaneWidth) / 2;
-        int var2 = (this.height - this.achievementsPaneHeight) / 2;
-        this.fontRenderer.drawString("Achievements", var1 + 15, var2 + 5, 4210752);
+        int guiLeft = (this.width - this.achievementsPaneWidth) / 2;
+        int guiTop = (this.height - this.achievementsPaneHeight) / 2;
+        this.fontRenderer.drawString("Achievements", guiLeft + 15, guiTop + 5, 4210752);
     }
 
     protected void genAchievementBackground(int posX, int posY, float par3)
     {
         int windowY = MathHelper.floor_double(this.field_74117_m + (this.guiMapX - this.field_74117_m) * (double)par3);
-        int windowX = MathHelper.floor_double(this.field_74115_n + (this.guiMapY - this.field_74115_n) * (double)par3);
+        int windowX = MathHelper.floor_double(this.field_74115_n + (this.guiMapY - this.field_74115_n) * (double)par3) - 25;
 
         if (windowY < guiMapTop)
         {
@@ -222,7 +222,7 @@ public class GuiAchievements extends GuiScreen
         int guiLeft = (this.width - this.achievementsPaneWidth) / 2;
         int guiTop = (this.height - this.achievementsPaneHeight) / 2;
         int var8 = guiLeft + 16;
-        int var9 = guiTop + 17;
+        int var9 = guiTop + 17 - 50;  // AA
         this.zLevel = 0.0F;
         GL11.glDepthFunc(GL11.GL_GEQUAL);
         GL11.glPushMatrix();
@@ -235,7 +235,7 @@ public class GuiAchievements extends GuiScreen
         int var10 = windowY + 288 >> 4;
         int var11 = windowX + 288 >> 4;
         int var12 = (windowY + 288) % 16;
-        int var13 = (windowX + 288) % 16;
+        int var13 = (windowX + 288) % 16 - 50;  // AA
         Random random = new Random();
         int i;
         int x1;
@@ -406,7 +406,7 @@ public class GuiAchievements extends GuiScreen
         GL11.glDisable(GL11.GL_DEPTH_TEST);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.mc.renderEngine.bindTexture("/achievement/window.png");
+        this.mc.renderEngine.bindTexture("/achievement/window.png");  // AA
         this.drawTexturedModalRect(guiLeft, guiTop, 0, 0, this.achievementsPaneWidth, this.achievementsPaneHeight);
         GL11.glPopMatrix();
         this.zLevel = 0.0F;
