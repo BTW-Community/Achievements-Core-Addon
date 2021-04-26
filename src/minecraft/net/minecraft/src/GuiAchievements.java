@@ -11,12 +11,7 @@ import org.lwjgl.opengl.GL12;
 import net.minecraft.client.Minecraft;
 
 public class GuiAchievements extends GuiScreen
-{
-	// AA
-	List tabList = AchievementTabList.tabList;
-	AchievementTab achievementTab = (AchievementTab) tabList.get(0);
-	List achievementList = achievementTab.achievementList;
-	
+{	
 	/** The top x coordinate of the achievement map */
     private static final int guiMapTop = AchievementTabList.minDisplayColumn * 24 - 112;
 
@@ -28,8 +23,8 @@ public class GuiAchievements extends GuiScreen
 
     /** The right y coordinate of the achievement map */
     private static final int guiMapRight = AchievementTabList.maxDisplayRow * 24 - 77;
-    protected int achievementsPaneWidth = 256;
-    protected int achievementsPaneHeight = 202;
+    protected int achievementsPaneWidth = 256;  // 256
+    protected int achievementsPaneHeight = 202;  // 202
 
     /** The current mouse x coordinate */
     protected int mouseX = 0;
@@ -50,6 +45,10 @@ public class GuiAchievements extends GuiScreen
     /** Whether the Mouse Button is down or not */
     private int isMouseButtonDown = 0;
     private StatFileWriter statFileWriter;
+    
+	 // AA
+	List tabList = AchievementTabList.tabList;
+	private static int tabIndex = 0;
 
     public GuiAchievements(StatFileWriter par1StatFileWriter)
     {
@@ -66,7 +65,7 @@ public class GuiAchievements extends GuiScreen
     public void initGui()
     {
         this.buttonList.clear();
-        this.buttonList.add(new GuiSmallButton(1, this.width / 2 + 24, this.height / 2 + 74, 80, 20, StatCollector.translateToLocal("gui.done")));
+        //this.buttonList.add(new GuiSmallButton(1, this.width / 2 + 24, this.height / 2 + 74, 80, 20, StatCollector.translateToLocal("gui.done")));
     }
 
     /**
@@ -220,10 +219,10 @@ public class GuiAchievements extends GuiScreen
             windowX = guiMapRight - 1;
         }
 
-        int var6 = (this.width - this.achievementsPaneWidth) / 2;
-        int var7 = (this.height - this.achievementsPaneHeight) / 2;
-        int var8 = var6 + 16;
-        int var9 = var7 + 17;
+        int guiLeft = (this.width - this.achievementsPaneWidth) / 2;
+        int guiTop = (this.height - this.achievementsPaneHeight) / 2;
+        int var8 = guiLeft + 16;
+        int var9 = guiTop + 17;
         this.zLevel = 0.0F;
         GL11.glDepthFunc(GL11.GL_GEQUAL);
         GL11.glPushMatrix();
@@ -300,6 +299,7 @@ public class GuiAchievements extends GuiScreen
         int flash;
         int x2;
 
+        List achievementList = ((AchievementTab) tabList.get(tabIndex)).achievementList;
         for (i = 0; i < achievementList.size(); ++i)
         {
             Achievement achievement = (Achievement) achievementList.get(i);
@@ -406,8 +406,8 @@ public class GuiAchievements extends GuiScreen
         GL11.glDisable(GL11.GL_DEPTH_TEST);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.mc.renderEngine.bindTexture("/achievement/bg.png");
-        this.drawTexturedModalRect(var6, var7, 0, 0, this.achievementsPaneWidth, this.achievementsPaneHeight);
+        this.mc.renderEngine.bindTexture("/achievement/window.png");
+        this.drawTexturedModalRect(guiLeft, guiTop, 0, 0, this.achievementsPaneWidth, this.achievementsPaneHeight);
         GL11.glPopMatrix();
         this.zLevel = 0.0F;
         GL11.glDepthFunc(GL11.GL_LEQUAL);
@@ -451,6 +451,15 @@ public class GuiAchievements extends GuiScreen
 
             this.fontRenderer.drawStringWithShadow(name, x2, y2, this.statFileWriter.canUnlockAchievement(achievementHovered) ? (achievementHovered.getSpecial() ? -128 : -1) : (achievementHovered.getSpecial() ? -8355776 : -8355712));
         }
+        
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderHelper.enableGUIStandardItemLighting();
+        for (i = 0; i < tabList.size(); ++i)
+        {
+            AchievementTab tab = (AchievementTab) tabList.get(i);
+            this.mc.renderEngine.bindTexture("/gui/allitems.png");
+            this.renderAchievementTab(tab);
+        }
 
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glEnable(GL11.GL_LIGHTING);
@@ -463,5 +472,64 @@ public class GuiAchievements extends GuiScreen
     public boolean doesGuiPauseGame()
     {
         return true;
+    }
+    
+    // AA
+    /**
+     * Renders passed creative inventory tab into the screen.
+     */
+    protected void renderAchievementTab(AchievementTab tab)
+    {
+    	int guiLeft = (this.width - this.achievementsPaneWidth) / 2;
+        int guiTop = (this.height - this.achievementsPaneHeight) / 2;
+        
+    	boolean tabSelected = tab.getIndex() == tabIndex;
+        boolean tabFirstRow = tab.getIndex() < 6;
+        int i = tab.getIndex() % 6;
+        int j = i * 28;
+        int k = 0;
+        int l = guiLeft + 28 * i;
+        int i1 = guiTop;
+        byte j1 = 32;
+
+        if (tabSelected)
+        {
+            k += 32;
+        }
+
+        if (i == 5)
+        {
+            l = guiLeft + this.achievementsPaneWidth - 28;
+        }
+        else if (i > 0)
+        {
+            l += i;
+        }
+
+        if (tabFirstRow)
+        {
+            i1 -= 28;
+        }
+        else
+        {
+            k += 64;
+            i1 += this.achievementsPaneHeight - 4;
+        }
+        
+        GL11.glDisable(GL11.GL_LIGHTING);
+        this.drawTexturedModalRect(l, i1, j, k, 28, j1);
+        this.zLevel = 100.0F;
+        RenderItem renderItem = new RenderItem();
+        renderItem.zLevel = 100.0F;
+        l += 6;
+        i1 += 8 + (tabFirstRow ? 1 : -1);
+        GL11.glEnable(GL11.GL_LIGHTING);
+        GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+        ItemStack itemstack = new ItemStack(tab.getIconItem());
+        renderItem.renderItemAndEffectIntoGUI(this.fontRenderer, this.mc.renderEngine, itemstack, l, i1);
+        renderItem.renderItemOverlayIntoGUI(this.fontRenderer, this.mc.renderEngine, itemstack, l, i1);
+        GL11.glDisable(GL11.GL_LIGHTING);
+        renderItem.zLevel = 0.0F;
+        this.zLevel = 0.0F;
     }
 }
