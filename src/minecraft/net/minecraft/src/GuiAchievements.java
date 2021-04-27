@@ -23,9 +23,8 @@ public class GuiAchievements extends GuiScreen
 
     /** The right y coordinate of the achievement map */
     private static final int guiMapRight = AchievementTabList.maxDisplayRow * 24 - 77;
-    protected int achievementsPaneWidth = 256;
-    protected int shift = 50;  // AA
-    protected int achievementsPaneHeight = 202 - shift;  // 202 AA
+    protected int achievementsPaneWidth = 252;  // 256 AA
+    protected int achievementsPaneHeight = 150;  // 202 AA
 
     /** The current mouse x coordinate */
     protected int mouseX = 0;
@@ -108,10 +107,10 @@ public class GuiAchievements extends GuiScreen
         {
             int guiLeft = (this.width - this.achievementsPaneWidth) / 2;
             int guiTop = (this.height - this.achievementsPaneHeight) / 2;
-            int var6 = guiLeft + 8;
-            int var7 = guiTop + 17;
+            int mapLeft = guiLeft + 8;
+            int mapTop = guiTop + 17;
 
-            if ((this.isMouseButtonDown == 0 || this.isMouseButtonDown == 1) && mouseX >= var6 && mouseX < var6 + 224 && mouseY >= var7 && mouseY < var7 + 155)
+            if ((this.isMouseButtonDown == 0 || this.isMouseButtonDown == 1) && mouseX >= mapLeft && mouseX < mapLeft + 234 && mouseY >= mapTop && mouseY < mapTop + 113)  // AA
             {
                 if (this.isMouseButtonDown == 0)
                 {
@@ -222,8 +221,9 @@ public class GuiAchievements extends GuiScreen
 
         int guiLeft = (this.width - this.achievementsPaneWidth) / 2;
         int guiTop = (this.height - this.achievementsPaneHeight) / 2;
-        int xShift = guiLeft + 16+2;
-        int yShift = guiTop + 17 - this.shift + 16;  // AA
+        int shiftMapY = -32;
+        int xShift = guiLeft + 16 +2;  // AA
+        int yShift = guiTop + 17 +shiftMapY;
         this.zLevel = 0.0F;
         GL11.glDepthFunc(GL11.GL_GEQUAL);
         GL11.glPushMatrix();
@@ -235,8 +235,8 @@ public class GuiAchievements extends GuiScreen
         this.mc.renderEngine.bindTexture("/terrain.png");
         int var10 = windowY + 288 >> 4;
         int var11 = windowX + 288 >> 4;
-        int mapWidth = (windowY + 288) % 16 + 8;  // AA
-        int mapHeight = (windowX + 288) % 16 - this.shift + 16;  // AA
+        int mapWidth = (windowY + 288) % 16 +16;  // AA
+        int mapHeight = (windowX + 288) % 16 +shiftMapY;  // AA
         Random random = new Random();
         int i;
         int x1;

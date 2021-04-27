@@ -6,13 +6,14 @@ import java.util.List;
 public class AchievementTab {
 	
 	/** Holds a list of all registered achievements. */
-    public static List achievementList = new ArrayList();
+    public static List achievementList;
     
     private static String name;
     private static int index;
     private static int iconID = Item.paper.itemID;
 	
 	public AchievementTab(String name) {
+		this.achievementList = new ArrayList();
 		this.name = name;
 		this.index = AchievementTabList.tabList.size();
 		AchievementTabList.tabList.add(this);
