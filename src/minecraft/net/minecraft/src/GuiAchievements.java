@@ -198,7 +198,7 @@ public class GuiAchievements extends GuiScreen
     protected void genAchievementBackground(int posX, int posY, float par3)
     {
         int windowY = MathHelper.floor_double(this.field_74117_m + (this.guiMapX - this.field_74117_m) * (double)par3);
-        int windowX = MathHelper.floor_double(this.field_74115_n + (this.guiMapY - this.field_74115_n) * (double)par3) - this.shift / 2;
+        int windowX = MathHelper.floor_double(this.field_74115_n + (this.guiMapY - this.field_74115_n) * (double)par3);
 
         if (windowY < guiMapTop)
         {
@@ -222,8 +222,8 @@ public class GuiAchievements extends GuiScreen
 
         int guiLeft = (this.width - this.achievementsPaneWidth) / 2;
         int guiTop = (this.height - this.achievementsPaneHeight) / 2;
-        int var8 = guiLeft + 16;
-        int var9 = guiTop + 17 - this.shift;  // AA
+        int xShift = guiLeft + 16+2;
+        int yShift = guiTop + 17 - this.shift + 16;  // AA
         this.zLevel = 0.0F;
         GL11.glDepthFunc(GL11.GL_GEQUAL);
         GL11.glPushMatrix();
@@ -235,19 +235,19 @@ public class GuiAchievements extends GuiScreen
         this.mc.renderEngine.bindTexture("/terrain.png");
         int var10 = windowY + 288 >> 4;
         int var11 = windowX + 288 >> 4;
-        int var12 = (windowY + 288) % 16;
-        int var13 = (windowX + 288) % 16 - this.shift;  // AA
+        int mapWidth = (windowY + 288) % 16 + 8;  // AA
+        int mapHeight = (windowX + 288) % 16 - this.shift + 16;  // AA
         Random random = new Random();
         int i;
         int x1;
         int y1;
 
-        for (i = 0; i * 16 - var13 < 155; ++i)
+        for (i = 0; i * 16 - mapHeight < 155; ++i)
         {
             float brightness = 0.6F - (float)(var11 + i) / 25.0F * 0.3F;
             GL11.glColor4f(brightness, brightness, brightness, 1.0F);
 
-            for (x1 = 0; x1 * 16 - var12 < 224; ++x1)
+            for (x1 = 0; x1 * 16 - mapWidth < 224; ++x1)
             {
                 random.setSeed((long)(1234 + var10 + x1));
                 random.nextInt();
@@ -289,7 +289,7 @@ public class GuiAchievements extends GuiScreen
                     icon = Block.bedrock.getIcon(0, 0);
                 }
 
-                this.drawTexturedModelRectFromIcon(var8 + x1 * 16 - var12, var9 + i * 16 - var13, icon, 16, 16);
+                this.drawTexturedModelRectFromIcon(xShift + x1 * 16 - mapWidth, yShift + i * 16 - mapHeight, icon, 16, 16);
             }
         }
 
@@ -307,10 +307,10 @@ public class GuiAchievements extends GuiScreen
 
             if (achievement.parentAchievement != null)
             {
-                x1 = achievement.displayColumn * 24 - windowY + 11 + var8;
-                y1 = achievement.displayRow * 24 - windowX + 11 + var9;
-                x2 = achievement.parentAchievement.displayColumn * 24 - windowY + 11 + var8;
-                y2 = achievement.parentAchievement.displayRow * 24 - windowX + 11 + var9;
+                x1 = achievement.displayColumn * 24 - windowY + 11 + xShift;
+                y1 = achievement.displayRow * 24 - windowX + 11 + yShift;
+                x2 = achievement.parentAchievement.displayColumn * 24 - windowY + 11 + xShift;
+                y2 = achievement.parentAchievement.displayRow * 24 - windowX + 11 + yShift;
                 boolean hasUnlocked = this.statFileWriter.hasAchievementUnlocked(achievement);
                 boolean canUnlock = this.statFileWriter.canUnlockAchievement(achievement);
                 flash = Math.sin((double)(Minecraft.getSystemTime() % 600L) / 600.0D * Math.PI * 2.0D) > 0.6D ? 255 : 130;
@@ -366,8 +366,8 @@ public class GuiAchievements extends GuiScreen
                 }
 
                 this.mc.renderEngine.bindTexture("/achievement/bg.png");
-                stringWidth = var8 + x2;
-                tooltipY = var9 + y2;
+                stringWidth = xShift + x2;
+                tooltipY = yShift + y2;
 
                 if (achievement.getSpecial())
                 {
@@ -397,7 +397,7 @@ public class GuiAchievements extends GuiScreen
 
                 GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-                if (posX >= var8 && posY >= var9 && posX < var8 + 224 && posY < var9 + 155 && posX >= stringWidth && posX <= stringWidth + 22 && posY >= tooltipY && posY <= tooltipY + 22)
+                if (posX >= xShift && posY >= yShift && posX < xShift + 224 && posY < yShift + 155 && posX >= stringWidth && posX <= stringWidth + 22 && posY >= tooltipY && posY <= tooltipY + 22)
                 {
                     achievementHovered = achievement;
                 }
