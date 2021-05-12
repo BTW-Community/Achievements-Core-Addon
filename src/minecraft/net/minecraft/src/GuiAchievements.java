@@ -23,8 +23,8 @@ public class GuiAchievements extends GuiScreen
 
     /** The right y coordinate of the achievement map */
     private static final int guiMapRight = AchievementTabList.maxDisplayRow * 24 - 77;
-    protected int achievementsPaneWidth = 252;  // 256 AA
-    protected int achievementsPaneHeight = 150;  // 202 AA
+    protected int achievementsPaneWidth = 256;
+    protected int achievementsPaneHeight = 202 -16;  // AA
 
     /** The current mouse x coordinate */
     protected int mouseX = 0;
@@ -110,7 +110,7 @@ public class GuiAchievements extends GuiScreen
             int mapLeft = guiLeft + 8;
             int mapTop = guiTop + 17;
 
-            if ((this.isMouseButtonDown == 0 || this.isMouseButtonDown == 1) && mouseX >= mapLeft && mouseX < mapLeft + 234 && mouseY >= mapTop && mouseY < mapTop + 113)  // AA
+            if ((this.isMouseButtonDown == 0 || this.isMouseButtonDown == 1) && mouseX >= mapLeft && mouseX < mapLeft + 224 && mouseY >= mapTop && mouseY < mapTop + 155)
             {
                 if (this.isMouseButtonDown == 0)
                 {
@@ -221,9 +221,8 @@ public class GuiAchievements extends GuiScreen
 
         int guiLeft = (this.width - this.achievementsPaneWidth) / 2;
         int guiTop = (this.height - this.achievementsPaneHeight) / 2;
-        int shiftMapY = -32;
-        int xShift = guiLeft + 16 +2;  // AA
-        int yShift = guiTop + 17 +shiftMapY;
+        int xShift = guiLeft + 16;
+        int yShift = guiTop + 17;
         this.zLevel = 0.0F;
         GL11.glDepthFunc(GL11.GL_GEQUAL);
         GL11.glPushMatrix();
@@ -235,8 +234,8 @@ public class GuiAchievements extends GuiScreen
         this.mc.renderEngine.bindTexture("/terrain.png");
         int var10 = windowY + 288 >> 4;
         int var11 = windowX + 288 >> 4;
-        int mapWidth = (windowY + 288) % 16 +16;  // AA
-        int mapHeight = (windowX + 288) % 16 +shiftMapY;  // AA
+        int mapWidth = (windowY + 288) % 16;
+        int mapHeight = (windowX + 288) % 16;
         Random random = new Random();
         int i;
         int x1;
@@ -288,7 +287,6 @@ public class GuiAchievements extends GuiScreen
                 {
                     icon = Block.bedrock.getIcon(0, 0);
                 }
-
                 this.drawTexturedModelRectFromIcon(xShift + x1 * 16 - mapWidth, yShift + i * 16 - mapHeight, icon, 16, 16);
             }
         }
@@ -329,6 +327,12 @@ public class GuiAchievements extends GuiScreen
                 this.drawVerticalLine(x2, y1, y2, color);
             }
         }
+        
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        this.drawRect(guiLeft - 16, guiTop, guiLeft + 6, guiTop + 16*10, 0xFF000000);
+        GL11.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+        GL11.glDisable(GL11.GL_BLEND);
 
         Achievement achievementHovered = null;
         RenderItem renderItem = new RenderItem();
@@ -365,7 +369,7 @@ public class GuiAchievements extends GuiScreen
                     GL11.glColor4f(brightness, brightness, brightness, 1.0F);
                 }
 
-                this.mc.renderEngine.bindTexture("/achievement/bg.png");
+                this.mc.renderEngine.bindTexture("/achievement/aa_bg.png");
                 stringWidth = xShift + x2;
                 tooltipY = yShift + y2;
 
@@ -403,11 +407,12 @@ public class GuiAchievements extends GuiScreen
                 }
             }
         }
+        
 
         GL11.glDisable(GL11.GL_DEPTH_TEST);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.mc.renderEngine.bindTexture("/achievement/window.png");  // AA
+        this.mc.renderEngine.bindTexture("/achievement/bg.png");
         this.drawTexturedModalRect(guiLeft, guiTop, 0, 0, this.achievementsPaneWidth, this.achievementsPaneHeight);
         GL11.glPopMatrix();
         this.zLevel = 0.0F;
