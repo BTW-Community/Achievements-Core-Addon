@@ -47,7 +47,7 @@ public class GuiAchievements extends GuiScreen
     private StatFileWriter statFileWriter;
     
 	 // AA
-	List tabList = AchievementTabList.tabList;
+	List<AchievementTab> tabList = AchievementTabList.tabList;
 	private int tabIndex = 0;
 
     public GuiAchievements(StatFileWriter par1StatFileWriter)
@@ -65,7 +65,7 @@ public class GuiAchievements extends GuiScreen
     public void initGui()
     {
         this.buttonList.clear();
-        setupTab();  // AA
+        setupTabMap();  // AA
     }
 
     /**
@@ -538,8 +538,8 @@ public class GuiAchievements extends GuiScreen
     }
     
     // AA
-    private void setupTab() {
-    	AchievementTab tab = (AchievementTab) tabList.get(tabIndex);
+    private void setupTabMap() {
+    	AchievementTab tab = tabList.get(this.tabIndex);
     	
     	/** The top x coordinate of the achievement map */
         this.guiMapTop = tab.minDisplayColumn * 24 - 112;
@@ -552,5 +552,64 @@ public class GuiAchievements extends GuiScreen
 
         /** The right y coordinate of the achievement map */
         this.guiMapRight = tab.maxDisplayRow * 24 - 77;
+    }
+
+    private void setCurrentTab(AchievementTab tab) {
+		this.tabIndex = tab.getIndex();
+		this.setupTabMap();
+		
+		short var2 = 141;
+        short var3 = 141;
+        this.field_74117_m = this.guiMapX = this.field_74124_q = (double)(AchievementList.openInventory.displayColumn * 24 - var2 / 2 - 12);
+        this.field_74115_n = this.guiMapY = this.field_74123_r = (double)(AchievementList.openInventory.displayRow * 24 - var3 / 2);
+	}
+    
+    /**
+     * Called when the mouse is moved or a mouse button is released.  Signature: (mouseX, mouseY, state) state==-1 is
+     * mouseMove, state==0 or state==1 is mouseUp
+     */
+    protected void mouseMovedOrUp(int mouseX, int mouseY, int state)
+    {
+        if (state == 0)
+        {
+        	int guiLeft = (this.width - this.achievementsPaneWidth) / 2;
+            int guiTop = (this.height - this.achievementsPaneHeight) / 2;
+            
+            int i = mouseX - guiLeft;
+            int j = mouseY - guiTop;
+
+            for (int tabIter = 0; tabIter < this.tabList.size(); ++tabIter)
+            {
+                AchievementTab tab = this.tabList.get(tabIter);
+
+                if (this.isMouseOverTab(tab, i, j))
+                {
+                    this.setCurrentTab(tab);
+                    return;
+                }
+            }
+        }
+
+        super.mouseMovedOrUp(mouseX, mouseY, state);
+    }
+
+	protected boolean isMouseOverTab(AchievementTab tab, int mouseX, int mouseY)
+    {
+        int i = tab.getIndex() % 6;
+        int j = 28 * i;
+        byte k = 0;
+
+        if (i == 5)
+        {
+            j = this.achievementsPaneWidth - 28 + 2;
+        }
+        else if (i > 0)
+        {
+            j += i;
+        }
+
+        int k1 = k - 32;
+
+        return mouseX >= j && mouseX <= j + 28 && mouseY >= k1 && mouseY <= k1 + 32;
     }
 }
