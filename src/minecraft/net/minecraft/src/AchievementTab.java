@@ -6,17 +6,29 @@ import java.util.List;
 public class AchievementTab {
 	
 	/** Holds a list of all registered achievements. */
-    public static List achievementList;
+    public List<Achievement> achievementList;
     
-    private static String name;
-    private static int index;
-    private static int iconID = Item.paper.itemID;
+    /** Is the smallest column used to display a achievement on the GUI. */
+    public static int minDisplayColumn;
+
+    /** Is the smallest row used to display a achievement on the GUI. */
+    public static int minDisplayRow;
+
+    /** Is the biggest column used to display a achievement on the GUI. */
+    public static int maxDisplayColumn;
+
+    /** Is the biggest row used to display a achievement on the GUI. */
+    public static int maxDisplayRow;
+    
+    private String name;
+    private int index;
+    private int iconID = Item.paper.itemID;
 	
 	public AchievementTab(String name) {
-		this.achievementList = new ArrayList();
+		this.achievementList = new ArrayList<Achievement>();
 		this.name = name;
 		this.index = AchievementTabList.tabList.size();
-		AchievementTabList.tabList.add(this);
+		AchievementTabList.add(this);
 	}
 	
 	public String getName() {
@@ -27,10 +39,14 @@ public class AchievementTab {
 		return this.index;
 	}
 	
-	public AchievementTab setIconItemID(int iconID) {
+	public AchievementTab setIcon(int iconID) {
         this.iconID = iconID;
         return this;
     }
+	
+	public void add(Achievement achievement) {
+		this.achievementList.add(achievement);
+	}
 	
 	public int getIconItemID() {
         return iconID;

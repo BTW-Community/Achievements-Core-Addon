@@ -70,26 +70,6 @@ public class Achievement extends StatBase
         this.displayColumn = displayColumn;
         this.displayRow = displayRow;
 
-        if (displayColumn < AchievementTabList.minDisplayColumn)
-        {
-        	AchievementTabList.minDisplayColumn = displayColumn;
-        }
-
-        if (displayRow < AchievementTabList.minDisplayRow)
-        {
-        	AchievementTabList.minDisplayRow = displayRow;
-        }
-
-        if (displayColumn > AchievementTabList.maxDisplayColumn)
-        {
-        	AchievementTabList.maxDisplayColumn = displayColumn;
-        }
-
-        if (displayRow > AchievementTabList.maxDisplayRow)
-        {
-        	AchievementTabList.maxDisplayRow = displayRow;
-        }
-
         this.parentAchievement = parentAchievement;
     }
 
@@ -129,7 +109,27 @@ public class Achievement extends StatBase
     public Achievement registerAchievement(AchievementTab tab)
     {
         super.registerStat();
-        tab.achievementList.add(this);
+        tab.add(this);
+        
+        if (this.displayColumn < tab.minDisplayColumn)
+        {
+        	tab.minDisplayColumn = this.displayColumn;
+        }
+
+        if (this.displayRow < tab.minDisplayRow)
+        {
+        	tab.minDisplayRow = this.displayRow;
+        }
+
+        if (this.displayColumn > tab.maxDisplayColumn)
+        {
+        	tab.maxDisplayColumn = this.displayColumn;
+        }
+
+        if (this.displayRow > tab.maxDisplayRow)
+        {
+        	tab.maxDisplayRow = this.displayRow;
+        }
         return this;
     }
 
