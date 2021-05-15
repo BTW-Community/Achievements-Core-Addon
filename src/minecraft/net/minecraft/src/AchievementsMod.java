@@ -23,8 +23,9 @@ public class AchievementsMod extends AddonExt {
 	public void Initialize() {
 		FCAddOnHandler.LogMessage(this.getName() + " Version " + this.getVersionString() + " Initializing...");
 		
-		AchievementTab tab = new AchievementTab("test_category");
+		AchievementTab tab = new AchievementTab("test").setIcon(FCBetterThanWolves.fcItemWindMill.itemID);
 		Achievement test = (new Achievement("test", 0, 0, FCBetterThanWolves.fcCompanionCube, null)).setIndependent().registerAchievement(tab);
+		Achievement test2 = (new Achievement("test2", 0, 2, FCBetterThanWolves.fcBlockDispenser, test)).registerAchievement(tab);
 		tab.printSize();
 		
 		FCAddOnHandler.LogMessage(this.getName() + " Initialized");
@@ -32,6 +33,6 @@ public class AchievementsMod extends AddonExt {
 	
 	public String GetLanguageFilePrefix()
 	{
-		return "SocksCrops";
+		return "achievements";
 	}
 } 

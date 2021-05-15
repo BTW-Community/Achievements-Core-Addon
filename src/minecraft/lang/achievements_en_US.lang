@@ -1,0 +1,13 @@
+
+language.name=English
+language.region=US
+language.code=en_US
+
+achievementtab.default=Minecraft
+achievementtab.test=Test Tab
+
+achievement.test=Test Achievement
+achievement.test.desc=It's gotta be a test
+
+achievement.test2=Test Achievement 2: Electric Boogaloo
+achievement.test2.desc=Testing must proceed!!

@@ -26,17 +26,17 @@ public class AchievementTab {
 	
 	public AchievementTab(String name) {
 		this.achievementList = new ArrayList<Achievement>();
-		this.name = name;
+		this.name = "achievementtab." + name;
 		this.index = AchievementTabList.tabList.size();
 		AchievementTabList.add(this);
 	}
 	
 	public String getName() {
-		return this.name;
+		return name;
 	}
 	
 	public int getIndex() {
-		return this.index;
+		return index;
 	}
 	
 	public AchievementTab setIcon(int iconID) {
@@ -57,6 +57,6 @@ public class AchievementTab {
     }
 
 	public void printSize() {
-        System.out.println(this.name + ": " + achievementList.size() + " achievements");
+        System.out.println(StatCollector.translateToLocal(name) + ": " + achievementList.size() + " achievements");
     }
 }

@@ -605,7 +605,7 @@ public class GuiAchievements extends GuiScreen
         int x2 = mouseX + 12;
         int y2 = mouseY - 4;
 
-        int stringWidth = Math.max(this.fontRenderer.getStringWidth(name), 30);
+        int stringWidth = Math.max(this.fontRenderer.getStringWidth(name), 15);
         
         this.drawGradientRect(x2 - 3, y2 - 3, x2 + stringWidth + 3, y2 + 12, -1073741824, -1073741824);
 
