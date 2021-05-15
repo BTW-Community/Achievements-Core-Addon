@@ -194,7 +194,7 @@ public class GuiAchievements extends GuiScreen
         this.fontRenderer.drawString("Achievements", guiLeft + 15, guiTop + 5, 4210752);
     }
 
-    protected void genAchievementBackground(int posX, int posY, float par3)
+    protected void genAchievementBackground(int mouseX, int mouseY, float par3)
     {
         int windowY = MathHelper.floor_double(this.field_74117_m + (this.guiMapX - this.field_74117_m) * (double)par3);
         int windowX = MathHelper.floor_double(this.field_74115_n + (this.guiMapY - this.field_74115_n) * (double)par3);
@@ -401,7 +401,7 @@ public class GuiAchievements extends GuiScreen
 
                 GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-                if (posX >= xShift && posY >= yShift && posX < xShift + 224 && posY < yShift + 155 && posX >= stringWidth && posX <= stringWidth + 22 && posY >= tooltipY && posY <= tooltipY + 22)
+                if (mouseX >= xShift && mouseY >= yShift && mouseX < xShift + 224 && mouseY < yShift + 155 && mouseX >= stringWidth && mouseX <= stringWidth + 22 && mouseY >= tooltipY && mouseY <= tooltipY + 22)
                 {
                     achievementHovered = achievement;
                 }
@@ -430,14 +430,14 @@ public class GuiAchievements extends GuiScreen
         GL11.glDepthFunc(GL11.GL_LEQUAL);
         GL11.glDisable(GL11.GL_DEPTH_TEST);
         GL11.glEnable(GL11.GL_TEXTURE_2D);
-        super.drawScreen(posX, posY, par3);
+        super.drawScreen(mouseX, mouseY, par3);
 
         if (achievementHovered != null)
         {
             String name = StatCollector.translateToLocal(achievementHovered.getName());
             String description = achievementHovered.getDescription();
-            x2 = posX + 12;
-            y2 = posY - 4;
+            x2 = mouseX + 12;
+            y2 = mouseY - 4;
 
             if (this.statFileWriter.canUnlockAchievement(achievementHovered))
             {
@@ -472,9 +472,18 @@ public class GuiAchievements extends GuiScreen
         // AA
         // Render the selected tab in front of the window.
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        AchievementTab tab = (AchievementTab) tabList.get(this.tabIndex);
+        AchievementTab tab = tabList.get(this.tabIndex);
         this.mc.renderEngine.bindTexture("/gui/allitems.png");
         this.renderAchievementTab(tab);
+        
+        // Render tab text if hovered.
+        for (i = 0; i < this.tabList.size(); i++) {
+        	tab = tabList.get(i);
+        	if (this.isMouseOverTab(tab, mouseX, mouseY)) {
+        		this.setHoverText(tab, mouseX, mouseY);
+        		break;
+        	}
+        }
 
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glEnable(GL11.GL_LIGHTING);
@@ -570,31 +579,47 @@ public class GuiAchievements extends GuiScreen
      */
     protected void mouseMovedOrUp(int mouseX, int mouseY, int state)
     {
+    	int guiLeft = (this.width - this.achievementsPaneWidth) / 2;
+        int guiTop = (this.height - this.achievementsPaneHeight) / 2;
+        
         if (state == 0)
         {
-        	int guiLeft = (this.width - this.achievementsPaneWidth) / 2;
-            int guiTop = (this.height - this.achievementsPaneHeight) / 2;
-            
-            int i = mouseX - guiLeft;
-            int j = mouseY - guiTop;
-
-            for (int tabIter = 0; tabIter < this.tabList.size(); ++tabIter)
-            {
-                AchievementTab tab = this.tabList.get(tabIter);
-
-                if (this.isMouseOverTab(tab, i, j))
-                {
-                    this.setCurrentTab(tab);
-                    return;
-                }
-            }
+	        for (int tabIter = 0; tabIter < this.tabList.size(); ++tabIter)
+	        {
+	            AchievementTab tab = this.tabList.get(tabIter);
+	
+	            if (this.isMouseOverTab(tab, mouseX, mouseY))
+	            {
+	                this.setCurrentTab(tab);
+	                return;
+	            }
+	        }
         }
 
         super.mouseMovedOrUp(mouseX, mouseY, state);
     }
 
+	private void setHoverText(AchievementTab tab, int mouseX, int mouseY)
+	{
+        String name = StatCollector.translateToLocal(tab.getName());
+        int x2 = mouseX + 12;
+        int y2 = mouseY - 4;
+
+        int stringWidth = Math.max(this.fontRenderer.getStringWidth(name), 30);
+        
+        this.drawGradientRect(x2 - 3, y2 - 3, x2 + stringWidth + 3, y2 + 12, -1073741824, -1073741824);
+
+        this.fontRenderer.drawStringWithShadow(name, x2, y2, -1);
+	}
+
 	protected boolean isMouseOverTab(AchievementTab tab, int mouseX, int mouseY)
     {
+		int guiLeft = (this.width - this.achievementsPaneWidth) / 2;
+        int guiTop = (this.height - this.achievementsPaneHeight) / 2;
+        
+		mouseX -= guiLeft;
+        mouseY -= guiTop;
+        
         int i = tab.getIndex() % 6;
         int j = 28 * i;
         byte k = 0;

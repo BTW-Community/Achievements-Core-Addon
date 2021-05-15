@@ -21,7 +21,7 @@ public class AchievementList
     public static List achievementList = new ArrayList();
     
     // Vanilla Achievements stored in a AchievementTab
-    public static AchievementTab vanillaTab = new AchievementTab("Vanilla").setIcon(Block.grass.blockID);
+    public static AchievementTab vanillaTab = new AchievementTab("vanilla").setIcon(Block.grass.blockID);
 
     /** Is the 'open inventory' achievement. */
     public static Achievement openInventory = (new Achievement(0, "openInventory", 0, 0, Item.book, (Achievement)null)).setIndependent().registerAchievement(vanillaTab);
