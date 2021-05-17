@@ -196,27 +196,27 @@ public class GuiAchievements extends GuiScreen
 
     protected void genAchievementBackground(int mouseX, int mouseY, float par3)
     {
-        int windowY = MathHelper.floor_double(this.field_74117_m + (this.guiMapX - this.field_74117_m) * (double)par3);
-        int windowX = MathHelper.floor_double(this.field_74115_n + (this.guiMapY - this.field_74115_n) * (double)par3);
+        int windowX = MathHelper.floor_double(this.field_74117_m + (this.guiMapX - this.field_74117_m) * (double)par3);
+        int windowY = MathHelper.floor_double(this.field_74115_n + (this.guiMapY - this.field_74115_n) * (double)par3);
 
-        if (windowY < guiMapTop)
+        if (windowX < guiMapTop)
         {
-            windowY = guiMapTop;
+            windowX = guiMapTop;
         }
 
-        if (windowX < guiMapLeft)
+        if (windowY < guiMapLeft)
         {
-            windowX = guiMapLeft;
+            windowY = guiMapLeft;
         }
 
-        if (windowY >= guiMapBottom)
+        if (windowX >= guiMapBottom)
         {
-            windowY = guiMapBottom - 1;
+            windowX = guiMapBottom - 1;
         }
 
-        if (windowX >= guiMapRight)
+        if (windowY >= guiMapRight)
         {
-            windowX = guiMapRight - 1;
+            windowY = guiMapRight - 1;
         }
 
         int guiLeft = (this.width - this.achievementsPaneWidth) / 2;
@@ -232,61 +232,20 @@ public class GuiAchievements extends GuiScreen
         GL11.glEnable(GL12.GL_RESCALE_NORMAL);
         GL11.glEnable(GL11.GL_COLOR_MATERIAL);
         this.mc.renderEngine.bindTexture("/terrain.png");
-        int var10 = windowY + 288 >> 4;
-        int var11 = windowX + 288 >> 4;
-        int mapWidth = (windowY + 288) % 16;
-        int mapHeight = (windowX + 288) % 16;
+        int mapWidth = (windowX + 288) % 16;
+        int mapHeight = (windowY + 288) % 16;
         Random random = new Random();
         int i;
         int x1;
         int y1;
+        
+        AchievementTab tab = tabList.get(this.tabIndex);
 
         for (i = 0; i * 16 - mapHeight < 155; ++i)
         {
-            float brightness = 0.6F - (float)(var11 + i) / 25.0F * 0.3F;
-            GL11.glColor4f(brightness, brightness, brightness, 1.0F);
-
             for (x1 = 0; x1 * 16 - mapWidth < 224; ++x1)
             {
-                random.setSeed((long)(1234 + var10 + x1));
-                random.nextInt();
-                y1 = random.nextInt(1 + var11 + i) + (var11 + i) / 2;
-                Icon icon = Block.sand.getIcon(0, 0);
-
-                if (y1 <= 37 && var11 + i != 35)
-                {
-                    if (y1 == 22)
-                    {
-                        if (random.nextInt(2) == 0)
-                        {
-                            icon = Block.oreDiamond.getIcon(0, 0);
-                        }
-                        else
-                        {
-                            icon = Block.oreRedstone.getIcon(0, 0);
-                        }
-                    }
-                    else if (y1 == 10)
-                    {
-                        icon = Block.oreIron.getIcon(0, 0);
-                    }
-                    else if (y1 == 8)
-                    {
-                        icon = Block.oreCoal.getIcon(0, 0);
-                    }
-                    else if (y1 > 4)
-                    {
-                        icon = Block.stone.getIcon(0, 0);
-                    }
-                    else if (y1 > 0)
-                    {
-                        icon = Block.dirt.getIcon(0, 0);
-                    }
-                }
-                else
-                {
-                    icon = Block.bedrock.getIcon(0, 0);
-                }
+                Icon icon = tab.genAchievementIcon(x1, i, windowX, windowY);
                 this.drawTexturedModelRectFromIcon(xShift + x1 * 16 - mapWidth, yShift + i * 16 - mapHeight, icon, 16, 16);
             }
         }
@@ -298,17 +257,16 @@ public class GuiAchievements extends GuiScreen
         int flash;
         int x2;
 
-        List achievementList = ((AchievementTab) tabList.get(tabIndex)).achievementList;
-        for (i = 0; i < achievementList.size(); ++i)
+        for (i = 0; i < tab.achievementList.size(); ++i)
         {
-            Achievement achievement = (Achievement) achievementList.get(i);
+            Achievement achievement = tab.achievementList.get(i);
 
             if (achievement.parentAchievement != null)
             {
-                x1 = achievement.displayColumn * 24 - windowY + 11 + xShift;
-                y1 = achievement.displayRow * 24 - windowX + 11 + yShift;
-                x2 = achievement.parentAchievement.displayColumn * 24 - windowY + 11 + xShift;
-                y2 = achievement.parentAchievement.displayRow * 24 - windowX + 11 + yShift;
+                x1 = achievement.displayColumn * 24 - windowX + 11 + xShift;
+                y1 = achievement.displayRow * 24 - windowY + 11 + yShift;
+                x2 = achievement.parentAchievement.displayColumn * 24 - windowX + 11 + xShift;
+                y2 = achievement.parentAchievement.displayRow * 24 - windowY + 11 + yShift;
                 boolean hasUnlocked = this.statFileWriter.hasAchievementUnlocked(achievement);
                 boolean canUnlock = this.statFileWriter.canUnlockAchievement(achievement);
                 flash = Math.sin((double)(Minecraft.getSystemTime() % 600L) / 600.0D * Math.PI * 2.0D) > 0.6D ? 255 : 130;
@@ -343,11 +301,11 @@ public class GuiAchievements extends GuiScreen
         int stringWidth;
         int tooltipY;
 
-        for (x1 = 0; x1 < achievementList.size(); ++x1)
+        for (x1 = 0; x1 < tab.achievementList.size(); ++x1)
         {
-            Achievement achievement = (Achievement) achievementList.get(x1);
-            x2 = achievement.displayColumn * 24 - windowY;
-            y2 = achievement.displayRow * 24 - windowX;
+            Achievement achievement = tab.achievementList.get(x1);
+            x2 = achievement.displayColumn * 24 - windowX;
+            y2 = achievement.displayRow * 24 - windowY;
 
             if (x2 >= -24 && y2 >= -24 && x2 <= 224 && y2 <= 155)
             {
@@ -417,7 +375,7 @@ public class GuiAchievements extends GuiScreen
         for (i = 0; i < tabList.size(); ++i)
         {
         	if (i != this.tabIndex) {
-	            AchievementTab tab = (AchievementTab) tabList.get(i);
+	            tab = tabList.get(i);
 	            this.mc.renderEngine.bindTexture("/gui/allitems.png");
 	            this.renderAchievementTab(tab);
         	}
@@ -472,7 +430,7 @@ public class GuiAchievements extends GuiScreen
         // AA
         // Render the selected tab in front of the window.
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        AchievementTab tab = tabList.get(this.tabIndex);
+        tab = tabList.get(this.tabIndex);
         this.mc.renderEngine.bindTexture("/gui/allitems.png");
         this.renderAchievementTab(tab);
         

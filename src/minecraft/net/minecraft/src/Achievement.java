@@ -3,7 +3,7 @@ package net.minecraft.src;
 public class Achievement extends StatBase
 {
 	static {
-		AchievementsMod.getInstance();
+		AchievementExampleAddon.getInstance();
 	}
     /**
      * Is the column (related to center of achievement gui, in 24 pixels unit) that the achievement will be displayed.
