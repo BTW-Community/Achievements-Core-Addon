@@ -33,6 +33,14 @@ public class AchievementExampleAddon extends AddonExt {
 		Achievement custom2 = (new Achievement("custom2", 10, 10, FCBetterThanWolves.fcItemBloodMossSpores, custom1)).registerAchievement(tabCustom);
 		tabCustom.printSize();
 		
+		new AchievementTab("simple2").setIcon(Block.cloth);
+		new AchievementTab("simple3").setIcon(Block.cloth);
+		new AchievementTab("simple4").setIcon(Block.cloth);
+		new AchievementTab("simple5").setIcon(Block.cloth);
+		new AchievementTab("simple6").setIcon(Block.cloth);
+		new AchievementTab("simple7").setIcon(Block.cloth);
+		new AchievementTab("simple8").setIcon(Block.cloth);
+		
 		FCAddOnHandler.LogMessage(this.getName() + " Initialized");
 	}
 	

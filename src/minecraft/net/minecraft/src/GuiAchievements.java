@@ -48,7 +48,9 @@ public class GuiAchievements extends GuiScreen
     
 	 // AA
 	List<AchievementTab> tabList = AchievementTabList.tabList;
-	private int tabIndex = 0;
+	private static int tabIndex = 0;
+	private static int page = 1;
+	private final int MAX_TABS = 8;  // Maximum tabs per page.
 
     public GuiAchievements(StatFileWriter par1StatFileWriter)
     {
@@ -461,28 +463,31 @@ public class GuiAchievements extends GuiScreen
      * Renders passed creative inventory tab into the screen.
      */
     protected void renderAchievementTab(AchievementTab tab)
-    {
+    {	
+    	if ((tab.getIndex() + 1) > MAX_TABS * page || (tab.getIndex() + 1) <= MAX_TABS * (page - 1)) {
+    		return;
+    	}
+        
     	int guiLeft = (this.width - this.achievementsPaneWidth) / 2;
         int guiTop = (this.height - this.achievementsPaneHeight) / 2;
         
-    	boolean tabSelected = tab.getIndex() == tabIndex;
-        int i = tab.getIndex() % 6;
-        int j = i * 28;
+        int i = tab.getIndex() % MAX_TABS;
+        int j = 28;
+        if (i == 0) {
+        	j = 0;
+        }
+        
         int k = 0;
         int l = guiLeft + 28 * i;
         int i1 = guiTop -28;
         byte j1 = 32;
 
-        if (tabSelected)
+        if (tab.getIndex() == tabIndex)
         {
             k += 32;
         }
 
-        if (i == 5)
-        {
-            l = guiLeft + this.achievementsPaneWidth - 28;
-        }
-        else if (i > 0)
+        if (i > 0)
         {
             l += i;
         }
@@ -572,21 +577,21 @@ public class GuiAchievements extends GuiScreen
 
 	protected boolean isMouseOverTab(AchievementTab tab, int mouseX, int mouseY)
     {
+		if ((tab.getIndex() + 1) > MAX_TABS * page || (tab.getIndex() + 1) <= MAX_TABS * (page - 1)) {
+    		return false;
+    	}
+		
 		int guiLeft = (this.width - this.achievementsPaneWidth) / 2;
         int guiTop = (this.height - this.achievementsPaneHeight) / 2;
         
 		mouseX -= guiLeft;
         mouseY -= guiTop;
         
-        int i = tab.getIndex() % 6;
+        int i = tab.getIndex() % MAX_TABS;
         int j = 28 * i;
         byte k = 0;
 
-        if (i == 5)
-        {
-            j = this.achievementsPaneWidth - 28 + 2;
-        }
-        else if (i > 0)
+        if (i > 0)
         {
             j += i;
         }
