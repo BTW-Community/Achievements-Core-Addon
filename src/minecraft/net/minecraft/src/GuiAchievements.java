@@ -13,18 +13,18 @@ import net.minecraft.client.Minecraft;
 public class GuiAchievements extends GuiScreen
 {	
 	/** The top x coordinate of the achievement map */
-    private static int guiMapTop;  // AA
+    private static int guiMapTop;
 
     /** The left y coordinate of the achievement map */
-    private static int guiMapLeft;  // AA
+    private static int guiMapLeft;
 
     /** The bottom x coordinate of the achievement map */
-    private static int guiMapBottom;  // AA
+    private static int guiMapBottom;
 
     /** The right y coordinate of the achievement map */
-    private static int guiMapRight;  // AA
-    protected int achievementsPaneWidth = 256;
-    protected int achievementsPaneHeight = 202 -16;  // AA
+    private static int guiMapRight;
+    protected int achievementsPaneWidth = 256 -4;
+    protected int achievementsPaneHeight = 202 -16;
 
     /** The current mouse x coordinate */
     protected int mouseX = 0;
@@ -67,7 +67,7 @@ public class GuiAchievements extends GuiScreen
     public void initGui()
     {
         this.buttonList.clear();
-        setupTabMap();  // AA
+        setupTabMap();
     }
 
     /**
@@ -223,7 +223,8 @@ public class GuiAchievements extends GuiScreen
 
         int guiLeft = (this.width - this.achievementsPaneWidth) / 2;
         int guiTop = (this.height - this.achievementsPaneHeight) / 2;
-        int xShift = guiLeft + 16;
+        int widthCorrection = -4;
+        int xShift = guiLeft + 16 +widthCorrection;
         int yShift = guiTop + 17;
         this.zLevel = 0.0F;
         GL11.glDepthFunc(GL11.GL_GEQUAL);
@@ -234,7 +235,7 @@ public class GuiAchievements extends GuiScreen
         GL11.glEnable(GL12.GL_RESCALE_NORMAL);
         GL11.glEnable(GL11.GL_COLOR_MATERIAL);
         this.mc.renderEngine.bindTexture("/terrain.png");
-        int mapWidth = (windowX + 288) % 16;
+        int mapWidth = (windowX + 288) % 16 +widthCorrection;
         int mapHeight = (windowY + 288) % 16;
         Random random = new Random();
         int i;
@@ -437,7 +438,7 @@ public class GuiAchievements extends GuiScreen
         this.renderAchievementTab(tab);
         
         // Render page buttons.
-        this.mc.renderEngine.bindTexture("/gui/trading.png");
+        this.mc.renderEngine.bindTexture("/btwmodtex/fcguitrading.png");
         this.renderPageButtons(mouseX, mouseY);
         
         // Render tab text if hovered.
@@ -462,7 +463,6 @@ public class GuiAchievements extends GuiScreen
         return true;
     }
     
-    // AA
     /**
      * Renders passed achievement tab into the screen.
      */
@@ -484,18 +484,13 @@ public class GuiAchievements extends GuiScreen
         }
         
         int k = 0;
-        int l = (int) (guiLeft + 27.6 * i);
+        int l = (int) Math.round(guiLeft + 28 * i);
         int i1 = guiTop -28;
         byte j1 = 32;
 
         if (tab.getIndex() == tabIndex)
         {
             k += 32;
-        }
-
-        if (i > 0)
-        {
-            l += i;
         }
         
         GL11.glDisable(GL11.GL_LIGHTING);
@@ -523,8 +518,9 @@ public class GuiAchievements extends GuiScreen
     	int guiLeft = (this.width - this.achievementsPaneWidth) / 2;
         int guiTop = (this.height - this.achievementsPaneHeight) / 2;
         
-        int leftPos = guiLeft - 10 - 4;
-        int rightPos = guiLeft + this.achievementsPaneWidth + 4;
+        int buttonShift = 1;
+        int leftPos = guiLeft - 10 - buttonShift;
+        int rightPos = guiLeft + this.achievementsPaneWidth + buttonShift;
         
         int yPos = guiTop - 18;
         
@@ -547,7 +543,6 @@ public class GuiAchievements extends GuiScreen
         }
     }
     
-    // AA
     private void setupTabMap() {
     	AchievementTab tab = tabList.get(this.tabIndex);
     	
@@ -574,6 +569,14 @@ public class GuiAchievements extends GuiScreen
         this.field_74115_n = this.guiMapY = this.field_74123_r = (double)(AchievementList.openInventory.displayRow * 24 - var3 / 2);
 	}
     
+    private void switchPage(int direction) {
+    	if (direction > 0 && tabList.size() > MAX_TABS * page) {
+    		page++;
+    	} else if (direction < 0 && page > 1) {
+    		page--;
+    	}
+    }
+    
     /**
      * Called when the mouse is moved or a mouse button is released.  Signature: (mouseX, mouseY, state) state==-1 is
      * mouseMove, state==0 or state==1 is mouseUp
@@ -586,11 +589,11 @@ public class GuiAchievements extends GuiScreen
         if (state == 0)
         {
         	if (this.isMouseOverLeftButton(mouseX, mouseY)) {
-        		this.page--;
+        		this.switchPage(-1);
         		return;
         	}
         	if (this.isMouseOverRightButton(mouseX, mouseY)) {
-        		this.page++;
+        		this.switchPage(1);
         		return;
         	}
 	        for (int tabIter = 0; tabIter < this.tabList.size(); ++tabIter)
@@ -608,6 +611,15 @@ public class GuiAchievements extends GuiScreen
         super.mouseMovedOrUp(mouseX, mouseY, state);
     }
 
+    /**
+     * Handles mouse input.
+     */
+    public void handleMouseInput()
+    {
+        super.handleMouseInput();
+        this.switchPage(-Mouse.getEventDWheel());
+    }
+    
 	private void setHoverText(AchievementTab tab, int mouseX, int mouseY)
 	{
         String name = StatCollector.translateToLocal(tab.getName());
@@ -634,7 +646,7 @@ public class GuiAchievements extends GuiScreen
         mouseY -= guiTop;
         
         int i = tab.getIndex() % MAX_TABS;
-        int j = (int) (27.6 * i);
+        int j = (int) (27.5 * i);
         byte k = 0;
 
         if (i > 0)
@@ -652,7 +664,8 @@ public class GuiAchievements extends GuiScreen
     	int guiLeft = (this.width - this.achievementsPaneWidth) / 2;
         int guiTop = (this.height - this.achievementsPaneHeight) / 2;
         
-        int leftPos = guiLeft - 10 - 4;
+        int buttonShift = 0;
+        int leftPos = guiLeft - 14 - buttonShift;
         int yPos = guiTop - 18;
         
         return mouseX >= leftPos && mouseX <= leftPos + 10 && mouseY >= yPos && mouseY <= yPos + 15 && page > 1;
@@ -663,7 +676,8 @@ public class GuiAchievements extends GuiScreen
     	int guiLeft = (this.width - this.achievementsPaneWidth) / 2;
         int guiTop = (this.height - this.achievementsPaneHeight) / 2;
         
-        int rightPos = guiLeft + this.achievementsPaneWidth + 4;
+        int buttonShift = 0;
+        int rightPos = guiLeft + this.achievementsPaneWidth + buttonShift;
         int yPos = guiTop - 18;
         
         return mouseX >= rightPos && mouseX <= rightPos + 10 && mouseY >= yPos && mouseY <= yPos + 15 && tabList.size() > MAX_TABS * page;
