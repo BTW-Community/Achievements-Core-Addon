@@ -50,7 +50,7 @@ public class GuiAchievements extends GuiScreen
 	List<AchievementTab> tabList = AchievementTabList.tabList;
 	private static int tabIndex = 0;
 	private static int page = 1;
-	private final int MAX_TABS = 8;  // Maximum tabs per page.
+	private final int MAX_TABS = 9;  // Maximum tabs per page.
 
     public GuiAchievements(StatFileWriter par1StatFileWriter)
     {
@@ -436,6 +436,10 @@ public class GuiAchievements extends GuiScreen
         this.mc.renderEngine.bindTexture("/gui/allitems.png");
         this.renderAchievementTab(tab);
         
+        // Render page buttons.
+        this.mc.renderEngine.bindTexture("/gui/trading.png");
+        this.renderPageButtons(mouseX, mouseY);
+        
         // Render tab text if hovered.
         for (i = 0; i < this.tabList.size(); i++) {
         	tab = tabList.get(i);
@@ -460,7 +464,7 @@ public class GuiAchievements extends GuiScreen
     
     // AA
     /**
-     * Renders passed creative inventory tab into the screen.
+     * Renders passed achievement tab into the screen.
      */
     protected void renderAchievementTab(AchievementTab tab)
     {	
@@ -475,10 +479,12 @@ public class GuiAchievements extends GuiScreen
         int j = 28;
         if (i == 0) {
         	j = 0;
+        } else if (i + 1 == MAX_TABS) {
+        	j = 5 * 28;
         }
         
         int k = 0;
-        int l = guiLeft + 28 * i;
+        int l = (int) (guiLeft + 27.6 * i);
         int i1 = guiTop -28;
         byte j1 = 32;
 
@@ -507,6 +513,38 @@ public class GuiAchievements extends GuiScreen
         GL11.glDisable(GL11.GL_LIGHTING);
         renderItem.zLevel = 0.0F;
         this.zLevel = 0.0F;
+    }
+    
+    /**
+     * Renders achievement page buttons into the screen.
+     */
+    protected void renderPageButtons(int mouseX, int mouseY)
+    {
+    	int guiLeft = (this.width - this.achievementsPaneWidth) / 2;
+        int guiTop = (this.height - this.achievementsPaneHeight) / 2;
+        
+        int leftPos = guiLeft - 10 - 4;
+        int rightPos = guiLeft + this.achievementsPaneWidth + 4;
+        
+        int yPos = guiTop - 18;
+        
+        GL11.glDisable(GL11.GL_LIGHTING);
+        if (page > 1)
+        {
+        	int u = 177;
+        	if (this.isMouseOverLeftButton(mouseX, mouseY)) {
+        		u = 189;
+        	}
+        	this.drawTexturedModalRect(leftPos, yPos, u, 21, 10, 15);
+        }
+        if (tabList.size() > MAX_TABS * page)
+        {
+        	int u = 177;
+        	if (this.isMouseOverRightButton(mouseX, mouseY)) {
+        		u = 189;
+        	}
+        	this.drawTexturedModalRect(rightPos, yPos, u, 2, 10, 15);
+        }
     }
     
     // AA
@@ -547,6 +585,14 @@ public class GuiAchievements extends GuiScreen
         
         if (state == 0)
         {
+        	if (this.isMouseOverLeftButton(mouseX, mouseY)) {
+        		this.page--;
+        		return;
+        	}
+        	if (this.isMouseOverRightButton(mouseX, mouseY)) {
+        		this.page++;
+        		return;
+        	}
 	        for (int tabIter = 0; tabIter < this.tabList.size(); ++tabIter)
 	        {
 	            AchievementTab tab = this.tabList.get(tabIter);
@@ -588,7 +634,7 @@ public class GuiAchievements extends GuiScreen
         mouseY -= guiTop;
         
         int i = tab.getIndex() % MAX_TABS;
-        int j = 28 * i;
+        int j = (int) (27.6 * i);
         byte k = 0;
 
         if (i > 0)
@@ -599,5 +645,27 @@ public class GuiAchievements extends GuiScreen
         int k1 = k - 32;
 
         return mouseX >= j && mouseX <= j + 28 && mouseY >= k1 && mouseY <= k1 + 32;
+    }
+	
+	protected boolean isMouseOverLeftButton(int mouseX, int mouseY)
+    {
+    	int guiLeft = (this.width - this.achievementsPaneWidth) / 2;
+        int guiTop = (this.height - this.achievementsPaneHeight) / 2;
+        
+        int leftPos = guiLeft - 10 - 4;
+        int yPos = guiTop - 18;
+        
+        return mouseX >= leftPos && mouseX <= leftPos + 10 && mouseY >= yPos && mouseY <= yPos + 15 && page > 1;
+    }
+	
+	protected boolean isMouseOverRightButton(int mouseX, int mouseY)
+    {
+    	int guiLeft = (this.width - this.achievementsPaneWidth) / 2;
+        int guiTop = (this.height - this.achievementsPaneHeight) / 2;
+        
+        int rightPos = guiLeft + this.achievementsPaneWidth + 4;
+        int yPos = guiTop - 18;
+        
+        return mouseX >= rightPos && mouseX <= rightPos + 10 && mouseY >= yPos && mouseY <= yPos + 15 && tabList.size() > MAX_TABS * page;
     }
 }
