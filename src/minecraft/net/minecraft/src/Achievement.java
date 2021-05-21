@@ -1,9 +1,11 @@
 package net.minecraft.src;
 
+import net.minecraft.src.example.ExampleAchievements;
+
 public class Achievement extends StatBase
 {
 	static {
-		AchievementExampleAddon.getInstance();
+		ExampleAchievements.getInstance();
 	}
     /**
      * Is the column (related to center of achievement gui, in 24 pixels unit) that the achievement will be displayed.

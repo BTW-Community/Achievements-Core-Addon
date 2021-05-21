@@ -69,8 +69,8 @@ public class AchievementTab {
         return Item.itemsList[this.getIconItemID()];
     }
 
-	public void printSize() {
-        System.out.println(StatCollector.translateToLocal(name) + ": " + achievementList.size() + " achievements");
+	public int size() {
+        return achievementList.size();
     }
 	
 	protected Icon genAchievementIcon(int mapX, int mapY, int windowX, int windowY)
