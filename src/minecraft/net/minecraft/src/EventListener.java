@@ -8,6 +8,6 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface AchievementListener {
-	public AchievementType value();
+public @interface EventListener {
+	public EventType value();
 }

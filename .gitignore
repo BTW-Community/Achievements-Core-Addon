@@ -619,7 +619,6 @@ src/minecraft/net/minecraft/src/EntityHanging.java
 src/minecraft/net/minecraft/src/EntityHeartFX.java
 src/minecraft/net/minecraft/src/EntityHugeExplodeFX.java
 src/minecraft/net/minecraft/src/EntityIronGolem.java
-src/minecraft/net/minecraft/src/EntityItem.java
 src/minecraft/net/minecraft/src/EntityItemFrame.java
 src/minecraft/net/minecraft/src/EntityJumpHelper.java
 src/minecraft/net/minecraft/src/EntityLargeExplodeFX.java

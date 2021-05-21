@@ -1,0 +1,23 @@
+
+language.name=English
+language.region=US
+language.code=en_US
+
+achievementtab.default=Minecraft
+
+
+achievementtab.simple1=Simple Test Tab
+
+achievement.chiselWood=You get the point!
+achievement.chiselWood.desc=Craft a pointy stick
+
+achievement.chiselStone=Stone Age
+achievement.chiselStone.desc=Craft a sharp stone
+
+achievementtab.custom=Custom Test Tab
+
+achievement.mineBark=Barking Up The Right Tree
+achievement.mineBark.desc=Get bark by punching a tree
+
+achievement.mineStick=A Sticky Situation
+achievement.custom2.desc=Get a stick by punching a tree more
