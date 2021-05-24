@@ -109,6 +109,7 @@ public class AchievementList
 
     static
     {
+    	EventDispatcher.init();
         System.out.println("Default: " + defaultTab.size() + " achievements");
     }
 }

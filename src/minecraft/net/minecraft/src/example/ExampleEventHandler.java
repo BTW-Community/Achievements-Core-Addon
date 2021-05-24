@@ -6,6 +6,7 @@ import net.minecraft.src.AchievementList;
 import net.minecraft.src.Block;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.FCBetterThanWolves;
+import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 
 public class ExampleEventHandler {
@@ -24,6 +25,8 @@ public class ExampleEventHandler {
 	public void onPickup(EntityPlayer player, ItemStack itemstack) {
 		if (itemstack.itemID == FCBetterThanWolves.fcItemBark.itemID) {
             player.triggerAchievement(ExampleAchievements.mineBark);  // This gets called, but the achievement doesn't trigger.
+        } else if (itemstack.itemID == Item.stick.itemID) {
+            player.triggerAchievement(ExampleAchievements.mineStick);
         }
 	}
 }

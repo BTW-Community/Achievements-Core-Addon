@@ -5,15 +5,11 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.src.example.ExampleAchievements;
 
-interface CollideWithPlayerListener {
-	void onCollideWithPlayer(EntityPlayer player, ItemStack itemstack);
-}
 
 public class EntityItem extends Entity
 {
-	private static List<CollideWithPlayerListener> listeners = new ArrayList<CollideWithPlayerListener>();
-	
     /**
      * The age of this EntityItem (used to animate it up and down as well as expire it)
      */
@@ -342,9 +338,7 @@ public class EntityItem extends Entity
                     par1EntityPlayer.triggerAchievement(AchievementList.blazeRod);
                 }
                 
-                for (CollideWithPlayerListener listener : listeners) {
-                	listener.onCollideWithPlayer(par1EntityPlayer, var2);
-                }
+                EventDispatcher.onCollideWithPlayer(par1EntityPlayer, var2);
 
                 this.playSound("random.pop", 0.2F, ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
                 par1EntityPlayer.onItemPickup(this, var3);
@@ -717,11 +711,5 @@ public class EntityItem extends Entity
     public static boolean InstallationIntegrityTestEntityItem()
     {
         return true;
-    }
-    
-    public static void addListener(CollideWithPlayerListener listener) {
-    	if (!listeners.contains(listener)) {
-    		listeners.add(listener);
-    	}
     }
 }

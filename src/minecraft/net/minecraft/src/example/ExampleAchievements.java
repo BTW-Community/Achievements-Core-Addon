@@ -40,13 +40,19 @@ public class ExampleAchievements extends AddonExt {
 	public void Initialize() {
 		FCAddOnHandler.LogMessage(this.getName() + " Version " + this.getVersionString() + " Initializing...");
 		
-		AchievementTab tabSimple = new AchievementTab("simple1").setIcon(FCBetterThanWolves.fcCompanionCube);
-		chiselWood = (new Achievement("chiselWood", 0, 0, FCBetterThanWolves.fcItemChiselWood, null)).setIndependent().registerAchievement(tabSimple);
+		/* DO NOT set any achievement to independent (don't call .setIndependent())
+		 * as this may cause issues for some achievements.
+		 * Setting the parent achievement to null works completely
+		 * fine so there shouldn't be a reason to use it anyway.
+		 */
+		
+		AchievementTab tabSimple = new AchievementTab("simple").setIcon(FCBetterThanWolves.fcCompanionCube);
+		chiselWood = (new Achievement("chiselWood", 0, 0, FCBetterThanWolves.fcItemChiselWood, null)).registerAchievement(tabSimple).setIndependent();
 		chiselStone = (new Achievement("chiselStone", 0, 2, FCBetterThanWolves.fcItemChiselStone, chiselWood)).registerAchievement(tabSimple);
 		System.out.println("Simple Tab: " + tabSimple.size() + " achievements");
 		
 		AchievementTab tabCustom = new CustomAchievementTab("custom").setIcon(FCBetterThanWolves.fcItemWaterWheel);
-		mineBark = (new Achievement("mineBark", 0, 0, FCBetterThanWolves.fcItemBark, null)).setIndependent().registerAchievement(tabCustom);
+		mineBark = (new Achievement("mineBark", 0, 0, FCBetterThanWolves.fcItemBark, null)).registerAchievement(tabCustom);
 		mineStick = (new Achievement("mineStick", 10, 10, Item.stick, mineBark)).registerAchievement(tabCustom);
 		System.out.println("Custom Tab: " + tabCustom.size() + " achievements");
 		

@@ -3,14 +3,9 @@ package net.minecraft.src;
 import java.util.ArrayList;
 import java.util.List;
 
-interface CraftingListener {
-	void onCrafted(EntityPlayer player, ItemStack itemstack);
-}
 
 public class SlotCrafting extends Slot
 {
-	private static List<CraftingListener> listeners = new ArrayList<CraftingListener>();
-	
     /** The craft matrix inventory linked to this result slot. */
     private final IInventory craftMatrix;
 
@@ -110,9 +105,7 @@ public class SlotCrafting extends Slot
             this.thePlayer.addStat(AchievementList.bookcase, 1);
         }
         
-        for (CraftingListener listener : listeners) {
-        	listener.onCrafted(thePlayer, par1ItemStack);
-        }
+        EventDispatcher.onCrafted(thePlayer, par1ItemStack);
     }
 
     public void onPickupFromSlot(EntityPlayer par1EntityPlayer, ItemStack par2ItemStack)
@@ -168,11 +161,5 @@ public class SlotCrafting extends Slot
         }
 
         ++par1EntityPlayer.m_iTimesCraftedThisTick;
-    }
-    
-    public static void addListener(CraftingListener listener) {
-    	if (!listeners.contains(listener)) {
-    		listeners.add(listener);
-    	}
     }
 }
