@@ -2,7 +2,7 @@ src deco/
 
 src/minecraft/net/minecraft/server/
 src/minecraft_server/net/minecraft/server/
-
+src/minecraft/net/minecraft/src/AchievementMap.java
 src/minecraft/net/minecraft/src/Block.java
 src/minecraft/net/minecraft/src/EntityList.java
 src/minecraft/net/minecraft/src/FCItemSign.java
