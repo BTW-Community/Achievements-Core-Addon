@@ -63,4 +63,8 @@ public class EventDispatcher {
 	public static void onCollideWithPlayer(EntityPlayer player, ItemStack itemstack) {
 		handleEvent(EventType.PICKUP, player, itemstack);
 	}
+	
+	public static void onCooked(EntityPlayer player, ItemStack itemstack) {
+		handleEvent(EventType.COOKED, player, itemstack);
+	}
 }

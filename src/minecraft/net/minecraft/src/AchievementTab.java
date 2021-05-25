@@ -29,7 +29,11 @@ public class AchievementTab {
 	
 	public AchievementTab(String name) {
 		this.achievementList = new ArrayList<Achievement>();
-		this.name = "achievementtab." + name;
+		if (name == "default") {
+			this.name = "Minecraft";
+		} else {
+			this.name = "achievementtab." + name;
+		}
 		this.index = AchievementTabList.tabList.size();
 		AchievementTabList.add(this);
 	}

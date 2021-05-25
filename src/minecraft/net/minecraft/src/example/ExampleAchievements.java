@@ -21,6 +21,8 @@ public class ExampleAchievements extends AddonExt {
 	
 	public static Achievement chiselWood;
 	public static Achievement chiselStone;
+	public static Achievement cookPork;
+	public static Achievement cookIron;
 	
 	public static Achievement mineBark;
 	public static Achievement mineStick;
@@ -40,15 +42,16 @@ public class ExampleAchievements extends AddonExt {
 	public void Initialize() {
 		FCAddOnHandler.LogMessage(this.getName() + " Version " + this.getVersionString() + " Initializing...");
 		
-		/* DO NOT set any achievement to independent (don't call .setIndependent())
-		 * as this may cause issues for some achievements.
-		 * Setting the parent achievement to null works completely
-		 * fine so there shouldn't be a reason to use it anyway.
+		/* DO NOT set any achievement to independent (i.e. don't call .setIndependent())
+		 * as this may cause issues for some achievement triggers. Setting the parent achievement
+		 * to null works completely fine so there shouldn't be a reason to use it anyway.
 		 */
 		
 		AchievementTab tabSimple = new AchievementTab("simple").setIcon(FCBetterThanWolves.fcCompanionCube);
-		chiselWood = (new Achievement("chiselWood", 0, 0, FCBetterThanWolves.fcItemChiselWood, null)).registerAchievement(tabSimple).setIndependent();
+		chiselWood = (new Achievement("chiselWood", 0, 0, FCBetterThanWolves.fcItemChiselWood, null)).registerAchievement(tabSimple);
 		chiselStone = (new Achievement("chiselStone", 0, 2, FCBetterThanWolves.fcItemChiselStone, chiselWood)).registerAchievement(tabSimple);
+		cookPork = (new Achievement("cookPork", 2, 2, Item.porkCooked, chiselStone)).registerAchievement(tabSimple);
+		cookIron = (new Achievement("cookIron", -2, 4, FCBetterThanWolves.fcItemNuggetIron, cookPork)).registerAchievement(tabSimple);
 		System.out.println("Simple Tab: " + tabSimple.size() + " achievements");
 		
 		AchievementTab tabCustom = new CustomAchievementTab("custom").setIcon(FCBetterThanWolves.fcItemWaterWheel);

@@ -24,9 +24,18 @@ public class ExampleEventHandler {
 	@EventListener(EventType.PICKUP)
 	public void onPickup(EntityPlayer player, ItemStack itemstack) {
 		if (itemstack.itemID == FCBetterThanWolves.fcItemBark.itemID) {
-            player.triggerAchievement(ExampleAchievements.mineBark);  // This gets called, but the achievement doesn't trigger.
+            player.triggerAchievement(ExampleAchievements.mineBark);
         } else if (itemstack.itemID == Item.stick.itemID) {
             player.triggerAchievement(ExampleAchievements.mineStick);
+        }
+	}
+	
+	@EventListener(EventType.COOKED)
+	public void onCooked(EntityPlayer player, ItemStack itemstack) {
+		if (itemstack.itemID == Item.porkCooked.itemID) {
+            player.triggerAchievement(ExampleAchievements.cookPork);
+        } else if (itemstack.itemID == FCBetterThanWolves.fcItemNuggetIron.itemID) {
+            player.triggerAchievement(ExampleAchievements.cookIron);
         }
 	}
 }

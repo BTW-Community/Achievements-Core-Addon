@@ -776,7 +776,6 @@ src/minecraft/net/minecraft/src/FCBlockButtonStone.java
 src/minecraft/net/minecraft/src/FCBlockButtonWood.java
 src/minecraft/net/minecraft/src/FCBlockCactus.java
 src/minecraft/net/minecraft/src/FCBlockCake.java
-src/minecraft/net/minecraft/src/FCBlockCampfire.java
 src/minecraft/net/minecraft/src/FCBlockCandle.java
 src/minecraft/net/minecraft/src/FCBlockCarrot.java
 src/minecraft/net/minecraft/src/FCBlockCauldron.java
@@ -840,7 +839,6 @@ src/minecraft/net/minecraft/src/FCBlockFlowerBlossom.java
 src/minecraft/net/minecraft/src/FCBlockFlowerPot.java
 src/minecraft/net/minecraft/src/FCBlockFullBlock.java
 src/minecraft/net/minecraft/src/FCBlockFurnace.java
-src/minecraft/net/minecraft/src/FCBlockFurnaceBrick.java
 src/minecraft/net/minecraft/src/FCBlockFurnaceBrickBurning.java
 src/minecraft/net/minecraft/src/FCBlockFurnaceBrickIdle.java
 src/minecraft/net/minecraft/src/FCBlockGearBox.java

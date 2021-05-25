@@ -3,8 +3,6 @@ language.name=English
 language.region=US
 language.code=en_US
 
-achievementtab.default=Minecraft
-
 
 achievementtab.simple=Simple Test Tab
 
@@ -13,6 +11,13 @@ achievement.chiselWood.desc=Craft a pointy stick
 
 achievement.chiselStone=Stone Age
 achievement.chiselStone.desc=Craft a sharp stone
+
+achievement.cookPork=Time to Feast!
+achievement.chiselStone.desc=Cook some pork
+
+achievement.cookIron=Acquire Hardware?
+achievement.chiselStone.desc=Smelt an iron nugget
+
 
 achievementtab.custom=Custom Test Tab
 
