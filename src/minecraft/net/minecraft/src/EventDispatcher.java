@@ -67,4 +67,8 @@ public class EventDispatcher {
 	public static void onCooked(EntityPlayer player, ItemStack itemstack) {
 		handleEvent(EventType.COOKED, player, itemstack);
 	}
+	
+	public static void onKilled(EntityPlayer player, EntityLiving entity) {
+		handleEvent(EventType.KILLED, player, entity);
+	}
 }

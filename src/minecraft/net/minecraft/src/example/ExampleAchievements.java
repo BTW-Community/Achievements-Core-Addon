@@ -21,6 +21,7 @@ public class ExampleAchievements extends AddonExt {
 	
 	public static Achievement chiselWood;
 	public static Achievement chiselStone;
+	public static Achievement killPig;
 	public static Achievement cookPork;
 	public static Achievement cookIron;
 	
@@ -50,7 +51,8 @@ public class ExampleAchievements extends AddonExt {
 		AchievementTab tabSimple = new AchievementTab("simple").setIcon(FCBetterThanWolves.fcCompanionCube);
 		chiselWood = (new Achievement("chiselWood", 0, 0, FCBetterThanWolves.fcItemChiselWood, null)).registerAchievement(tabSimple);
 		chiselStone = (new Achievement("chiselStone", 0, 2, FCBetterThanWolves.fcItemChiselStone, chiselWood)).registerAchievement(tabSimple);
-		cookPork = (new Achievement("cookPork", 2, 2, Item.porkCooked, chiselStone)).registerAchievement(tabSimple);
+		killPig = (new Achievement("killPig", 3, 3, Item.porkRaw, chiselStone)).registerAchievement(tabSimple);
+		cookPork = (new Achievement("cookPork", 2, 2, Item.porkCooked, killPig)).registerAchievement(tabSimple);
 		cookIron = (new Achievement("cookIron", -2, 4, FCBetterThanWolves.fcItemNuggetIron, cookPork)).registerAchievement(tabSimple);
 		System.out.println("Simple Tab: " + tabSimple.size() + " achievements");
 		

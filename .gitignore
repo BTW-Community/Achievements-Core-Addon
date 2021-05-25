@@ -648,7 +648,6 @@ src/minecraft/net/minecraft/src/EntityPainting.java
 src/minecraft/net/minecraft/src/EntityPickupFX.java
 src/minecraft/net/minecraft/src/EntityPig.java
 src/minecraft/net/minecraft/src/EntityPigZombie.java
-src/minecraft/net/minecraft/src/EntityPlayer.java
 src/minecraft/net/minecraft/src/EntityPlayerMP.java
 src/minecraft/net/minecraft/src/EntityPlayerSP.java
 src/minecraft/net/minecraft/src/EntityPortalFX.java
