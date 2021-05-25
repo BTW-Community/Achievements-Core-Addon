@@ -11,6 +11,7 @@ This addon will allow for addon authors to create their own custom achievements.
   - AchievementMap
   - EntityItem
   - EntityPlayer
+  - EntityPlayerMP
   - FCBlockCampfire
   - FCBlockFurnaceBrick
   - GuiAchievement

@@ -71,4 +71,8 @@ public class EventDispatcher {
 	public static void onKilled(EntityPlayer player, EntityLiving entity) {
 		handleEvent(EventType.KILLED, player, entity);
 	}
+	
+	public static void onTraveledDimension(EntityPlayer player, int dimension) {
+		handleEvent(EventType.PORTAL, player, dimension);
+	}
 }

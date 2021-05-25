@@ -49,4 +49,11 @@ public class ExampleEventHandler {
             player.triggerAchievement(ExampleAchievements.killPig);
         }
 	}
+	
+	@EventListener(EventType.PORTAL)
+	public void onTravelledDimension(EntityPlayer player, int dimension) {
+		if (dimension == -1) {
+            player.triggerAchievement(ExampleAchievements.netherPortal);
+        }
+	}
 }
