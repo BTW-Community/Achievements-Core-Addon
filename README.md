@@ -16,5 +16,6 @@ This addon will allow for addon authors to create their own custom achievements.
   - FCBlockFurnaceBrick
   - GuiAchievement
   - GuiAchievements
+  - SlotBrewingStandPotion
   - SlotCrafting
 </details>

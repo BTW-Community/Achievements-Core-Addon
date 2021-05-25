@@ -2073,7 +2073,6 @@ src/minecraft/net/minecraft/src/Slot.java
 src/minecraft/net/minecraft/src/SlotArmor.java
 src/minecraft/net/minecraft/src/SlotBeacon.java
 src/minecraft/net/minecraft/src/SlotBrewingStandIngredient.java
-src/minecraft/net/minecraft/src/SlotBrewingStandPotion.java
 
 src/minecraft/net/minecraft/src/SlotCreativeInventory.java
 src/minecraft/net/minecraft/src/SlotEnchantment.java

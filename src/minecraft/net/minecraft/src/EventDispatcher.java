@@ -60,12 +60,16 @@ public class EventDispatcher {
 		handleEvent(EventType.CRAFTED, player, itemstack);
 	}
 	
-	public static void onCollideWithPlayer(EntityPlayer player, ItemStack itemstack) {
-		handleEvent(EventType.PICKUP, player, itemstack);
-	}
-	
 	public static void onCooked(EntityPlayer player, ItemStack itemstack) {
 		handleEvent(EventType.COOKED, player, itemstack);
+	}
+	
+	public static void onBrewed(EntityPlayer player, ItemStack itemstack) {
+		handleEvent(EventType.BREWED, player, itemstack);
+	}
+	
+	public static void onCollideWithPlayer(EntityPlayer player, ItemStack itemstack) {
+		handleEvent(EventType.PICKUP, player, itemstack);
 	}
 	
 	public static void onKilled(EntityPlayer player, EntityLiving entity) {

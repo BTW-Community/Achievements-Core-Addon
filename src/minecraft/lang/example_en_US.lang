@@ -31,4 +31,7 @@ achievement.mineStick=A Sticky Situation
 achievement.mineStick.desc=Get a stick by punching a tree more
 
 achievement.netherPortal=Welkom in Nederland
-achievement.mineStick.desc=Travel to the Nether
+achievement.netherPortal.desc=Travel to the Nether
+
+achievement.firePotion=Immunity
+achievement.firePotion.desc=Brew a fire resistance potion

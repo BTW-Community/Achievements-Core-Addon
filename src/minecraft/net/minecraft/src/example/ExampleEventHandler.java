@@ -9,6 +9,7 @@ import net.minecraft.src.EntityPig;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.FCBetterThanWolves;
 import net.minecraft.src.Item;
+import net.minecraft.src.ItemPotion;
 import net.minecraft.src.ItemStack;
 
 public class ExampleEventHandler {
@@ -23,16 +24,6 @@ public class ExampleEventHandler {
         }
 	}
 	
-	@EventListener(EventType.PICKUP)
-	public void onPickup(EntityPlayer player, ItemStack itemstack) {
-		if (itemstack.itemID == FCBetterThanWolves.fcItemBark.itemID) {
-            player.triggerAchievement(ExampleAchievements.mineBark);
-        }
-		else if (itemstack.itemID == Item.stick.itemID) {
-            player.triggerAchievement(ExampleAchievements.mineStick);
-        }
-	}
-	
 	@EventListener(EventType.COOKED)
 	public void onCooked(EntityPlayer player, ItemStack itemstack) {
 		if (itemstack.itemID == Item.porkCooked.itemID) {
@@ -40,6 +31,23 @@ public class ExampleEventHandler {
         }
 		else if (itemstack.itemID == FCBetterThanWolves.fcItemNuggetIron.itemID) {
             player.triggerAchievement(ExampleAchievements.cookIron);
+        }
+	}
+	
+	@EventListener(EventType.BREWED)
+	public void onBrewed(EntityPlayer player, ItemStack itemstack) {
+		if (itemstack.itemID == Item.potion.itemID && itemstack.getItemDamage() == 8195) {
+			player.triggerAchievement(ExampleAchievements.firePotion);
+        }
+	}
+	
+	@EventListener(EventType.PICKUP)
+	public void onPickup(EntityPlayer player, ItemStack itemstack) {
+		if (itemstack.itemID == FCBetterThanWolves.fcItemBark.itemID) {
+            player.triggerAchievement(ExampleAchievements.mineBark);
+        }
+		else if (itemstack.itemID == Item.stick.itemID) {
+            player.triggerAchievement(ExampleAchievements.mineStick);
         }
 	}
 	
