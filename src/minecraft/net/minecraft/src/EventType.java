@@ -7,5 +7,5 @@ public enum EventType {
 	PICKUP,
 	KILLED,
 	PORTAL,
-	NEUTERED,
+	ENTITY_INTERACT,
 }

@@ -1122,6 +1122,7 @@ public abstract class EntityPlayer extends EntityLiving implements ICommandSende
     {
         if (par1Entity.interact(this))
         {
+        	EventDispatcher.onEntityInteraction(this, par1Entity);
             return true;
         }
         else
@@ -1141,6 +1142,7 @@ public abstract class EntityPlayer extends EntityLiving implements ICommandSende
                     {
                         this.destroyCurrentEquippedItem();
                     }
+                    EventDispatcher.onEntityInteraction(this, par1Entity);
 
                     return true;
                 }

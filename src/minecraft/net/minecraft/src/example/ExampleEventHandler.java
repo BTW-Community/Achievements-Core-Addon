@@ -4,12 +4,15 @@ import net.minecraft.src.EventListener;
 import net.minecraft.src.EventType;
 import net.minecraft.src.AchievementList;
 import net.minecraft.src.Block;
+import net.minecraft.src.Entity;
+import net.minecraft.src.EntityCreeper;
 import net.minecraft.src.EntityLiving;
 import net.minecraft.src.EntityPig;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.FCBetterThanWolves;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemPotion;
+import net.minecraft.src.ItemShears;
 import net.minecraft.src.ItemStack;
 
 public class ExampleEventHandler {
@@ -65,8 +68,13 @@ public class ExampleEventHandler {
         }
 	}
 	
-	@EventListener(EventType.NEUTERED)
-	public void onNeutered(EntityPlayer player) {
-		player.triggerAchievement(ExampleAchievements.neuterCreeper);
+	@EventListener(EventType.ENTITY_INTERACT)
+	public void onEntityInteraction(EntityPlayer player, Entity entity) {
+		if (entity instanceof EntityCreeper) {
+			Item currentItem = player.getCurrentEquippedItem().getItem();
+			if (currentItem instanceof ItemShears) {
+				player.triggerAchievement(ExampleAchievements.neuterCreeper);				
+			}
+		}
 	}
 }

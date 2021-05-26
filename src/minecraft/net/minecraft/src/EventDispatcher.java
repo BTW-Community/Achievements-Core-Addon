@@ -80,7 +80,7 @@ public class EventDispatcher {
 		handleEvent(EventType.PORTAL, player, dimension);
 	}
 	
-	public static void onNeutered(EntityPlayer player) {
-		handleEvent(EventType.NEUTERED, player);
+	public static void onEntityInteraction(EntityPlayer player, Entity entity) {
+		handleEvent(EventType.ENTITY_INTERACT, player, entity);
 	}
 }

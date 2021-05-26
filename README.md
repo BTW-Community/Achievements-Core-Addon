@@ -14,7 +14,6 @@ This addon will allow for addon authors to create their own custom achievements.
   - EntityPlayerMP
   - FCBlockCampfire
   - FCBlockFurnaceBrick
-  - FCEntityCreeper
   - GuiAchievement
   - GuiAchievements
   - SlotBrewingStandPotion

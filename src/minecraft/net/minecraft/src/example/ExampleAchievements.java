@@ -11,14 +11,12 @@ import net.minecraft.src.FCBetterThanWolves;
 import net.minecraft.src.Item;
 
 /**
- * @author IssaMe (@issame)
- *
  * An example addon showcasing how to use the Achievements Core Addon.
  */
 public class ExampleAchievements extends AddonExt {
 	private static ExampleAchievements instance;
-	private ExampleEventHandler listener;
 	
+	/* List of custom achievements */
 	public static Achievement chiselWood;
 	public static Achievement chiselStone;
 	public static Achievement killPig;
@@ -66,14 +64,6 @@ public class ExampleAchievements extends AddonExt {
 		netherPortal = (new Achievement("netherPortal", -5, -5, Block.obsidian, mineStick)).registerAchievement(tabCustom);
 		firePotion = (new Achievement("firePotion", 4, 2, Item.potion, netherPortal)).setSpecial().registerAchievement(tabCustom);
 		System.out.println("Custom Tab: " + tabCustom.size() + " achievements");
-		
-		new AchievementTab("4").setIcon(Block.cloth);
-		new AchievementTab("5").setIcon(Block.cloth);
-		new AchievementTab("6").setIcon(Block.cloth);
-		new AchievementTab("7").setIcon(Block.cloth);
-		new AchievementTab("8").setIcon(Block.cloth);
-		new AchievementTab("9").setIcon(Block.cloth);
-		new AchievementTab("10").setIcon(Block.cloth);
 		
 		EventDispatcher.register(new ExampleEventHandler());
 		

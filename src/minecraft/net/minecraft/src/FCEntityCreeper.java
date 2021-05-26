@@ -103,7 +103,6 @@ public class FCEntityCreeper extends EntityCreeper
         {
             if (!this.worldObj.isRemote)
             {
-            	EventDispatcher.onNeutered(var1);
                 this.SetNeuteredState(1);
                 EntityItem var3 = this.entityDropItem(new ItemStack(FCBetterThanWolves.fcItemCreeperOysters, 1), 0.25F);
                 var3.motionY += (double)(this.rand.nextFloat() * 0.025F);
