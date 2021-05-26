@@ -64,4 +64,9 @@ public class ExampleEventHandler {
             player.triggerAchievement(ExampleAchievements.netherPortal);
         }
 	}
+	
+	@EventListener(EventType.NEUTERED)
+	public void onNeutered(EntityPlayer player) {
+		player.triggerAchievement(ExampleAchievements.neuterCreeper);
+	}
 }

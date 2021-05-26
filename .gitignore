@@ -1142,7 +1142,6 @@ src/minecraft/net/minecraft/src/FCEntityCanvas.java
 src/minecraft/net/minecraft/src/FCEntityCaveSpider.java
 src/minecraft/net/minecraft/src/FCEntityChicken.java
 src/minecraft/net/minecraft/src/FCEntityCow.java
-src/minecraft/net/minecraft/src/FCEntityCreeper.java
 src/minecraft/net/minecraft/src/FCEntityDynamite.java
 src/minecraft/net/minecraft/src/FCEntityEnderman.java
 src/minecraft/net/minecraft/src/FCEntityFallingBlock.java

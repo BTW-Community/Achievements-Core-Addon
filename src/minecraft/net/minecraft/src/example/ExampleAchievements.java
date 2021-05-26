@@ -27,6 +27,7 @@ public class ExampleAchievements extends AddonExt {
 	
 	public static Achievement mineBark;
 	public static Achievement mineStick;
+	public static Achievement neuterCreeper;
 	public static Achievement netherPortal;
 	public static Achievement firePotion;
 
@@ -61,6 +62,7 @@ public class ExampleAchievements extends AddonExt {
 		AchievementTab tabCustom = new CustomAchievementTab("custom").setIcon(FCBetterThanWolves.fcItemWaterWheel);
 		mineBark = (new Achievement("mineBark", 0, 0, FCBetterThanWolves.fcItemBark, null)).registerAchievement(tabCustom);
 		mineStick = (new Achievement("mineStick", 10, 10, Item.stick, mineBark)).registerAchievement(tabCustom);
+		neuterCreeper = (new Achievement("neuterCreeper", 6, 9, FCBetterThanWolves.fcItemCreeperOysters, mineStick)).registerAchievement(tabCustom);
 		netherPortal = (new Achievement("netherPortal", -5, -5, Block.obsidian, mineStick)).registerAchievement(tabCustom);
 		firePotion = (new Achievement("firePotion", 4, 2, Item.potion, netherPortal)).setSpecial().registerAchievement(tabCustom);
 		System.out.println("Custom Tab: " + tabCustom.size() + " achievements");

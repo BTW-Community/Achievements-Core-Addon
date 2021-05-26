@@ -79,4 +79,8 @@ public class EventDispatcher {
 	public static void onTraveledDimension(EntityPlayer player, int dimension) {
 		handleEvent(EventType.PORTAL, player, dimension);
 	}
+	
+	public static void onNeutered(EntityPlayer player) {
+		handleEvent(EventType.NEUTERED, player);
+	}
 }
