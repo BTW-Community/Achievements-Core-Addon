@@ -1,5 +1,3 @@
-src deco/
-
 src/minecraft/net/minecraft/server/
 src/minecraft_server/net/minecraft/server/
 src/minecraft/net/minecraft/src/AchievementMap.java
@@ -2266,8 +2264,6 @@ src/minecraft/net/minecraft/src/WrongUsageException.java
 src/minecraft/org/
 src/minecraft_server/net/minecraft/src/AABBLocalPool.java
 src/minecraft_server/net/minecraft/src/AABBPool.java
-src/minecraft_server/net/minecraft/src/Achievement.java
-src/minecraft_server/net/minecraft/src/AchievementList.java
 src/minecraft_server/net/minecraft/src/AchievementMap.java
 src/minecraft_server/net/minecraft/src/AnvilChunkLoader.java
 src/minecraft_server/net/minecraft/src/AnvilChunkLoaderPending.java
@@ -2744,7 +2740,6 @@ src/minecraft_server/net/minecraft/src/EntityGiantZombie.java
 src/minecraft_server/net/minecraft/src/EntityGolem.java
 src/minecraft_server/net/minecraft/src/EntityHanging.java
 src/minecraft_server/net/minecraft/src/EntityIronGolem.java
-src/minecraft_server/net/minecraft/src/EntityItem.java
 src/minecraft_server/net/minecraft/src/EntityItemFrame.java
 src/minecraft_server/net/minecraft/src/EntityJumpHelper.java
 src/minecraft_server/net/minecraft/src/EntityLargeFireball.java
@@ -2769,8 +2764,6 @@ src/minecraft_server/net/minecraft/src/EntityOcelot.java
 src/minecraft_server/net/minecraft/src/EntityPainting.java
 src/minecraft_server/net/minecraft/src/EntityPig.java
 src/minecraft_server/net/minecraft/src/EntityPigZombie.java
-src/minecraft_server/net/minecraft/src/EntityPlayer.java
-src/minecraft_server/net/minecraft/src/EntityPlayerMP.java
 src/minecraft_server/net/minecraft/src/EntityPotion.java
 src/minecraft_server/net/minecraft/src/EntitySelectorAlive.java
 src/minecraft_server/net/minecraft/src/EntitySelectorArmoredMob.java
@@ -2878,7 +2871,6 @@ src/minecraft_server/net/minecraft/src/FCBlockButtonStone.java
 src/minecraft_server/net/minecraft/src/FCBlockButtonWood.java
 src/minecraft_server/net/minecraft/src/FCBlockCactus.java
 src/minecraft_server/net/minecraft/src/FCBlockCake.java
-src/minecraft_server/net/minecraft/src/FCBlockCampfire.java
 src/minecraft_server/net/minecraft/src/FCBlockCandle.java
 src/minecraft_server/net/minecraft/src/FCBlockCarrot.java
 src/minecraft_server/net/minecraft/src/FCBlockCauldron.java
@@ -2942,7 +2934,6 @@ src/minecraft_server/net/minecraft/src/FCBlockFlowerBlossom.java
 src/minecraft_server/net/minecraft/src/FCBlockFlowerPot.java
 src/minecraft_server/net/minecraft/src/FCBlockFullBlock.java
 src/minecraft_server/net/minecraft/src/FCBlockFurnace.java
-src/minecraft_server/net/minecraft/src/FCBlockFurnaceBrick.java
 src/minecraft_server/net/minecraft/src/FCBlockFurnaceBrickBurning.java
 src/minecraft_server/net/minecraft/src/FCBlockFurnaceBrickIdle.java
 src/minecraft_server/net/minecraft/src/FCBlockGearBox.java
@@ -3874,8 +3865,6 @@ src/minecraft_server/net/minecraft/src/Slot.java
 src/minecraft_server/net/minecraft/src/SlotArmor.java
 src/minecraft_server/net/minecraft/src/SlotBeacon.java
 src/minecraft_server/net/minecraft/src/SlotBrewingStandIngredient.java
-src/minecraft_server/net/minecraft/src/SlotBrewingStandPotion.java
-src/minecraft_server/net/minecraft/src/SlotCrafting.java
 src/minecraft_server/net/minecraft/src/SlotEnchantment.java
 src/minecraft_server/net/minecraft/src/SlotEnchantmentTable.java
 src/minecraft_server/net/minecraft/src/SlotFurnace.java

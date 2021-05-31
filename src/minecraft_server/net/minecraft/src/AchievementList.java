@@ -19,7 +19,7 @@ public class AchievementList
 
     /** Holds a list of all registered achievements. */
     public static List achievementList = new ArrayList();
-
+   
     /** Is the 'open inventory' achievement. */
     public static Achievement openInventory = (new Achievement(0, "openInventory", 0, 0, Item.book, (Achievement)null)).setIndependent().registerAchievement();
 

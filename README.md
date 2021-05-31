@@ -6,16 +6,30 @@ This addon will allow for addon authors to create their own custom achievements.
 <details>
   <summary>Client</summary>
   
-  - Achievement
-  - AchievementList
-  - AchievementMap
-  - EntityItem
-  - EntityPlayer
-  - EntityPlayerMP
   - FCBlockCampfire
-  - FCBlockFurnaceBrick
-  - GuiAchievement
-  - GuiAchievements
-  - SlotBrewingStandPotion
+  - EntityItem
+  - Achievement
   - SlotCrafting
+  - EntityPlayer
+  - AchievementList
+  - EntityPlayerMP
+  - SlotBrewingStandPotion
+  - AchievementTab
+  - FCBlockFurnaceBrick
+  - GuiAchievements
+</details>
+
+<details>
+  <summary>Server</summary>
+  
+  - FCBlockCampfire
+  - EntityItem
+  - Achievement
+  - SlotCrafting
+  - EntityPlayer
+  - AchievementList
+  - EntityPlayerMP
+  - SlotBrewingStandPotion
+  - AchievementTab
+  - FCBlockFurnaceBrick
 </details>
