@@ -27,6 +27,11 @@ public class EventDispatcher {
 		return instance;
 	}
 	
+	/**
+	 * Registers an event handler that will be called when events are called.
+	 * 
+	 * @param obj is the event handler
+	 */
 	public static void register(Object obj) {
 		if (!listeners.contains(obj)) {
 			listeners.add(obj);

@@ -27,6 +27,9 @@ public class AchievementTab {
     private int index;
     private int iconID = Item.paper.itemID;
 	
+    /**
+     * @param name is the name of the tab
+     */
 	public AchievementTab(String name) {
 		this.achievementList = new ArrayList<Achievement>();
 		this.name = "achievementtab." + name;
@@ -34,29 +37,58 @@ public class AchievementTab {
 		AchievementTabList.add(this);
 	}
 	
+	/**
+	 * @return untranslated name of the tab
+	 */
 	public String getName() {
 		return name;
 	}
 	
+	/**
+	 * @return index of the tab
+	 */
 	public int getIndex() {
 		return index;
 	}
 	
+	/**
+	 * Sets the icon for this tab to the specified item/block id.
+	 * 
+	 * @param id is the item/block id
+	 * @return this
+	 */
 	public AchievementTab setIcon(int id) {
         this.iconID = id;
         return this;
     }
 	
+	/**
+	 * Sets the icon for this tab to the specified item.
+	 * 
+	 * @param item is the item to set as the icon
+	 * @return this
+	 */
 	public AchievementTab setIcon(Item item) {
 		setIcon(item.itemID);
         return this;
     }
 	
+	/**
+	 * Sets the icon for this tab to the specified block.
+	 * 
+	 * @param block is the block to set as the block
+	 * @return this
+	 */
 	public AchievementTab setIcon(Block block) {
 		setIcon(block.blockID);
         return this;
     }
 	
+	/**
+	 * Adds an Achievement to this tab.
+	 * 
+	 * @param achievement to add
+	 */
 	public void add(Achievement achievement) {
 		this.achievementList.add(achievement);
 	}
@@ -73,6 +105,17 @@ public class AchievementTab {
         return achievementList.size();
     }
 	
+	/**
+	 * Generates the background of a tab.
+	 * Uses vanilla background by default.
+	 * Override this method to create a custom background.
+	 * 
+	 * @param mapX
+	 * @param mapY
+	 * @param windowX
+	 * @param windowY
+	 * @return Icon object
+	 */
 	protected Icon genAchievementIcon(int mapX, int mapY, int windowX, int windowY)
     {   
     	int var10 = windowX + 288 >> 4;

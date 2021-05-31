@@ -1,17 +1,26 @@
-package net.minecraft.src;
+package net.minecraft.src.example;
 
 import java.util.Random;
 
 import org.lwjgl.opengl.GL11;
 
+import net.minecraft.src.AchievementTab;
+import net.minecraft.src.Block;
+import net.minecraft.src.Icon;
+
+/**
+ * A custom tab that overrides the background generation to create a custom background.
+ */
 public class CustomAchievementTab extends AchievementTab {
 
 	public CustomAchievementTab(String name) {
 		super(name);
 	}
 	
+	@Override
 	protected Icon genAchievementIcon(int mapX, int mapY, int windowX, int windowY)
     {   
+		// Honestly not sure how this works, but it works.
 		int xPos = (windowX + 288 >> 4) + mapX;
         int yPos = (windowY + 288 >> 4) + mapY;
         

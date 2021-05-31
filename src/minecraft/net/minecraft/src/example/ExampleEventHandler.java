@@ -15,6 +15,12 @@ import net.minecraft.src.ItemPotion;
 import net.minecraft.src.ItemShears;
 import net.minecraft.src.ItemStack;
 
+/**
+ * An example event handler.
+ * 
+ * The names of the functions do not matter, all you need are the annotations
+ * and the relevant parameters.
+ */
 public class ExampleEventHandler {
 
 	@EventListener(EventType.CRAFTED)

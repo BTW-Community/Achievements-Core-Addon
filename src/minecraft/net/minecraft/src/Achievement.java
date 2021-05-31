@@ -44,14 +44,14 @@ public class Achievement extends StatBase
      */
     private boolean isSpecial;
     
-    public Achievement(String par2Str, int par3, int par4, Item par5Item, Achievement par6Achievement)
+    public Achievement(String name, int displayColumn, int displayRow, Item item, Achievement parentAchievement)
     {
-        this(0, par2Str, par3, par4, new ItemStack(par5Item), par6Achievement);
+        this(0, name, displayColumn, displayRow, new ItemStack(item), parentAchievement);
     }
 
-    public Achievement(String par2Str, int par3, int par4, Block par5Block, Achievement par6Achievement)
+    public Achievement(String name, int displayColumn, int displayRow, Block block, Achievement parentAchievement)
     {
-        this(0, par2Str, par3, par4, new ItemStack(par5Block), par6Achievement);
+        this(0, name, displayColumn, displayRow, new ItemStack(block), parentAchievement);
     }
 
     public Achievement(int par1, String par2Str, int par3, int par4, Item par5Item, Achievement par6Achievement)
@@ -106,7 +106,10 @@ public class Achievement extends StatBase
     }
     
     /**
-     * Adds the achievement on the internal list of registered achievements, also, it's check for duplicated id's.
+     * Registers an achievement to a custom tab.
+     * 
+     * @param tab is the custom tab to register to
+     * @return this
      */
     public Achievement registerAchievement(AchievementTab tab)
     {

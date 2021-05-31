@@ -5,7 +5,6 @@ import net.minecraft.src.EventDispatcher;
 import net.minecraft.src.AchievementTab;
 import net.minecraft.src.AddonExt;
 import net.minecraft.src.Block;
-import net.minecraft.src.CustomAchievementTab;
 import net.minecraft.src.FCAddOnHandler;
 import net.minecraft.src.FCBetterThanWolves;
 import net.minecraft.src.Item;
@@ -44,7 +43,8 @@ public class ExampleAchievements extends AddonExt {
 	public void Initialize() {
 		FCAddOnHandler.LogMessage(this.getName() + " Version " + this.getVersionString() + " Initializing...");
 		
-		/* DO NOT set any achievement to independent (i.e. don't call .setIndependent())
+		/* 
+		 * DO NOT set any achievement to independent (i.e. don't call .setIndependent())
 		 * as this may cause issues for some achievement triggers. Setting the parent achievement
 		 * to null works completely fine so there shouldn't be a reason to use it anyway.
 		 */
