@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.src.example.ExampleAchievements;
 
 
 public class EntityItem extends Entity

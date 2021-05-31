@@ -46,7 +46,6 @@ public class GuiAchievements extends GuiScreen
     private int isMouseButtonDown = 0;
     private StatFileWriter statFileWriter;
     
-	 // AA
 	List<AchievementTab> tabList = AchievementTabList.tabList;
 	private static int tabIndex = 0;
 	private static int page = 1;
