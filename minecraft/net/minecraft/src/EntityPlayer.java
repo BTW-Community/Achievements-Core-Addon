@@ -1,8 +1,17 @@
 package net.minecraft.src;
 
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+
+import argo.jdom.JdomParser;
+import argo.jdom.JsonRootNode;
+import net.minecraft.src.EntityPlayer.BeaconRespawnValidationResult.BeaconStatus;
 
 public abstract class EntityPlayer extends EntityLiving implements ICommandSender
 {
@@ -714,7 +723,7 @@ public abstract class EntityPlayer extends EntityLiving implements ICommandSende
         }
         else
         {
-            EntityItem var3 = new EntityItem(this.worldObj, this.posX, this.posY - 0.30000001192092896D + (double)this.getEyeHeight(), this.posZ, par1ItemStack);
+            EntityItem var3 = (EntityItem) EntityList.createEntityOfType(EntityItem.class, this.worldObj, this.posX, this.posY - 0.30000001192092896D + (double)this.getEyeHeight(), this.posZ, par1ItemStack);
             var3.delayBeforeCanPickup = 40;
             float var4 = 0.1F;
             float var5;
@@ -1169,7 +1178,7 @@ public abstract class EntityPlayer extends EntityLiving implements ICommandSende
     {
         if (par1Entity.interact(this))
         {
-        	EventDispatcher.onEntityInteraction(this, par1Entity);
+        	EventDispatcher.onEntityInteraction(this, par1Entity);  // ACA
             return true;
         }
         else
@@ -1189,8 +1198,8 @@ public abstract class EntityPlayer extends EntityLiving implements ICommandSende
                     {
                         this.destroyCurrentEquippedItem();
                     }
-                    EventDispatcher.onEntityInteraction(this, par1Entity);
 
+                    EventDispatcher.onEntityInteraction(this, par1Entity);  // ACA
                     return true;
                 }
             }
@@ -1924,7 +1933,7 @@ public abstract class EntityPlayer extends EntityLiving implements ICommandSende
      */
     public void onKillEntity(EntityLiving par1EntityLiving)
     {
-    	EventDispatcher.onEntityInteraction(this, par1EntityLiving);
+    	EventDispatcher.onEntityInteraction(this, par1EntityLiving);  // ACA
         if (par1EntityLiving instanceof IMob)
         {
             this.triggerAchievement(AchievementList.killEnemy);
@@ -2957,10 +2966,10 @@ public abstract class EntityPlayer extends EntityLiving implements ICommandSende
      */
     public int GetValidatedRespawnCoordinates( World newWorld, ChunkCoordinates respawnLocation )
     {
-    	int iReturnValue = 0;
+    	int returnValue = 0;
     	
-    	int iOldDimension = dimension;
-    	int iNewDimension = m_iSpawnDimension;
+    	int oldDimension = dimension;
+    	int newDimension = m_iSpawnDimension;
     	
         IChunkProvider chunkProvider = newWorld.getChunkProvider();
         
@@ -2985,88 +2994,90 @@ public abstract class EntityPlayer extends EntityLiving implements ICommandSende
             }
             else
             {
-            	iReturnValue = 1;
+            	returnValue = 1;
             }
         }
         else
-        {        
-    		iReturnValue = 2;
-    		
-	        if ( newWorld.getBlockId( spawnChunk.posX, spawnChunk.posY, spawnChunk.posZ ) == Block.beacon.blockID )
-	        {
-	        	FCTileEntityBeacon beaconEnt = (FCTileEntityBeacon)newWorld.getBlockTileEntity( spawnChunk.posX, spawnChunk.posY, spawnChunk.posZ );
-	        	
-	        	if ( beaconEnt != null )
-	        	{
-	        		int iBeaconEffect = beaconEnt.getPrimaryEffect();
-	        		
-	        		if ( iBeaconEffect == FCTileEntityBeacon.m_iEffectIDSpawnPoint )
-	        		{
-	        			int iBeaconPowerLevel = beaconEnt.getLevels();
-	        		
-	        			if ( iBeaconPowerLevel > 0 )
-	        			{
-	        				iReturnValue = 3;
-	        				
-		        			if ( iBeaconPowerLevel >= 4 || iOldDimension == iNewDimension )
-		        			{
-		        				boolean bInRange = true;
-		        				
-		        				if ( iBeaconPowerLevel < 3 )
-		        				{
-		        					int iMaxRange = 160;
-		        					
-		        					if ( iBeaconPowerLevel == 2 )
-		        					{
-		        						iMaxRange = 2000;
-		        					}
-		        					
-		        					int iDeltaX = Math.abs( (int)posX - spawnChunk.posX );
-		        					
-		        					if ( iDeltaX > iMaxRange )
-		        					{
-		        						bInRange = false;
-		        					}
-		        					else
-		        					{
-			        					int iDeltaZ = Math.abs( (int)posZ - spawnChunk.posZ );
-			        					
-			        					if ( iDeltaZ > iMaxRange )
-			        					{
-			        						bInRange = false;
-			        					}
-		        					}
-		        				}
-		        				
-		        				if ( bInRange )
-		        				{	        				
-		        					validatedCoords = GetRandomValidSpawnAroundBeaconLocation( newWorld, spawnChunk.posX, spawnChunk.posY, spawnChunk.posZ, iBeaconPowerLevel );
-		        					
-		        					if ( validatedCoords != null )
-		        					{
-		        						iReturnValue = 0;
-		        						beaconEnt.m_bPlayerRespawnedAtBeacon = true;
-		        					}
-		        					else
-		        					{
-		        						iReturnValue = 4;
-		        					}
-		        				}
-		        			}
-	        			}
-	        		}
-	        	}
-	        }
-	        
-	        if ( validatedCoords != null )
-	        {
-	        	respawnLocation.posX = validatedCoords.posX;
-	        	respawnLocation.posY = validatedCoords.posY;
-	        	respawnLocation.posZ = validatedCoords.posZ;
-	        }
+        {
+        	BeaconRespawnValidationResult validatedResult = validateBoundRespawnBeacon(newWorld, oldDimension, newDimension);
+        	returnValue = validatedResult.beaconStatus.id;
+        	
+            if( returnValue == 0)
+            {
+            	respawnLocation.posX = validatedResult.coords.posX;
+            	respawnLocation.posY = validatedResult.coords.posY;
+            	respawnLocation.posZ = validatedResult.coords.posZ;
+            }
         }
         
-        return iReturnValue;
+        return returnValue;
+    }
+    
+    // TODO: lots of hardcoded stuff in here
+    public BeaconRespawnValidationResult validateBoundRespawnBeacon(World world, int oldDimension, int newDimension) {
+    	BeaconRespawnValidationResult result = new BeaconRespawnValidationResult();
+    	result.beaconStatus = BeaconStatus.MISSING;
+		
+    	// Does the beacon exist
+        if ( spawnChunk != null && world.getBlockId(spawnChunk.posX, spawnChunk.posY, spawnChunk.posZ ) == Block.beacon.blockID) {
+        	FCTileEntityBeacon beaconEnt = (FCTileEntityBeacon) world.getBlockTileEntity(spawnChunk.posX, spawnChunk.posY, spawnChunk.posZ);
+        	
+        	if (beaconEnt != null) {
+        		int beaconEffect = beaconEnt.getPrimaryEffect();
+        		
+        		// Is the beacon a steel beacon
+        		if (beaconEffect == FCTileEntityBeacon.m_iEffectIDSpawnPoint) {
+        			int beaconPowerLevel = beaconEnt.getLevels();
+        			
+        			// Validate that the beacon is in fact powered
+        			if (beaconPowerLevel > 0) {
+        				result.beaconStatus = BeaconStatus.OUT_OF_RANGE;
+        				
+        				// Level 4 is across dimensions, otherwise must be the same dimension
+	        			if (beaconPowerLevel >= 4 || oldDimension == newDimension) {
+	        				boolean inRange = true;
+	        				
+	        				// Check range for level 1 and 2
+	        				// Level 3 and 4 have no range limit
+	        				if (beaconPowerLevel < 3) {
+	        					int maxRange = 160;
+	        					
+	        					if (beaconPowerLevel == 2) {
+	        						maxRange = 2000;
+	        					}
+	        					
+	        					int deltaX = Math.abs( (int)posX - spawnChunk.posX );
+	        					
+	        					if (deltaX > maxRange) {
+	        						inRange = false;
+	        					}
+	        					else {
+		        					int deltaZ = Math.abs( (int)posZ - spawnChunk.posZ );
+		        					
+		        					if (deltaZ > maxRange) {
+		        						inRange = false;
+		        					}
+	        					}
+	        				}
+	        				
+	        				if (inRange) {
+	        					result.coords = GetRandomValidSpawnAroundBeaconLocation( world, spawnChunk.posX, spawnChunk.posY, spawnChunk.posZ, beaconPowerLevel );
+	        					
+	        					if (result.coords != null) {
+	        						result.beaconStatus = BeaconStatus.VALID;
+	        						beaconEnt.m_bPlayerRespawnedAtBeacon = true;
+	        					}
+	        					else {
+	        						result.beaconStatus = BeaconStatus.OBSTRUCTED;
+	        					}
+	        				}
+	        			}
+        			}
+        		}
+        	}
+        }
+        
+        return result;
     }
     
     private boolean IsValidRespawnLocation( World world, int i, int j, int k )
@@ -3434,6 +3445,71 @@ public abstract class EntityPlayer extends EntityLiving implements ICommandSende
     static public boolean InstallationIntegrityTestPlayer()
     {
     	return true;
-    }    
+    }
+    
+    private static final Map<String, String> uuids = new HashMap<String, String>();
+    
+    public static String fetchUuid(String userName) {
+        if (uuids.containsKey(userName))
+            return uuids.get(userName);
+
+        HttpURLConnection profileConn = null;
+        String id = null;
+
+        try {
+            URL profileUrl = new URL("https://api.mojang.com/users/profiles/minecraft/" + userName);
+            profileConn = (HttpURLConnection) profileUrl.openConnection();
+            profileConn.setDoInput(true);
+            profileConn.setDoOutput(false);
+            profileConn.connect();
+
+            if (profileConn.getResponseCode() / 100 == 4) {
+                return null;
+            }
+
+            JsonRootNode json = (new JdomParser())
+                    .parse(new InputStreamReader(profileConn.getInputStream()));
+
+            String name = json.getStringValue("name");
+            id = json.getStringValue("id");
+
+            if (userName.equals(name)) {
+                uuids.put(userName, id);
+            } else {
+                id = null;
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            if (profileConn != null)
+                profileConn.disconnect();
+        }
+        return id;
+    }
+    
+    public static class BeaconRespawnValidationResult {
+    	public BeaconStatus beaconStatus;
+    	
+    	public ChunkCoordinates coords;
+    	
+    	public void setCoords(ChunkCoordinates coords) {
+    		this.coords = coords;
+    	}
+    	
+    	public enum BeaconStatus {
+    		VALID(0),
+    		MISSING(2),
+    		OUT_OF_RANGE(3),
+    		OBSTRUCTED(4);
+    		
+    		public final int id;
+    		
+    		private BeaconStatus(int id) {
+    			this.id = id;
+    		}
+    	}
+    }
     // END FCMOD
 }

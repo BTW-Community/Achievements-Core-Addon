@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.src.EntityPlayer.BeaconRespawnValidationResult.BeaconStatus;
 
 public class EntityPlayerMP extends EntityPlayer implements ICrafting
 {
@@ -312,6 +313,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
      */
     public void onDeath(DamageSource par1DamageSource)
     {
+        EntityLivingOnDeath(par1DamageSource);
         this.mcServer.getConfigurationManager().sendChatMsg(this.field_94063_bt.func_94546_b());
 
         if (!this.worldObj.getGameRules().getGameRuleBooleanValue("keepInventory"))
@@ -339,8 +341,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
         {
             var6.addToPlayerScore(this, this.scoreValue);
         }
-        
-        EventDispatcher.onDeath(this, par1DamageSource);
+        EventDispatcher.onDeath(this, par1DamageSource);  // ACA
     }
 
     /**
@@ -397,8 +398,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
      */
     public void travelToDimension(int par1)
     {
-    	EventDispatcher.onTraveledDimension(this, par1);
-    	
+    	EventDispatcher.onTraveledDimension(this, par1);  // ACA
         if (this.dimension == 1 && par1 == 1)
         {
             this.triggerAchievement(AchievementList.theEnd2);
@@ -757,13 +757,14 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 
                 this.playerNetServerHandler.sendPacketToPlayer(new Packet200Statistic(par1StatBase.statId, par2));
             }
-            
+            // ACA start:
             if (par1StatBase.isAchievement()) {
             	String achievementName = par1StatBase.toString();
             	String achievementGet = StatCollector.translateToLocal("achievement.announce");
-            	String msg = String.format("%s %s §a[%s]", this.username, achievementGet, achievementName);
+            	String msg = String.format("%s %s [%s]", this.username, achievementGet, achievementName);
             	this.mcServer.getConfigurationManager().sendChatMsg(msg);
             }
+            // ACA end.
         }
     }
 
@@ -1057,10 +1058,13 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 				{
 					iDropItemID = FCBetterThanWolves.fcItemMeatBurned.itemID;
 				}
+				else if (validateBoundRespawnBeacon(this.worldObj, this.dimension, this.m_iSpawnDimension).beaconStatus != BeaconStatus.MISSING) {
+					iDropItemID = Item.rottenFlesh.itemID;
+				}
 		    	
-		        int iFat = ( (int)foodStats.getSaturationLevel() ) / 2;
+		        int iFat = GetFatPenaltyLevel() / 2;
 		        
-		        int iNumDropped = 1 + iFat;
+		        int iNumDropped = 2 + iFat;
 		
 		        for ( int iTempCount = 0; iTempCount < iNumDropped; ++iTempCount )
 		        {        	

@@ -7,6 +7,8 @@ public class SlotCrafting extends Slot
 
     /** The player that is using the GUI where this slot resides. */
     private EntityPlayer thePlayer;
+    
+    private IRecipe currentRecipe = null; 
 
     /**
      * The number of items that have been crafted so far. Gets passed to ItemStack.onCrafting before being reset.
@@ -100,23 +102,27 @@ public class SlotCrafting extends Slot
         {
             this.thePlayer.addStat(AchievementList.bookcase, 1);
         }
-        
-        EventDispatcher.onCrafted(thePlayer, par1ItemStack);
+        EventDispatcher.onCrafted(thePlayer, par1ItemStack);  // ACA
     }
 
-    public void onPickupFromSlot(EntityPlayer par1EntityPlayer, ItemStack par2ItemStack)
+    public void onPickupFromSlot(EntityPlayer player, ItemStack par2ItemStack)
     {
         this.onCrafting(par2ItemStack);
 
+        if (!player.worldObj.isRemote && currentRecipe.getSecondaryOutput(this.craftMatrix) != null) {
+        	for (ItemStack stack : currentRecipe.getSecondaryOutput(this.craftMatrix)) {
+        		FCUtilsItem.EjectStackWithRandomVelocity(player.worldObj, player.posX, player.posY, player.posZ, stack.copy());
+        	}
+        }
+        
         for (int var3 = 0; var3 < this.craftMatrix.getSizeInventory(); ++var3)
         {
             ItemStack var4 = this.craftMatrix.getStackInSlot(var3);
 
             if (var4 != null)
             {
-            	// FCMOD: Added            	
-            	var4.getItem().OnUsedInCrafting( var4.getItemDamage(), par1EntityPlayer, 
-            		par2ItemStack );
+            	// FCMOD: Added
+            	var4.getItem().OnUsedInCrafting(var4.getItemDamage(), player, par2ItemStack);
             	
             	if ( !var4.getItem().IsConsumedInCrafting() )
             	{
@@ -126,15 +132,15 @@ public class SlotCrafting extends Slot
             	{
             		if ( var4.getItemDamage() >= var4.getMaxDamage() - 1 )
             		{
-            			var4.getItem().OnBrokenInCrafting( par1EntityPlayer );
+            			var4.getItem().OnBrokenInCrafting( player );
             			
                         craftMatrix.decrStackSize(var3, 1);
             		}
             		else
             		{
-            			var4.getItem().OnDamagedInCrafting( par1EntityPlayer );
+            			var4.getItem().OnDamagedInCrafting( player );
             			
-            			var4.damageItem( 1, par1EntityPlayer );
+            			var4.damageItem( 1, player );
             		}
 
             		continue;
@@ -169,7 +175,11 @@ public class SlotCrafting extends Slot
         }
         
         // FCMOD: Code added
-        par1EntityPlayer.m_iTimesCraftedThisTick++;
+        player.m_iTimesCraftedThisTick++;
         // END FCMOD
+    }
+    
+    public void setRecipe(IRecipe recipe) {
+    	this.currentRecipe = recipe;
     }
 }

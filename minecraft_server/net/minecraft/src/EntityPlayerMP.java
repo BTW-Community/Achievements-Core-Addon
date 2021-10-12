@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.src.EntityPlayer.BeaconRespawnValidationResult.BeaconStatus;
 
 public class EntityPlayerMP extends EntityPlayer implements ICrafting
 {
@@ -33,6 +34,10 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
     public double managedPosZ;
 
     /** LinkedList that holds the loaded chunks. */
+    /**
+     * FCNOTE: Deprecated list used by vanilla PlayerInstance and PlayerManager to track watched
+     * chunks
+     */
     public final List loadedChunks = new LinkedList();
 
     /** entities added to this list will  be packet29'd to the player */
@@ -75,15 +80,6 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
      * and XP
      */
     public boolean playerConqueredTheEnd = false;
-    public LinkedList m_chunksToBeSentToClient = new LinkedList();
-    private int m_iLastFoodSaturation = -99999999;
-    private int m_iExhaustionWithTimeCounter = 0;
-    private static final int m_iExhaustionWithTimePeriod = 600;
-    private static final float m_fExhaustionWithTimeAmount = 0.5F;
-    private static final float m_fMinimumGloomBiteChance = 0.01F;
-    private static final float m_fMaximumGloomBiteChance = 0.05F;
-    private static final int m_iDelayBetweenZeroDamageAttackSounds = 20;
-    private long m_lTimeOfLastZeroDamageAttackSound = 0L;
 
     public EntityPlayerMP(MinecraftServer par1MinecraftServer, World par2World, String par3Str, ItemInWorldManager par4ItemInWorldManager)
     {
@@ -197,8 +193,53 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
             this.playerNetServerHandler.sendPacket(new Packet29DestroyEntity(var2));
         }
 
-        this.SendChunksToClient();
-        this.ModSpecificOnUpdate();
+        // FCMOD: Changed
+        /*
+        if (!this.loadedChunks.isEmpty())
+        {
+            ArrayList var6 = new ArrayList();
+            Iterator var7 = this.loadedChunks.iterator();
+            ArrayList var8 = new ArrayList();
+
+            while (var7.hasNext() && var6.size() < 5)
+            {
+                ChunkCoordIntPair var9 = (ChunkCoordIntPair)var7.next();
+                var7.remove();
+
+                if (var9 != null && this.worldObj.blockExists(var9.chunkXPos << 4, 0, var9.chunkZPos << 4))
+                {
+                    var6.add(this.worldObj.getChunkFromChunkCoords(var9.chunkXPos, var9.chunkZPos));
+                    var8.addAll(((WorldServer)this.worldObj).getTileEntityList(var9.chunkXPos * 16, 0, var9.chunkZPos * 16, var9.chunkXPos * 16 + 16, 256, var9.chunkZPos * 16 + 16));
+                }
+            }
+
+            if (!var6.isEmpty())
+            {
+                this.playerNetServerHandler.sendPacket(new Packet56MapChunks(var6));
+                Iterator var11 = var8.iterator();
+
+                while (var11.hasNext())
+                {
+                    TileEntity var5 = (TileEntity)var11.next();
+                    this.getTileEntityInfo(var5);
+                }
+
+                var11 = var6.iterator();
+
+                while (var11.hasNext())
+                {
+                    Chunk var10 = (Chunk)var11.next();
+                    this.getServerForPlayer().getEntityTracker().func_85172_a(this, var10);
+                }
+            }
+        }
+        */
+        SendChunksToClient();
+        // END FCMOD
+
+        // FCMOD: Code Added
+        ModSpecificOnUpdate();
+        // END FCMOD
     }
 
     public void setEntityHealth(int par1)
@@ -235,13 +276,21 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
                 }
             }
 
-            if (this.getHealth() != this.lastHealth || this.lastFoodLevel != this.foodStats.getFoodLevel() || this.foodStats.getSaturationLevel() == 0.0F != this.wasHungry || this.m_iLastFoodSaturation != (int)(this.foodStats.getSaturationLevel() * 8.0F))
+        	// FCMOD: Code changed to relay changes in food saturation
+        	/*
+            if (this.getHealth() != this.lastHealth || this.lastFoodLevel != this.foodStats.getFoodLevel() || this.foodStats.getSaturationLevel() == 0.0F != this.wasHungry)
+        	*/
+        	if (this.getHealth() != this.lastHealth || this.lastFoodLevel != this.foodStats.getFoodLevel() || this.foodStats.getSaturationLevel() == 0.0F != this.wasHungry ||
+        		m_iLastFoodSaturation != (int)( foodStats.getSaturationLevel() * 8F ) )
+    		// END FCMOD
             {
                 this.playerNetServerHandler.sendPacket(new Packet8UpdateHealth(this.getHealth(), this.foodStats.getFoodLevel(), this.foodStats.getSaturationLevel()));
                 this.lastHealth = this.getHealth();
                 this.lastFoodLevel = this.foodStats.getFoodLevel();
                 this.wasHungry = this.foodStats.getSaturationLevel() == 0.0F;
-                this.m_iLastFoodSaturation = (int)(this.foodStats.getSaturationLevel() * 8.0F);
+            	// FCMOD: Code added
+            	m_iLastFoodSaturation = (int)( foodStats.getSaturationLevel() * 8F );
+            	// END FCMOD
             }
 
             if (this.experienceTotal != this.lastExperience)
@@ -264,6 +313,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
      */
     public void onDeath(DamageSource par1DamageSource)
     {
+    	EntityLivingOnDeath(par1DamageSource);
         this.mcServer.getConfigurationManager().sendChatMsg(this.field_94063_bt.func_94546_b());
 
         if (!this.worldObj.getGameRules().getGameRuleBooleanValue("keepInventory"))
@@ -271,7 +321,10 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
             this.inventory.dropAllItems();
         }
 
-        this.CustomModDrops(par1DamageSource);
+        // FCMOD: Code added
+        CustomModDrops( par1DamageSource );
+        // END FCMOD
+
         Collection var2 = this.worldObj.getScoreboard().func_96520_a(ScoreObjectiveCriteria.field_96642_c);
         Iterator var3 = var2.iterator();
 
@@ -288,8 +341,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
         {
             var6.addToPlayerScore(this, this.scoreValue);
         }
-        
-        EventDispatcher.onDeath(this, par1DamageSource);
+        EventDispatcher.onDeath(this, par1DamageSource);  // ACA
     }
 
     /**
@@ -343,8 +395,7 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
 
     public void travelToTheEnd(int par1)
     {
-    	EventDispatcher.onTraveledDimension(this, par1);
-    	
+    	EventDispatcher.onTraveledDimension(this, par1);  // ACA
         if (this.dimension == 1 && par1 == 1)
         {
             this.triggerAchievement(AchievementList.theEnd2);
@@ -378,11 +429,17 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
         }
     }
 
-    private void sendTileEntityToPlayer(TileEntity var1)
+    /**
+     * gets description packets from all TileEntity's that override func_20070
+     */
+    // FCMOD: Changed (server only) to match name on client
+    //private void getTileEntityInfo(TileEntity par1TileEntity)
+    private void sendTileEntityToPlayer(TileEntity par1TileEntity)
+    // END FCMOD
     {
-        if (var1 != null)
+        if (par1TileEntity != null)
         {
-            Packet var2 = var1.getDescriptionPacket();
+            Packet var2 = par1TileEntity.getDescriptionPacket();
 
             if (var2 != null)
             {
@@ -475,7 +532,10 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
     {
         this.getNextWindowId();
         this.playerNetServerHandler.sendPacket(new Packet100OpenWindow(this.currentWindowId, 1, "Crafting", 9, true));
-        this.openContainer = new FCContainerWorkbench(this.inventory, this.worldObj, par1, par2, par3);
+        // FCMOD: Changed
+        //this.openContainer = new ContainerWorkbench(this.inventory, this.worldObj, par1, par2, par3);
+        openContainer = new FCContainerWorkbench( inventory, worldObj, par1, par2, par3 );
+        // END FCMOD
         this.openContainer.windowId = this.currentWindowId;
         this.openContainer.onCraftGuiOpened(this);
     }
@@ -589,9 +649,16 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
         this.getNextWindowId();
         this.openContainer = new ContainerMerchant(this.inventory, par1IMerchant, this.worldObj);
         this.openContainer.windowId = this.currentWindowId;
+        // FCMOD: Code moved slightly later to avoid init order problems
+        /*
+        this.openContainer.onCraftGuiOpened(this);
+        */
+        // END FCMOD
         InventoryMerchant var3 = ((ContainerMerchant)this.openContainer).getMerchantInventory();
         this.playerNetServerHandler.sendPacket(new Packet100OpenWindow(this.currentWindowId, 6, par2Str == null ? "" : par2Str, var3.getSizeInventory(), par2Str != null));
+        // FCMOD: Code moved from above to avoid init order problems
         this.openContainer.onCraftGuiOpened(this);
+        // END FCMOD
         MerchantRecipeList var4 = par1IMerchant.getRecipes(this);
 
         if (var4 != null)
@@ -617,9 +684,12 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
      */
     public void sendSlotContents(Container par1Container, int par2, ItemStack par3ItemStack)
     {
-        if (!(par1Container.getSlot(par2) instanceof SlotCrafting) && !this.isChangingQuantityOnly)
+        if (!(par1Container.getSlot(par2) instanceof SlotCrafting))
         {
-            this.playerNetServerHandler.sendPacket(new Packet103SetSlot(par1Container.windowId, par2, par3ItemStack));
+            if (!this.isChangingQuantityOnly)
+            {
+                this.playerNetServerHandler.sendPacket(new Packet103SetSlot(par1Container.windowId, par2, par3ItemStack));
+            }
         }
     }
 
@@ -681,22 +751,26 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
      */
     public void addStat(StatBase par1StatBase, int par2)
     {
-        if (par1StatBase != null && !par1StatBase.isIndependent)
+        if (par1StatBase != null)
         {
-            while (par2 > 100)
+            if (!par1StatBase.isIndependent)
             {
-                this.playerNetServerHandler.sendPacket(new Packet200Statistic(par1StatBase.statId, 100));
-                par2 -= 100;
-            }
+                while (par2 > 100)
+                {
+                    this.playerNetServerHandler.sendPacket(new Packet200Statistic(par1StatBase.statId, 100));
+                    par2 -= 100;
+                }
 
-            this.playerNetServerHandler.sendPacket(new Packet200Statistic(par1StatBase.statId, par2));
-        }
-        
-        if (par1StatBase instanceof Achievement) {
-        	String achievementName = par1StatBase.toString();
-        	String achievementGet = StatCollector.translateToLocal("achievement.announce");
-        	String msg = String.format("%s %s §a[%s]", this.username, achievementGet, achievementName);
-        	this.mcServer.getConfigurationManager().sendChatMsg(msg);
+                this.playerNetServerHandler.sendPacket(new Packet200Statistic(par1StatBase.statId, par2));
+            }
+            // ACA start:
+            if (par1StatBase instanceof Achievement) {
+            	String achievementName = par1StatBase.toString();
+            	String achievementGet = StatCollector.translateToLocal("achievement.announce");
+            	String msg = String.format("%s %s [%s]", this.username, achievementGet, achievementName);
+            	this.mcServer.getConfigurationManager().sendChatMsg(msg);
+            }
+            // ACA end.
         }
     }
 
@@ -907,463 +981,562 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
         return new ChunkCoordinates(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY + 0.5D), MathHelper.floor_double(this.posZ));
     }
 
-    protected void CheckForHeadDrop(DamageSource var1, int var2)
+    // FCMOD: Added
+    public LinkedList<ChunkCoordIntPair> m_chunksToBeSentToClient = 
+    	new LinkedList<ChunkCoordIntPair>();
+    
+    private int m_iLastFoodSaturation = -99999999;
+	private int m_iExhaustionWithTimeCounter = 0;
+	
+	private static final int m_iExhaustionWithTimePeriod = 600; // once per 30 seconds
+	private static final float m_fExhaustionWithTimeAmount = 0.5F; // set with above to begin starving to death after 160 minutes if you're fully obese, losing 1 hunger every 4 minutes	
+    
+    private static final float m_fMinimumGloomBiteChance = 0.01F; 
+    private static final float m_fMaximumGloomBiteChance = 0.05F; // 1/second
+    
+	private static final int m_iDelayBetweenZeroDamageAttackSounds = 20; 
+	private long m_lTimeOfLastZeroDamageAttackSound = 0;
+	
+    @Override
+    protected void CheckForHeadDrop( DamageSource source, int iLootingModifier )
     {
-        Entity var3 = var1.getEntity();
-        int var4 = this.rand.nextInt(200);
-        var4 -= var2;
+	    Entity sourceEntity = source.getEntity();        
+	    int iHeadChance = this.rand.nextInt(200);        
+	    
+        iHeadChance -= iLootingModifier;
+    	
+	    if ( sourceEntity instanceof EntityPlayer)
+	    {
+	    	if ( ((EntityPlayer)sourceEntity).getHeldItem() != null && 
+	    		((EntityPlayer)sourceEntity).getHeldItem().getItem().itemID == FCBetterThanWolves.fcItemBattleAxe.itemID )
+	    	{
+	    		// 100% chance of decapitation with Battle Axe in PvP
+	    		
+	    		iHeadChance = 0;
+	    	}
+	    }
+	    else if ( source == FCDamageSourceCustom.m_DamageSourceChoppingBlock )
+	    {
+			iHeadChance = 0;
+	    }
+	    
+	    if ( iHeadChance < 5 )
+	    {
+	        dropHead();
+	    }
+    }
+    
+    private void CustomModDrops( DamageSource source )
+    {
+	    Entity sourceEntity = source.getEntity();        
+        int iLootingModifier = GetAmbientLootingModifier();
 
-        if (var3 instanceof EntityPlayer)
+        if ( sourceEntity instanceof EntityPlayer )
         {
-            if (((EntityPlayer)var3).getHeldItem() != null && ((EntityPlayer)var3).getHeldItem().getItem().itemID == FCBetterThanWolves.fcItemBattleAxe.itemID)
+            int iPlayerLootingModifier = EnchantmentHelper.getLootingModifier((EntityLiving)sourceEntity);
+            
+            if ( iPlayerLootingModifier > iLootingModifier )
             {
-                var4 = 0;
+            	iLootingModifier = iPlayerLootingModifier;
             }
         }
-        else if (var1 == FCDamageSourceCustom.m_DamageSourceChoppingBlock)
-        {
-            var4 = 0;
-        }
-
-        if (var4 < 5)
-        {
-            this.dropHead();
-        }
+        
+        DropMysteryMeat( iLootingModifier );
+        
+        CheckForHeadDrop( source, iLootingModifier );
     }
-
-    private void CustomModDrops(DamageSource var1)
+    
+    private void DropMysteryMeat( int iLootingModifier )
     {
-        Entity var2 = var1.getEntity();
-        int var3 = this.GetAmbientLootingModifier();
-
-        if (var2 instanceof EntityPlayer)
+        if ( !HasHeadCrabbedSquid() )
         {
-            int var4 = EnchantmentHelper.getLootingModifier((EntityLiving)var2);
+	    	// only drop mystery meat periodically to prevent people killing themselves repeatedly for food.
+	    	// With HC Spawn enabled, it only happens when the player will be moved to a new spawn location.
+	    	
+			long lOverworldTime = MinecraftServer.getServer().worldServers[0].getWorldTime();
+			
+			if ( m_lTimeOfLastSpawnAssignment == 0 || m_lTimeOfLastSpawnAssignment > lOverworldTime || 
+				lOverworldTime - m_lTimeOfLastSpawnAssignment >= FCUtilsHardcoreSpawn.m_iHardcoreSpawnTimeBetweenReassignments )
+			{
+				int iDropItemID = FCBetterThanWolves.fcItemRawMysteryMeat.itemID;
+				
+				if ( isBurning() )
+				{
+					iDropItemID = FCBetterThanWolves.fcItemMeatBurned.itemID;
+				}
+				else if (validateBoundRespawnBeacon(this.worldObj, this.dimension, this.m_iSpawnDimension).beaconStatus != BeaconStatus.MISSING) {
+					iDropItemID = Item.rottenFlesh.itemID;
+				}
 
-            if (var4 > var3)
-            {
-                var3 = var4;
-            }
-        }
+		        int iFat = GetFatPenaltyLevel() / 2;
 
-        this.DropMysteryMeat(var3);
-        this.CheckForHeadDrop(var1, var3);
-    }
-
-    private void DropMysteryMeat(int var1)
-    {
-        if (!this.HasHeadCrabbedSquid())
-        {
-            long var2 = MinecraftServer.getServer().worldServers[0].getWorldTime();
-
-            if (this.m_lTimeOfLastSpawnAssignment == 0L || this.m_lTimeOfLastSpawnAssignment > var2 || var2 - this.m_lTimeOfLastSpawnAssignment >= 24000L)
-            {
-                int var4 = FCBetterThanWolves.fcItemRawMysteryMeat.itemID;
-
-                if (this.isBurning())
-                {
-                    var4 = FCBetterThanWolves.fcItemMeatBurned.itemID;
-                }
-
-                int var5 = (int)this.foodStats.getSaturationLevel() / 2;
-                int var6 = 1 + var5;
-
-                for (int var7 = 0; var7 < var6; ++var7)
-                {
-                    this.dropItem(var4, 1);
-                }
-            }
+		        int iNumDropped = 2 + iFat;
+		
+		        for ( int iTempCount = 0; iTempCount < iNumDropped; ++iTempCount )
+		        {        	
+		            dropItem( iDropItemID, 1 );
+		        }
+			}
         }
     }
-
+    
     private void ModSpecificOnUpdate()
     {
-        this.UpdateExhaustionWithTime();
-        this.UpdateHealthAndHungerEffects();
-        this.UpdateMagneticInfluences();
-        this.UpdateSpawnChunksVisualization();
-        this.NotifyBlockWalkedOn();
+        UpdateExhaustionWithTime();
+        
+        UpdateHealthAndHungerEffects();
+        
+        UpdateMagneticInfluences();
+        
+        UpdateSpawnChunksVisualization();
+        
+    	NotifyBlockWalkedOn();
     }
-
-    private void UpdateMagneticInfluences()
-    {
-        if ((this.worldObj.getTotalWorldTime() + (long)this.entityId) % 40L == 0L)
-        {
-            FCMagneticPoint var1 = null;
-            double var2 = 0.0D;
-
-            if (this.worldObj.provider.isSurfaceWorld())
-            {
-                ChunkCoordinates var4 = this.worldObj.getSpawnPoint();
-                var1 = new FCMagneticPoint(var4.posX, 0, var4.posZ, 2);
-                var2 = var1.GetFieldStrengthRelativeToPosition(this.posX, this.posZ);
-                Iterator var5 = this.worldObj.GetMagneticPointList().m_MagneticPoints.iterator();
-
-                while (var5.hasNext())
-                {
-                    FCMagneticPoint var6 = (FCMagneticPoint)var5.next();
-                    double var7 = var6.GetFieldStrengthRelativeToPosition(this.posX, this.posZ);
-
-                    if (var7 > var2)
-                    {
-                        var1 = var6;
-                        var2 = var7;
-                    }
-                }
-            }
-            else
-            {
-                Iterator var9 = this.worldObj.GetMagneticPointList().m_MagneticPoints.iterator();
-
-                while (var9.hasNext())
-                {
-                    FCMagneticPoint var10 = (FCMagneticPoint)var9.next();
-                    double var11 = var10.GetFieldStrengthRelativeToPositionWithBackgroundNoise(this.posX, this.posZ);
-
-                    if (var11 > var2)
-                    {
-                        var1 = var10;
-                        var2 = var11;
-                    }
-                }
-            }
-
-            if (var1 != null)
-            {
-                this.SetHasValidMagneticPointForLocation(true);
-                this.SetStongestMagneticPointForLocationI(var1.m_iIPos);
-                this.SetStongestMagneticPointForLocationK(var1.m_iKPos);
-            }
-            else
-            {
-                this.SetHasValidMagneticPointForLocation(false);
-            }
-        }
-    }
-
-    private void UpdateSpawnChunksVisualization()
-    {
-        if (this.worldObj.provider.dimensionId == 0 && (this.IsWearingEnderSpectacles() || this.isPotionActive(FCBetterThanWolves.potionTrueSight)))
-        {
-            this.SetSpawnChunksVisualization(this.worldObj.worldInfo.getSpawnX(), this.worldObj.worldInfo.getSpawnY(), this.worldObj.worldInfo.getSpawnZ());
-        }
-        else
-        {
-            this.SetSpawnChunksVisualization(0, 0, 0);
-        }
-    }
-
+    
+	private void UpdateMagneticInfluences()
+	{
+		if ( ( worldObj.getTotalWorldTime() + entityId ) % 40 != 0 )
+		{
+			// stagger these updates as they can be performance intensive
+			 
+			return;
+		}
+		 
+		FCMagneticPoint strongestPoint = null;
+		double dStrongestFieldStrength = 0.0D;
+		 
+	    if ( worldObj.provider.isSurfaceWorld() )
+	    {
+	    	ChunkCoordinates spawnPos = worldObj.getSpawnPoint();
+	    	 
+	    	strongestPoint = new FCMagneticPoint( spawnPos.posX, 0, spawnPos.posZ, 2 );
+	    	 
+	    	dStrongestFieldStrength = strongestPoint.GetFieldStrengthRelativeToPosition( posX, posZ );
+	    	 
+	        Iterator pointIterator = worldObj.GetMagneticPointList().m_MagneticPoints.iterator();
+	         
+	        while ( pointIterator.hasNext() )
+	        {
+	        	FCMagneticPoint tempPoint = (FCMagneticPoint)pointIterator.next();
+	        	 
+	        	double dTempFieldStrength = tempPoint.GetFieldStrengthRelativeToPosition( posX, posZ );
+	        	 
+	        	if ( dTempFieldStrength > dStrongestFieldStrength )
+	        	{
+	        		strongestPoint = tempPoint;
+	        		dStrongestFieldStrength = dTempFieldStrength;
+	        	}
+	        }
+	    }
+	    else
+	    {
+	        Iterator pointIterator = worldObj.GetMagneticPointList().m_MagneticPoints.iterator();
+	         
+	        while ( pointIterator.hasNext() )
+	        {
+	        	FCMagneticPoint tempPoint = (FCMagneticPoint)pointIterator.next();
+	        	 
+	        	double dTempFieldStrength = tempPoint.GetFieldStrengthRelativeToPositionWithBackgroundNoise( posX, posZ );
+	        	 
+	        	if ( dTempFieldStrength > dStrongestFieldStrength )
+	        	{
+	        		strongestPoint = tempPoint;
+	        		dStrongestFieldStrength = dTempFieldStrength;
+	        	}
+	        }
+	    }         
+	     
+	    if ( strongestPoint != null )
+	    {
+	    	SetHasValidMagneticPointForLocation( true );
+	    	SetStongestMagneticPointForLocationI( strongestPoint.m_iIPos );
+	    	SetStongestMagneticPointForLocationK( strongestPoint.m_iKPos );
+	    }
+	    else
+	    {
+	    	SetHasValidMagneticPointForLocation( false );
+	    }
+	}
+	
+	private void UpdateSpawnChunksVisualization()
+	{
+		if ( worldObj.provider.dimensionId == 0 && ( IsWearingEnderSpectacles() || 
+			isPotionActive( FCBetterThanWolves.potionTrueSight ) ) )
+		{
+			SetSpawnChunksVisualization( worldObj.worldInfo.getSpawnX(),
+				worldObj.worldInfo.getSpawnY(), worldObj.worldInfo.getSpawnZ() );
+		}
+		else
+		{
+			SetSpawnChunksVisualization( 0, 0, 0 );
+		}
+	}
+	
     private void UpdateExhaustionWithTime()
     {
-        ++this.m_iExhaustionWithTimeCounter;
-
-        if (this.m_iExhaustionWithTimeCounter >= 600)
-        {
-            if (!this.capabilities.disableDamage)
+    	m_iExhaustionWithTimeCounter++;
+    	
+    	if ( m_iExhaustionWithTimeCounter >= m_iExhaustionWithTimePeriod )
+    	{
+            if ( !capabilities.disableDamage ) // disable hunger drain in creative
             {
-                this.foodStats.addExhaustion(0.5F);
+            	foodStats.addExhaustion( m_fExhaustionWithTimeAmount );
             }
-
-            this.m_iExhaustionWithTimeCounter = 0;
-        }
+            
+    		m_iExhaustionWithTimeCounter = 0;
+    	}
     }
-
+    
     private void UpdateHealthAndHungerEffects()
     {
-        if (!this.isDead && (this.worldObj.getTotalWorldTime() + (long)this.entityId) % 80L == 0L)
-        {
-            if (this.foodStats.getFoodLevel() <= 0 && this.foodStats.getSaturationLevel() <= 0.0F)
-            {
-                this.addPotionEffect(new PotionEffect(Potion.confusion.getId(), 180, 0, true));
-            }
-
-            if (this.health <= 2)
-            {
-                this.addPotionEffect(new PotionEffect(Potion.blindness.getId(), 180, 0, true));
-            }
-        }
+    	if ( !isDead && ( worldObj.getTotalWorldTime() + (long)entityId ) % 80L == 0L )
+    	{
+    		if ( foodStats.getFoodLevel() <= 0 && foodStats.getSaturationLevel() <= 0F )
+    		{
+                addPotionEffect( new PotionEffect( Potion.confusion.getId(), 180, 0, true ) );                            
+    		}
+    		
+    		if ( health <= 2 )
+    		{
+                addPotionEffect( new PotionEffect( Potion.blindness.getId(), 180, 0, true ) );                            
+    		}
+    	}
     }
-
+    
+    @Override
     protected void UpdateGloomState()
     {
-        if (!this.isDead)
-        {
-            if (this.IsInGloom())
-            {
-                ++this.m_iInGloomCounter;
+    	if ( !isDead )
+    	{
+    		if ( IsInGloom() )
+    		{
+    			m_iInGloomCounter++;
+    			
+    			if ( GetGloomLevel() == 0 || ( m_iInGloomCounter > m_iGloomCounterBetweenStateChanges && GetGloomLevel() < 3 ) )
+    			{
+    				SetGloomLevel( GetGloomLevel() + 1 );
+    				
+    				m_iInGloomCounter = 0;
+    			}
+    			
+    			if ( GetGloomLevel() >= 3 )
+    			{
+    		    	if ( ( worldObj.getTotalWorldTime() + (long)entityId ) % 80L == 0L )
+    		    	{
+		                addPotionEffect( new PotionEffect( Potion.confusion.getId(), 180, 0, true ) );                            
+    		    	}
+    		    	
+    		    	// gloom bites
+    		    	
+    	    		float fCounterProgress = (float)m_iInGloomCounter / (float)m_iGloomCounterBetweenStateChanges;
+    	    		
+    	    		if ( fCounterProgress > 1.0F )
+    	    		{
+    	    			fCounterProgress = 1.0F;
+    	    		}
 
-                if (this.GetGloomLevel() == 0 || this.m_iInGloomCounter > 1200 && this.GetGloomLevel() < 3)
-                {
-                    this.SetGloomLevel(this.GetGloomLevel() + 1);
-                    this.m_iInGloomCounter = 0;
-                }
-
-                if (this.GetGloomLevel() >= 3)
-                {
-                    if ((this.worldObj.getTotalWorldTime() + (long)this.entityId) % 80L == 0L)
-                    {
-                        this.addPotionEffect(new PotionEffect(Potion.confusion.getId(), 180, 0, true));
-                    }
-
-                    float var1 = (float)this.m_iInGloomCounter / 1200.0F;
-
-                    if (var1 > 1.0F)
-                    {
-                        var1 = 1.0F;
-                    }
-
-                    float var2 = 0.01F + 0.04F * var1;
-
-                    if (this.rand.nextFloat() < var2 && this.attackEntityFrom(FCDamageSourceCustom.m_DamageSourceGloom, 1) && this.health <= 0)
-                    {
-                        this.worldObj.playAuxSFX(2226, MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY), MathHelper.floor_double(this.posZ), 0);
-                    }
-                }
-            }
-            else
-            {
-                this.SetGloomLevel(0);
-                this.m_iInGloomCounter = 0;
-            }
-        }
+            		float fGloomBiteChance = m_fMinimumGloomBiteChance + ( m_fMaximumGloomBiteChance - m_fMinimumGloomBiteChance ) * fCounterProgress;        		
+    	    		
+            		if ( rand.nextFloat() < fGloomBiteChance )
+            		{
+            			if ( attackEntityFrom( FCDamageSourceCustom.m_DamageSourceGloom, 1 ) )
+            			{            			
+	            			if ( health <= 0 )
+	            			{
+	            	        	worldObj.playAuxSFX( FCBetterThanWolves.m_iBurpSoundAuxFXID, 
+	            	        		MathHelper.floor_double( posX ), MathHelper.floor_double( posY ), MathHelper.floor_double( posZ ), 0 );
+	            			}
+            			}
+            		}
+		    	}
+    		}
+    		else
+    		{
+        		SetGloomLevel( 0 );
+        		
+        		m_iInGloomCounter = 0;
+    		}   		    		
+    	}
     }
 
+    @Override
     protected void UpdateFatPenaltyLevel()
     {
-        int var1 = (int)this.foodStats.getSaturationLevel();
-        byte var2 = 4;
-
-        if (var1 < 12)
+        int iFat = (int)foodStats.getSaturationLevel();
+    	int iFatLevel = 4;
+        
+        if ( iFat < 12 )
         {
-            var2 = 0;
+        	iFatLevel = 0;
         }
-        else if (var1 < 14)
+        else if ( iFat < 14 )
         {
-            var2 = 1;
+        	iFatLevel = 1;
         }
-        else if (var1 < 16)
+        else if ( iFat < 16 )
         {
-            var2 = 2;
+        	iFatLevel = 2;
         }
-        else if (var1 < 18)
+        else if ( iFat < 18 )
         {
-            var2 = 3;
+        	iFatLevel = 3;
         }
-
-        this.SetFatPenaltyLevel(var2);
+    	
+    	SetFatPenaltyLevel( iFatLevel );
     }
-
-    protected void UpdateHungerPenaltyLevel()
-    {
-        int var1 = this.foodStats.getFoodLevel();
-        byte var2 = 5;
-
-        if (var1 > 24)
+	
+    @Override
+	protected void UpdateHungerPenaltyLevel()
+	{
+        int iHunger = foodStats.getFoodLevel();
+        int iPenaltyLevel = 5;
+        
+        if ( iHunger > 24 )
         {
-            var2 = 0;
+        	iPenaltyLevel = 0;
         }
-        else if (var1 > 18)
+        else if ( iHunger > 18 )
         {
-            var2 = 1;
+        	iPenaltyLevel = 1;
         }
-        else if (var1 > 12)
+        else if ( iHunger > 12 )
         {
-            var2 = 2;
+        	iPenaltyLevel = 2;
         }
-        else if (var1 > 6)
+        else if ( iHunger > 6 )
         {
-            var2 = 3;
+        	iPenaltyLevel = 3;
         }
-        else if (var1 > 0 || this.foodStats.getSaturationLevel() > 0.0F)
+        else if ( iHunger > 0 || foodStats.getSaturationLevel() > 0F )
         {
-            var2 = 4;
+        	iPenaltyLevel = 4;
         }
-
-        this.SetHungerPenaltyLevel(var2);
-    }
-
-    protected void UpdateHealthPenaltyLevel()
-    {
-        int var1 = this.getHealth();
-        byte var2 = 5;
-
-        if (var1 > 10)
+        
+        SetHungerPenaltyLevel( iPenaltyLevel );
+	}
+	
+    @Override
+	protected void UpdateHealthPenaltyLevel()
+	{
+		int iHealth = getHealth();
+        int iPenaltyLevel = 5;
+        
+        if ( iHealth > 10 )
         {
-            var2 = 0;
+        	iPenaltyLevel = 0;
         }
-        else if (var1 > 8)
+        else if ( iHealth > 8 )
         {
-            var2 = 1;
+        	iPenaltyLevel = 1;
         }
-        else if (var1 > 6)
+        else if ( iHealth > 6 )
         {
-            var2 = 2;
+        	iPenaltyLevel = 2;
         }
-        else if (var1 > 4)
+        else if ( iHealth > 4 )
         {
-            var2 = 3;
+        	iPenaltyLevel = 3;
         }
-        else if (var1 > 2)
+        else if ( iHealth > 2 )
         {
-            var2 = 4;
+        	iPenaltyLevel = 4;
         }
-
-        this.SetHealthPenaltyLevel(var2);
-    }
-
+        
+        SetHealthPenaltyLevel( iPenaltyLevel );
+	}
+	
     private boolean IsInGloom()
     {
-        if (!this.capabilities.disableDamage && !this.isPotionActive(Potion.nightVision) && this.worldObj.provider.dimensionId == 0)
+        if ( !capabilities.disableDamage ) // disable darkness effects in creative
         {
-            int var1 = MathHelper.floor_double(this.posX);
-            int var2 = MathHelper.floor_double(this.posY - (double)this.yOffset);
-            int var3 = MathHelper.floor_double(this.posZ);
-            int var4 = this.worldObj.skylightSubtracted;
-            float var5 = this.worldObj.ComputeOverworldSunBrightnessWithMoonPhases();
+	        if ( !isPotionActive( Potion.nightVision ) && worldObj.provider.dimensionId == 0 )
+	        {
+		        int i = MathHelper.floor_double( posX );
+		        int j = MathHelper.floor_double( posY - yOffset );
+		        int k = MathHelper.floor_double( posZ );
+		        
+		        int iOldSkylightSubtracted = worldObj.skylightSubtracted;
+		        
+		        float fSunBrightness = worldObj.ComputeOverworldSunBrightnessWithMoonPhases();
+		        
+		        if ( fSunBrightness < 0.02D )
+		        {
+		        	// world is in gloom, no skylight at all
+		        	worldObj.skylightSubtracted = 15;
+		        }
+		        else
+		        {
+		        	worldObj.skylightSubtracted = (int)( ( 1F - fSunBrightness ) * 11.9F );
+		        }
 
-            if ((double)var5 < 0.02D)
-            {
-                this.worldObj.skylightSubtracted = 15;
-            }
-            else
-            {
-                this.worldObj.skylightSubtracted = (int)((1.0F - var5) * 11.9F);
-            }
-
-            float var6 = this.worldObj.getLightBrightness(var1, var2, var3);
-            float var7 = this.worldObj.getLightBrightness(var1, var2 + 1, var3);
-
-            if (var7 > var6)
-            {
-                var6 = var7;
-            }
-
-            this.worldObj.skylightSubtracted = var4;
-            return var6 < 0.001F;
+		        float fBlockInLightValue = worldObj.getLightBrightness( i, j, k );
+		        
+		        float fBlockAboveLightValue = worldObj.getLightBrightness( i, j + 1, k );
+		        
+		        if ( fBlockAboveLightValue > fBlockInLightValue )
+		        {
+		        	fBlockInLightValue = fBlockAboveLightValue;
+		        }
+		        
+		        worldObj.skylightSubtracted = iOldSkylightSubtracted;
+		        
+		    	return fBlockInLightValue < 0.001F;
+	        }
         }
-        else
-        {
-            return false;
-        }
+        
+        return false;
     }
+    
+	@Override    
+	public void AddRawChatMessage( String message )
+	{
+		playerNetServerHandler.sendPacket( new Packet3Chat( message ) );
+	}
 
-    public void AddRawChatMessage(String var1)
-    {
-        this.playerNetServerHandler.sendPacket(new Packet3Chat(var1));
-    }
-
+	@Override
     protected void OnZeroDamageAttack()
     {
-        long var1 = this.worldObj.getWorldTime();
-
-        if (var1 > this.m_lTimeOfLastZeroDamageAttackSound + 20L)
-        {
-            this.worldObj.playSoundAtEntity(this, "random.classic_hurt", 1.0F + this.rand.nextFloat() * 0.25F, this.getSoundPitch() * 1.2F + this.rand.nextFloat() * 0.1F);
-            this.m_lTimeOfLastZeroDamageAttackSound = var1;
-        }
+		long lCurrentTime = worldObj.getWorldTime();
+		
+		if ( lCurrentTime > m_lTimeOfLastZeroDamageAttackSound + m_iDelayBetweenZeroDamageAttackSounds )
+		{
+			worldObj.playSoundAtEntity( this, 
+	    		"random.classic_hurt", 1.0F +  rand.nextFloat() * 0.25F, 
+	    		getSoundPitch() * 1.20F + rand.nextFloat() * 0.1F);
+			
+			m_lTimeOfLastZeroDamageAttackSound = lCurrentTime;
+		}
     }
 
-    public void OnStruckByLightning(FCEntityLightningBolt var1)
+	@Override
+    public void OnStruckByLightning( FCEntityLightningBolt boltEntity )
     {
-        if (!this.capabilities.disableDamage)
+        if ( !capabilities.disableDamage )
         {
-            this.dealFireDamage(12);
-            this.setFire(8);
-            this.FlingAwayFromEntity(var1, 2.0D);
-            this.worldObj.playSoundAtEntity(this, "random.classic_hurt", 1.0F + this.rand.nextFloat() * 0.25F, this.getSoundPitch() * 1.2F + this.rand.nextFloat() * 0.1F);
-            this.addPotionEffect(new PotionEffect(Potion.blindness.getId(), 90, 0, true));
-            this.addPotionEffect(new PotionEffect(Potion.confusion.getId(), 180, 0, true));
+            dealFireDamage( 12 );
+            
+            setFire( 8 );
+
+        	FlingAwayFromEntity( boltEntity, 2D );
+    		
+    		worldObj.playSoundAtEntity( this, 
+        		"random.classic_hurt", 1.0F +  rand.nextFloat() * 0.25F, 
+        		getSoundPitch() * 1.20F + rand.nextFloat() * 0.1F);
+    		
+            addPotionEffect( new PotionEffect( Potion.blindness.getId(), 90, 0, true ) );
+            
+            addPotionEffect( new PotionEffect( Potion.confusion.getId(), 180, 0, true ) );                            
         }
     }
-
+	
     public int IncrementAndGetWindowID()
     {
         this.currentWindowId = this.currentWindowId % 100 + 1;
-        return this.currentWindowId;
+        
+        return currentWindowId;
     }
-
+    
     private void NotifyBlockWalkedOn()
     {
-        if (this.onGround)
+        if ( onGround )
         {
-            int var1 = MathHelper.floor_double(this.posX);
-            int var2 = MathHelper.floor_double(this.posY - 0.03D - (double)this.yOffset);
-            int var3 = MathHelper.floor_double(this.posZ);
-            Block var4 = Block.blocksList[this.worldObj.getBlockId(var1, var2, var3)];
+        	int iGroundI = MathHelper.floor_double( posX );
+        	int iGroundJ = MathHelper.floor_double( posY - 0.03D - (double)yOffset ); // same calc used for step sound
+        	int iGroundK = MathHelper.floor_double( posZ );
+        	
+        	Block blockOn = Block.blocksList[worldObj.getBlockId( iGroundI, iGroundJ, iGroundK )];
 
-            if (var4 == null || var4.getCollisionBoundingBoxFromPool(this.worldObj, var1, var2, var3) == null)
-            {
-                float var5 = this.width / 2.0F;
-                int var6 = var1;
-                var1 = MathHelper.floor_double(this.posX + (double)var5);
-                var4 = Block.blocksList[this.worldObj.getBlockId(var1, var2, var3)];
+        	if ( blockOn == null || blockOn.getCollisionBoundingBoxFromPool( worldObj, iGroundI, iGroundJ, iGroundK ) == null )
+        	{
+        		float fHalfWidth = width / 2F;
+        		
+        		// block we are standing on directly is air or has no collision box.  Check the horizontal extents of our box for a movement modifier
 
-                if (var4 == null || var4.getCollisionBoundingBoxFromPool(this.worldObj, var1, var2, var3) == null)
-                {
-                    var1 = MathHelper.floor_double(this.posX - (double)var5);
-                    var4 = Block.blocksList[this.worldObj.getBlockId(var1, var2, var3)];
-
-                    if (var4 == null || var4.getCollisionBoundingBoxFromPool(this.worldObj, var1, var2, var3) == null)
-                    {
-                        var1 = var6;
-                        var3 = MathHelper.floor_double(this.posZ + (double)var5);
-                        var4 = Block.blocksList[this.worldObj.getBlockId(var6, var2, var3)];
-
-                        if (var4 == null || var4.getCollisionBoundingBoxFromPool(this.worldObj, var6, var2, var3) == null)
-                        {
-                            var3 = MathHelper.floor_double(this.posZ - (double)var5);
-                            var4 = Block.blocksList[this.worldObj.getBlockId(var6, var2, var3)];
-                        }
-                    }
-                }
-            }
-
-            if (var4 != null)
-            {
-                var4.OnPlayerWalksOnBlock(this.worldObj, var1, var2, var3, this);
-            }
-        }
+        		int iCenterGroundI = iGroundI;
+        		
+        		iGroundI = MathHelper.floor_double( posX + fHalfWidth );	        		
+	        	blockOn = Block.blocksList[worldObj.getBlockId( iGroundI, iGroundJ, iGroundK )];
+	        	
+	        	if ( blockOn == null || blockOn.getCollisionBoundingBoxFromPool( worldObj, iGroundI, iGroundJ, iGroundK ) == null )
+	        	{
+	        		iGroundI = MathHelper.floor_double( posX - fHalfWidth );
+		        	blockOn = Block.blocksList[worldObj.getBlockId( iGroundI, iGroundJ, iGroundK )];
+		        	
+		        	if ( blockOn == null || blockOn.getCollisionBoundingBoxFromPool( worldObj, iGroundI, iGroundJ, iGroundK ) == null )
+		        	{
+		        		iGroundI = iCenterGroundI;
+		        		
+		        		iGroundK = MathHelper.floor_double( posZ + fHalfWidth );
+			        	blockOn = Block.blocksList[worldObj.getBlockId( iGroundI, iGroundJ, iGroundK )];
+			        	
+			        	if ( blockOn == null || blockOn.getCollisionBoundingBoxFromPool( worldObj, iGroundI, iGroundJ, iGroundK ) == null )
+			        	{
+			        		iGroundK = MathHelper.floor_double( posZ - fHalfWidth );
+				        	blockOn = Block.blocksList[worldObj.getBlockId( iGroundI, iGroundJ, iGroundK )];					        	
+			        	}
+		        	}
+	        	}	        	
+        	}
+        	
+        	if ( blockOn != null )
+        	{
+        		blockOn.OnPlayerWalksOnBlock( worldObj, iGroundI, iGroundJ, iGroundK, this );        		
+        	}
+        }        
     }
-
+    
     public void SendChunksToClient()
     {
-        if (!this.m_chunksToBeSentToClient.isEmpty())
+        if ( !m_chunksToBeSentToClient.isEmpty() )
         {
-            Iterator var1 = this.m_chunksToBeSentToClient.iterator();
-            ArrayList var2 = new ArrayList();
-            ArrayList var3 = new ArrayList();
+            Iterator<ChunkCoordIntPair> coordIterator = m_chunksToBeSentToClient.iterator();
+            
+            ArrayList<Chunk> chunksToSend = new ArrayList<Chunk>();
+            ArrayList<TileEntity> tileEntitiesToSend = new ArrayList<TileEntity>();
 
-            while (var1.hasNext() && var2.size() < 5)
+            while ( coordIterator.hasNext() && chunksToSend.size() < 5 )
             {
-                ChunkCoordIntPair var4 = (ChunkCoordIntPair)var1.next();
-                var1.remove();
+                ChunkCoordIntPair tempCoord = coordIterator.next();
+                coordIterator.remove();
 
-                if (var4 != null && this.worldObj.chunkExists(var4.chunkXPos, var4.chunkZPos))
+                if ( tempCoord != null && worldObj.chunkExists( 
+                	tempCoord.chunkXPos, tempCoord.chunkZPos ) )
                 {
-                    var2.add(this.worldObj.getChunkFromChunkCoords(var4.chunkXPos, var4.chunkZPos));
-                    var3.addAll(this.getServerForPlayer().getAllTileEntityInBox(var4.chunkXPos * 16, 0, var4.chunkZPos * 16, var4.chunkXPos * 16 + 16, 256, var4.chunkZPos * 16 + 16));
+                    chunksToSend.add( worldObj.getChunkFromChunkCoords(
+                    	tempCoord.chunkXPos, tempCoord.chunkZPos ) );
+                    
+                    tileEntitiesToSend.addAll( getServerForPlayer().getAllTileEntityInBox(
+                    	tempCoord.chunkXPos * 16, 0, tempCoord.chunkZPos * 16, 
+                    	tempCoord.chunkXPos * 16 + 16, 256, tempCoord.chunkZPos * 16 + 16));
                 }
             }
 
-            if (!var2.isEmpty())
+            if ( !chunksToSend.isEmpty() )
             {
-                FCUtilsWorld.SendPacketToPlayer(this.playerNetServerHandler, new Packet56MapChunks(var2));
-                Iterator var7 = var3.iterator();
+	        	FCUtilsWorld.SendPacketToPlayer( playerNetServerHandler, 
+	        		new Packet56MapChunks( chunksToSend ) );
+	        	
+                Iterator<TileEntity> tileIterator = tileEntitiesToSend.iterator();
 
-                while (var7.hasNext())
+                while ( tileIterator.hasNext() )
                 {
-                    TileEntity var5 = (TileEntity)var7.next();
-                    this.sendTileEntityToPlayer(var5);
+                    TileEntity tempTile = (TileEntity)tileIterator.next();
+                    
+                    sendTileEntityToPlayer( tempTile );
                 }
 
-                Iterator var8 = var2.iterator();
+                Iterator<Chunk> chunkIterator = chunksToSend.iterator();
 
-                while (var8.hasNext())
+                while ( chunkIterator.hasNext() )
                 {
-                    Chunk var6 = (Chunk)var8.next();
-                    this.getServerForPlayer().getEntityTracker().func_85172_a(this, var6);
+                    Chunk var10 = chunkIterator.next();
+                    
+                    // the following call checks for entities in the chunk, and starts the player
+                    // watching them for updates
+                    getServerForPlayer().getEntityTracker().func_85172_a( this, var10 );
                 }
             }
         }
     }
+	// END FCMOD
 }
