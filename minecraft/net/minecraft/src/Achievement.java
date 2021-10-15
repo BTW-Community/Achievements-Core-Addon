@@ -67,7 +67,7 @@ public class Achievement extends StatBase
 
     public Achievement(int id, String name, int displayColumn, int displayRow, ItemStack theItemStack, Achievement parentAchievement)
     {
-        super(5242880 + AchievementTabList.counter++, "achievement." + name);
+        super(AchievementTabList.counter++, "achievement." + name);
         this.theItemStack = theItemStack;
         this.achievementDescription = "achievement." + name + ".desc";
         this.displayColumn = displayColumn;
