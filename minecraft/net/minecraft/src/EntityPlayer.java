@@ -1731,6 +1731,7 @@ public abstract class EntityPlayer extends EntityLiving implements ICommandSende
      */
     public void triggerAchievement(StatBase par1StatBase)
     {
+    	if (par1StatBase == null) { return; }
         this.addStat(par1StatBase, 1);
         if (par1StatBase.isAchievement()) {
         	AchievementsCore.getInstance().triggerAchievement(this, (Achievement) par1StatBase);
