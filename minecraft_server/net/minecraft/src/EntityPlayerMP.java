@@ -764,10 +764,10 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
                 this.playerNetServerHandler.sendPacket(new Packet200Statistic(par1StatBase.statId, par2));
             }
             // ACA start:
-            if (par1StatBase instanceof Achievement) {
-            	String achievementName = par1StatBase.toString();
-            	String achievementGet = StatCollector.translateToLocal("achievement.announce");
-            	String msg = String.format("%s %s [%s]", this.username, achievementGet, achievementName);
+            if (par1StatBase instanceof Achievement && !AchievementsCore.getInstance().hasUnlocked(this, (Achievement) par1StatBase)) {
+            	String name = par1StatBase.toString();
+            	String announce = StatCollector.translateToLocal("achievement.announce");
+            	String msg = String.format("%s %s §a[%s]", this.username, announce, name);
             	this.mcServer.getConfigurationManager().sendChatMsg(msg);
             }
             // ACA end.

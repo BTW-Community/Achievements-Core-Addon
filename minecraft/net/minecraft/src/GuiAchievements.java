@@ -46,6 +46,7 @@ public class GuiAchievements extends GuiScreen
     private int isMouseButtonDown = 0;
     private StatFileWriter statFileWriter;
     
+    AchievementsCore ac = AchievementsCore.getInstance();
 	List<AchievementTab> tabList = AchievementTabList.tabList;
 	private static int tabIndex = 0;
 	private static int page = 1;
@@ -270,8 +271,8 @@ public class GuiAchievements extends GuiScreen
                 y1 = achievement.displayRow * 24 - windowY + 11 + yShift;
                 x2 = achievement.parentAchievement.displayColumn * 24 - windowX + 11 + xShift;
                 y2 = achievement.parentAchievement.displayRow * 24 - windowY + 11 + yShift;
-                boolean hasUnlocked = this.statFileWriter.hasAchievementUnlocked(achievement);
-                boolean canUnlock = this.statFileWriter.canUnlockAchievement(achievement);
+                boolean hasUnlocked = ac.hasUnlocked(mc.thePlayer, achievement);
+                boolean canUnlock = ac.canUnlock(mc.thePlayer, achievement);
                 flash = Math.sin((double)(Minecraft.getSystemTime() % 600L) / 600.0D * Math.PI * 2.0D) > 0.6D ? 255 : 130;
                 int color = -16777216;
 
@@ -314,12 +315,12 @@ public class GuiAchievements extends GuiScreen
             {
                 float brightness;
 
-                if (this.statFileWriter.hasAchievementUnlocked(achievement))
+                if (ac.hasUnlocked(mc.thePlayer, achievement))
                 {
                     brightness = 1.0F;
                     GL11.glColor4f(brightness, brightness, brightness, 1.0F);
                 }
-                else if (this.statFileWriter.canUnlockAchievement(achievement))
+                else if (ac.canUnlock(mc.thePlayer, achievement))
                 {
                     brightness = Math.sin((double)(Minecraft.getSystemTime() % 600L) / 600.0D * Math.PI * 2.0D) < 0.6D ? 0.6F : 0.8F;
                     GL11.glColor4f(brightness, brightness, brightness, 1.0F);
@@ -343,7 +344,7 @@ public class GuiAchievements extends GuiScreen
                     this.drawTexturedModalRect(stringWidth - 2, tooltipY - 2, 0, 202, 26, 26);
                 }
 
-                if (!this.statFileWriter.canUnlockAchievement(achievement))
+                if (!ac.canUnlock(mc.thePlayer, achievement))
                 {
                     float borderBrightness = 0.1F;
                     GL11.glColor4f(borderBrightness, borderBrightness, borderBrightness, 1.0F);
@@ -355,7 +356,7 @@ public class GuiAchievements extends GuiScreen
                 renderItem.renderItemAndEffectIntoGUI(this.mc.fontRenderer, this.mc.renderEngine, achievement.theItemStack, stringWidth + 3, tooltipY + 3);
                 GL11.glDisable(GL11.GL_LIGHTING);
 
-                if (!this.statFileWriter.canUnlockAchievement(achievement))
+                if (!ac.canUnlock(mc.thePlayer, achievement))
                 {
                     renderItem.renderWithColor = true;
                 }
@@ -400,12 +401,12 @@ public class GuiAchievements extends GuiScreen
             x2 = mouseX + 12;
             y2 = mouseY - 4;
 
-            if (this.statFileWriter.canUnlockAchievement(achievementHovered))
+            if (ac.canUnlock(mc.thePlayer, achievementHovered))
             {
                 stringWidth = Math.max(this.fontRenderer.getStringWidth(name), 120);
                 tooltipY = this.fontRenderer.splitStringWidth(description, stringWidth);
 
-                if (this.statFileWriter.hasAchievementUnlocked(achievementHovered))
+                if (ac.hasUnlocked(mc.thePlayer, achievementHovered))
                 {
                     tooltipY += 12;
                 }
@@ -413,7 +414,7 @@ public class GuiAchievements extends GuiScreen
                 this.drawGradientRect(x2 - 3, y2 - 3, x2 + stringWidth + 3, y2 + tooltipY + 3 + 12, -1073741824, -1073741824);
                 this.fontRenderer.drawSplitString(description, x2, y2 + 12, stringWidth, -6250336);
 
-                if (this.statFileWriter.hasAchievementUnlocked(achievementHovered))
+                if (ac.hasUnlocked(mc.thePlayer, achievementHovered))
                 {
                     this.fontRenderer.drawStringWithShadow(StatCollector.translateToLocal("achievement.taken"), x2, y2 + tooltipY + 4, -7302913);
                 }
@@ -427,7 +428,7 @@ public class GuiAchievements extends GuiScreen
                 this.fontRenderer.drawSplitString(requiredDesc, x2, y2 + 12, stringWidth, -9416624);
             }
 
-            this.fontRenderer.drawStringWithShadow(name, x2, y2, this.statFileWriter.canUnlockAchievement(achievementHovered) ? (achievementHovered.getSpecial() ? -128 : -1) : (achievementHovered.getSpecial() ? -8355776 : -8355712));
+            this.fontRenderer.drawStringWithShadow(name, x2, y2, ac.canUnlock(mc.thePlayer, achievementHovered) ? (achievementHovered.getSpecial() ? -128 : -1) : (achievementHovered.getSpecial() ? -8355776 : -8355712));
         }
         
         // AA

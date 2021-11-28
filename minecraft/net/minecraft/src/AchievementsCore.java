@@ -18,14 +18,12 @@ import net.minecraft.src.Item;
 
 /**
  * Achievements Core Addon.
- * This only exists so I can add a language file prefix,
- * which is used for achievement messages.
  */
 public class AchievementsCore extends FCAddOn {
 	private static AchievementsCore instance;
 	private Map<String, byte[]> achievementsMap = new HashMap();
 	
-	public int maxSize;
+	public int achievementsLength;
 	
 	public AchievementsCore() {
 		super("Achievements Core", "2.1.0", "AC");
@@ -41,27 +39,52 @@ public class AchievementsCore extends FCAddOn {
 	@Override
 	public void Initialize() {
 		FCAddOnHandler.LogMessage(this.getName() + " Version " + this.getVersionString() + " Initializing...");
-		maxSize = AchievementTabList.getMaxSize();
+		achievementsLength = AchievementTabList.counter + 1;
 		FCAddOnHandler.LogMessage(this.getName() + " Initialized");
+	}
+	
+	@Override
+	public FCAddOnUtilsWorldData createWorldData() {
+		return new AchievementsCoreWorldData();
+	}
+	
+	@Override
+	public String GetLanguageFilePrefix() {
+		return "achievementscore";
 	}
 	
 	public void triggerAchievement(EntityPlayer player, Achievement achievement) {
 		if (!achievementsMap.containsKey(player.username)) {
 			createBlankAchievements(player.username);
 		}
-		byte[] achievementStats = achievementsMap.get(player.username);
-		achievementStats[achievement.statId] += 1;
+		achievementsMap.get(player.username)[achievement.statId] += 1;
 	}
 	
 	private void createBlankAchievements(String name) {
-		byte[] achievementStats = new byte[maxSize];
+		byte[] achievementStats = new byte[achievementsLength];
 		
 		for (AchievementTab tab : AchievementTabList.tabList) {
 			for (Achievement achievement : tab.achievementList) {
 				achievementStats[achievement.statId] = 0;
 			}
 		}
+		achievementStats[0] = 1;  // Unlock open inventory achievement by default.
 		achievementsMap.put(name, achievementStats);
+	}
+	
+	public boolean hasUnlocked(EntityPlayer player, Achievement achievement) {
+		if (!achievementsMap.containsKey(player.username)) {
+			createBlankAchievements(player.username);
+		}
+		return achievementsMap.get(player.username)[achievement.statId] > 0;
+	}
+	
+	public boolean canUnlock(EntityPlayer player, Achievement achievement) {
+		if (!achievementsMap.containsKey(player.username)) {
+			createBlankAchievements(player.username);
+		}
+		if (achievement.parentAchievement == null) { return true; }
+		return achievementsMap.get(player.username)[achievement.parentAchievement.statId] > 0;
 	}
 	
 	public NBTTagCompound saveAchievementsToNBT() {
@@ -88,22 +111,11 @@ public class AchievementsCore extends FCAddOn {
 			byte[] achievementStats = achievementsMap.get(name);
 			byte[] tempStats = achievementsTag.getByteArray(name);
 			
-			for (int i = 0; i < maxSize; i++) {
-				// Break early in-case there are more.
+			for (int i = 0; i < achievementsLength; i++) {
+				// Break early so the array doesn't go out of bounds.
 				if (tempStats.length == i) { break; }
 				achievementStats[i] = tempStats[i];
 			}
 		}
 	}
-	
-	@Override
-	public FCAddOnUtilsWorldData createWorldData() {
-		return new AchievementsCoreWorldData();
-	}
-	
-	@Override
-	public String GetLanguageFilePrefix() {
-		return "achievementscore";
-	}
-
 }

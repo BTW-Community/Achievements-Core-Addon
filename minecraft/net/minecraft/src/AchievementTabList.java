@@ -12,12 +12,4 @@ public class AchievementTabList {
 	public static void add(AchievementTab achievementTab) {
 		tabList.add(achievementTab);
 	}
-	
-	public static int getMaxSize() {
-		int max = 0;
-		for (AchievementTab tab : tabList) {
-			max = Integer.max(max, tab.size());
-		}
-		return max * tabList.size();
-	}
 }
