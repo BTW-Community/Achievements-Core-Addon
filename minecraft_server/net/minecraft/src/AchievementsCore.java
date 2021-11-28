@@ -15,6 +15,7 @@ import net.minecraft.src.Block;
 import net.minecraft.src.FCAddOnHandler;
 import net.minecraft.src.FCBetterThanWolves;
 import net.minecraft.src.Item;
+import net.minecraft.src.example.ExampleAchievements;
 
 /**
  * Achievements Core Addon.
@@ -23,7 +24,7 @@ public class AchievementsCore extends FCAddOn {
 	private static AchievementsCore instance;
 	private Map<String, byte[]> achievementsMap = new HashMap();
 	
-	public int maxSize;
+	public int achievementsLength;
 	
 	public AchievementsCore() {
 		super("Achievements Core", "2.1.0", "AC");
@@ -39,7 +40,14 @@ public class AchievementsCore extends FCAddOn {
 	@Override
 	public void Initialize() {
 		FCAddOnHandler.LogMessage(this.getName() + " Version " + this.getVersionString() + " Initializing...");
-		maxSize = AchievementTabList.getMaxSize();
+	}
+	
+	@Override
+	public void PostInitialize() {
+		achievementsLength = 1;
+		for (AchievementTab tab : AchievementTabList.tabList) {
+			achievementsLength += tab.achievementList.size();
+		}
 		FCAddOnHandler.LogMessage(this.getName() + " Initialized");
 	}
 	
@@ -61,13 +69,14 @@ public class AchievementsCore extends FCAddOn {
 	}
 	
 	private void createBlankAchievements(String name) {
-		byte[] achievementStats = new byte[maxSize];
+		byte[] achievementStats = new byte[achievementsLength];
 		
 		for (AchievementTab tab : AchievementTabList.tabList) {
 			for (Achievement achievement : tab.achievementList) {
 				achievementStats[achievement.statId] = 0;
 			}
 		}
+		achievementStats[0] = 1;  // Unlock open inventory achievement by default.
 		achievementsMap.put(name, achievementStats);
 	}
 	
@@ -76,6 +85,17 @@ public class AchievementsCore extends FCAddOn {
 			createBlankAchievements(player.username);
 		}
 		return achievementsMap.get(player.username)[achievement.statId] > 0;
+	}
+	
+	public boolean canUnlock(EntityPlayer player, Achievement achievement) {
+		for (Achievement parent : achievement.parentAchievements) {
+			if (parent == null) {
+				return true;
+			} else if (!hasUnlocked(player, parent)) {
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	public NBTTagCompound saveAchievementsToNBT() {
@@ -102,7 +122,7 @@ public class AchievementsCore extends FCAddOn {
 			byte[] achievementStats = achievementsMap.get(name);
 			byte[] tempStats = achievementsTag.getByteArray(name);
 			
-			for (int i = 0; i < maxSize; i++) {
+			for (int i = 0; i < achievementsLength; i++) {
 				// Break early so the array doesn't go out of bounds.
 				if (tempStats.length == i) { break; }
 				achievementStats[i] = tempStats[i];

@@ -23,7 +23,6 @@ public class AchievementList
     // Vanilla Achievements stored in a AchievementTab
     // Set all achievements to null so they don't register,
     // apart from openInventory since it needs to be not null in other places.
-    public static AchievementTab minecraftTab = new AchievementTab("minecraft").setIcon(Block.grass.blockID);
     
     /** Is the 'open inventory' achievement. */
     public static Achievement openInventory = (new Achievement(0, "openInventory", 0, 0, Item.book, (Achievement)null));

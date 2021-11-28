@@ -1,11 +1,13 @@
 package net.minecraft.src;
 
 import net.minecraft.src.AchievementsCore;
+import net.minecraft.src.example.ExampleAchievements;
 
 public class Achievement extends StatBase
 {
 	static {
 		AchievementsCore.getInstance();
+		ExampleAchievements.getInstance();
 	}
 	
     /**
@@ -19,9 +21,10 @@ public class Achievement extends StatBase
     public final int displayRow;
 
     /**
-     * Holds the parent achievement, that must be taken before this achievement is avaiable.
+     * Holds the parent achievements, that must be taken before this achievement is avaiable.
      */
     public final Achievement parentAchievement;
+    public final Achievement[] parentAchievements;
 
     /**
      * Holds the description of the achievement, ready to be formatted and/or displayed.
@@ -45,27 +48,27 @@ public class Achievement extends StatBase
      */
     private boolean isSpecial;
     
-    public Achievement(String name, int displayColumn, int displayRow, Item item, Achievement parentAchievement)
+    public Achievement(String name, int displayColumn, int displayRow, Item item, Achievement... parentAchievements)
     {
-        this(0, name, displayColumn, displayRow, new ItemStack(item), parentAchievement);
+        this(0, name, displayColumn, displayRow, new ItemStack(item), parentAchievements);
     }
 
-    public Achievement(String name, int displayColumn, int displayRow, Block block, Achievement parentAchievement)
+    public Achievement(String name, int displayColumn, int displayRow, Block block, Achievement... parentAchievements)
     {
-        this(0, name, displayColumn, displayRow, new ItemStack(block), parentAchievement);
+        this(0, name, displayColumn, displayRow, new ItemStack(block), parentAchievements);
     }
 
-    public Achievement(int par1, String par2Str, int par3, int par4, Item par5Item, Achievement par6Achievement)
+    public Achievement(int par1, String par2Str, int par3, int par4, Item par5Item, Achievement... parentAchievements)
     {
-        this(par1, par2Str, par3, par4, new ItemStack(par5Item), par6Achievement);
+        this(par1, par2Str, par3, par4, new ItemStack(par5Item), parentAchievements);
     }
 
-    public Achievement(int par1, String par2Str, int par3, int par4, Block par5Block, Achievement par6Achievement)
+    public Achievement(int par1, String par2Str, int par3, int par4, Block par5Block, Achievement... parentAchievements)
     {
-        this(par1, par2Str, par3, par4, new ItemStack(par5Block), par6Achievement);
+        this(par1, par2Str, par3, par4, new ItemStack(par5Block), parentAchievements);
     }
 
-    public Achievement(int id, String name, int displayColumn, int displayRow, ItemStack theItemStack, Achievement parentAchievement)
+    public Achievement(int id, String name, int displayColumn, int displayRow, ItemStack theItemStack, Achievement... parentAchievements)
     {
         super(AchievementTabList.counter++, "achievement." + name);
         this.theItemStack = theItemStack;
@@ -73,7 +76,8 @@ public class Achievement extends StatBase
         this.displayColumn = displayColumn;
         this.displayRow = displayRow;
 
-        this.parentAchievement = parentAchievement;
+        this.parentAchievements = parentAchievements;
+        this.parentAchievement = parentAchievements[0];
     }
 
     /**

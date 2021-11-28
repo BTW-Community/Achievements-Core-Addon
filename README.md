@@ -29,6 +29,7 @@ If you would like to see more events, please create an Issue on GitHub or feel f
   - EntityItem
   - EntityPlayer
   - EntityPlayerMP
+  - EntityPlayerSP
   - FCBlockCampfire
   - FCBlockFurnaceBrick
   - GuiAchievements

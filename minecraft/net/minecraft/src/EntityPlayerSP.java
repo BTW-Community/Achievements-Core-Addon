@@ -509,7 +509,7 @@ public class EntityPlayerSP extends EntityPlayer
                 Achievement var3 = (Achievement)par1StatBase;
                 AchievementsCore ac = AchievementsCore.getInstance();
 
-                if (var3.parentAchievement == null || ac.hasUnlocked(this, var3.parentAchievement))
+                if (var3.parentAchievements == null || ac.canUnlock(this, var3))
                 {
                     if (!ac.hasUnlocked(this, var3))
                     {

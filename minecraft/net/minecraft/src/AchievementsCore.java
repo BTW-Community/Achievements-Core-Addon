@@ -15,6 +15,7 @@ import net.minecraft.src.Block;
 import net.minecraft.src.FCAddOnHandler;
 import net.minecraft.src.FCBetterThanWolves;
 import net.minecraft.src.Item;
+import net.minecraft.src.example.ExampleAchievements;
 
 /**
  * Achievements Core Addon.
@@ -39,7 +40,14 @@ public class AchievementsCore extends FCAddOn {
 	@Override
 	public void Initialize() {
 		FCAddOnHandler.LogMessage(this.getName() + " Version " + this.getVersionString() + " Initializing...");
-		achievementsLength = AchievementTabList.counter + 1;
+	}
+	
+	@Override
+	public void PostInitialize() {
+		achievementsLength = 1;
+		for (AchievementTab tab : AchievementTabList.tabList) {
+			achievementsLength += tab.achievementList.size();
+		}
 		FCAddOnHandler.LogMessage(this.getName() + " Initialized");
 	}
 	
@@ -80,11 +88,14 @@ public class AchievementsCore extends FCAddOn {
 	}
 	
 	public boolean canUnlock(EntityPlayer player, Achievement achievement) {
-		if (!achievementsMap.containsKey(player.username)) {
-			createBlankAchievements(player.username);
+		for (Achievement parent : achievement.parentAchievements) {
+			if (parent == null) {
+				return true;
+			} else if (!hasUnlocked(player, parent)) {
+				return false;
+			}
 		}
-		if (achievement.parentAchievement == null) { return true; }
-		return achievementsMap.get(player.username)[achievement.parentAchievement.statId] > 0;
+		return true;
 	}
 	
 	public NBTTagCompound saveAchievementsToNBT() {

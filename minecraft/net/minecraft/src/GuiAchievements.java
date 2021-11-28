@@ -264,13 +264,14 @@ public class GuiAchievements extends GuiScreen
         for (i = 0; i < tab.achievementList.size(); ++i)
         {
             Achievement achievement = tab.achievementList.get(i);
-
-            if (achievement.parentAchievement != null)
+            
+            for (Achievement parent : achievement.parentAchievements)
             {
+            	if (parent == null) { break; }
                 x1 = achievement.displayColumn * 24 - windowX + 11 + xShift;
                 y1 = achievement.displayRow * 24 - windowY + 11 + yShift;
-                x2 = achievement.parentAchievement.displayColumn * 24 - windowX + 11 + xShift;
-                y2 = achievement.parentAchievement.displayRow * 24 - windowY + 11 + yShift;
+                x2 = parent.displayColumn * 24 - windowX + 11 + xShift;
+                y2 = parent.displayRow * 24 - windowY + 11 + yShift;
                 boolean hasUnlocked = ac.hasUnlocked(mc.thePlayer, achievement);
                 boolean canUnlock = ac.canUnlock(mc.thePlayer, achievement);
                 flash = Math.sin((double)(Minecraft.getSystemTime() % 600L) / 600.0D * Math.PI * 2.0D) > 0.6D ? 255 : 130;
@@ -422,7 +423,7 @@ public class GuiAchievements extends GuiScreen
             else
             {
                 stringWidth = Math.max(this.fontRenderer.getStringWidth(name), 120);
-                String requiredDesc = StatCollector.translateToLocalFormatted("achievement.requires", new Object[] {StatCollector.translateToLocal(achievementHovered.parentAchievement.getName())});
+                String requiredDesc = StatCollector.translateToLocalFormatted("achievement.requires", new Object[] {StatCollector.translateToLocal(achievementHovered.parentAchievements[0].getName())});
                 flash = this.fontRenderer.splitStringWidth(requiredDesc, stringWidth);
                 this.drawGradientRect(x2 - 3, y2 - 3, x2 + stringWidth + 3, y2 + flash + 12 + 3, -1073741824, -1073741824);
                 this.fontRenderer.drawSplitString(requiredDesc, x2, y2 + 12, stringWidth, -9416624);
