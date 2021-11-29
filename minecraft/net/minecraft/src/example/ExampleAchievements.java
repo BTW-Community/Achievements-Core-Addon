@@ -55,11 +55,11 @@ private static ExampleAchievements instance;
 		killPig = (new Achievement("killPig", 2, -1, Item.porkRaw, chiselStone)).registerAchievement(tabSimple);
 		cookPork = (new Achievement("cookPork", 2, -2, Item.porkCooked, killPig)).registerAchievement(tabSimple);
 		cookIron = (new Achievement("cookIron", 3, 0, FCBetterThanWolves.fcItemNuggetIron, chiselStone)).registerAchievement(tabSimple);
-		neuterCreeper = (new Achievement("neuterCreeper", 3, 1, FCBetterThanWolves.fcItemCreeperOysters, cookIron)).registerAchievement(tabSimple);
+		neuterCreeper = (new Achievement("neuterCreeper", 3, 1, FCBetterThanWolves.fcItemCreeperOysters, cookIron)).setHidden().registerAchievement(tabSimple);
 		System.out.println("Simple Tab: " + tabSimple.size() + " achievements");
 		
 		AchievementTab tabCustom = new CustomAchievementTab("custom").setIcon(FCBetterThanWolves.fcItemWaterWheel);
-		netherPortal = (new Achievement("netherPortal", 0, 0, Block.obsidian, cookIron)).registerAchievement(tabCustom);
+		netherPortal = (new Achievement("netherPortal", 0, 0, Block.obsidian, neuterCreeper)).registerAchievement(tabCustom);
 		firePotion = (new Achievement("firePotion", 0, 1, Item.potion, netherPortal)).setSpecial().registerAchievement(tabCustom);
 		System.out.println("Custom Tab: " + tabCustom.size() + " achievements");
 		

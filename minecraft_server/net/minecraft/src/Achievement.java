@@ -28,6 +28,11 @@ public class Achievement extends StatBase
      * Holds the tab this achievement is in.
      */
     public AchievementTab tab;
+    
+    /**
+     * Determines if this achievement should be shown to the player when locked.
+     */
+    public boolean isHidden = false;
 
     /**
      * Holds the description of the achievement, ready to be formatted and/or displayed.
@@ -94,6 +99,15 @@ public class Achievement extends StatBase
     public Achievement setSpecial()
     {
         this.isSpecial = true;
+        return this;
+    }
+    
+    /**
+     * Hidden achievements are not revealed until unlocked.
+     */
+    public Achievement setHidden()
+    {
+        this.isHidden = true;
         return this;
     }
     

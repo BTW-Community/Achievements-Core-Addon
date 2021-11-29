@@ -264,6 +264,7 @@ public class GuiAchievements extends GuiScreen
         // Draw lines connecting achievements.
         for (i = 0; i < tab.achievementList.size(); ++i) {
             Achievement achievement = tab.achievementList.get(i);
+            if (shouldHide(achievement)) { continue; }
             
             for (Achievement parent : achievement.parentAchievements) {
             	if (parent == null || (achievement.tab != parent.tab)) { continue; }
@@ -303,28 +304,22 @@ public class GuiAchievements extends GuiScreen
         int stringWidth;
         int tooltipY;
 
-        for (x1 = 0; x1 < tab.achievementList.size(); ++x1)
-        {
+        for (x1 = 0; x1 < tab.achievementList.size(); ++x1) {
             Achievement achievement = tab.achievementList.get(x1);
+            if (shouldHide(achievement)) { continue; }
             x2 = achievement.displayColumn * 24 - windowX;
             y2 = achievement.displayRow * 24 - windowY;
 
-            if (x2 >= -24 && y2 >= -24 && x2 <= 224 && y2 <= 155)
-            {
+            if (x2 >= -24 && y2 >= -24 && x2 <= 224 && y2 <= 155) {
                 float brightness;
 
-                if (ac.hasUnlocked(mc.thePlayer, achievement))
-                {
+                if (ac.hasUnlocked(mc.thePlayer, achievement)) {
                     brightness = 1.0F;
                     GL11.glColor4f(brightness, brightness, brightness, 1.0F);
-                }
-                else if (ac.canUnlock(mc.thePlayer, achievement))
-                {
+                } else if (ac.canUnlock(mc.thePlayer, achievement)) {
                     brightness = Math.sin((double)(Minecraft.getSystemTime() % 600L) / 600.0D * Math.PI * 2.0D) < 0.6D ? 0.6F : 0.8F;
                     GL11.glColor4f(brightness, brightness, brightness, 1.0F);
-                }
-                else
-                {
+                } else {
                     brightness = 0.3F;
                     GL11.glColor4f(brightness, brightness, brightness, 1.0F);
                 }
@@ -333,17 +328,13 @@ public class GuiAchievements extends GuiScreen
                 stringWidth = xShift + x2;
                 tooltipY = yShift + y2;
 
-                if (achievement.getSpecial())
-                {
+                if (achievement.getSpecial()) {
                     this.drawTexturedModalRect(stringWidth - 2, tooltipY - 2, 26, 202, 26, 26);
-                }
-                else
-                {
+                } else {
                     this.drawTexturedModalRect(stringWidth - 2, tooltipY - 2, 0, 202, 26, 26);
                 }
 
-                if (!ac.canUnlock(mc.thePlayer, achievement))
-                {
+                if (!ac.canUnlock(mc.thePlayer, achievement)) {
                     float borderBrightness = 0.1F;
                     GL11.glColor4f(borderBrightness, borderBrightness, borderBrightness, 1.0F);
                     renderItem.renderWithColor = false;
@@ -354,15 +345,13 @@ public class GuiAchievements extends GuiScreen
                 renderItem.renderItemAndEffectIntoGUI(this.mc.fontRenderer, this.mc.renderEngine, achievement.theItemStack, stringWidth + 3, tooltipY + 3);
                 GL11.glDisable(GL11.GL_LIGHTING);
 
-                if (!ac.canUnlock(mc.thePlayer, achievement))
-                {
+                if (!ac.canUnlock(mc.thePlayer, achievement)) {
                     renderItem.renderWithColor = true;
                 }
 
                 GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-                if (mouseX >= xShift && mouseY >= yShift && mouseX < xShift + 224 && mouseY < yShift + 155 && mouseX >= stringWidth && mouseX <= stringWidth + 22 && mouseY >= tooltipY && mouseY <= tooltipY + 22)
-                {
+                if (mouseX >= xShift && mouseY >= yShift && mouseX < xShift + 224 && mouseY < yShift + 155 && mouseX >= stringWidth && mouseX <= stringWidth + 22 && mouseY >= tooltipY && mouseY <= tooltipY + 22) {
                     achievementHovered = achievement;
                 }
             }
@@ -372,10 +361,8 @@ public class GuiAchievements extends GuiScreen
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         
-        // AA
         // Render all non-selected tabs behind the window.
-        for (i = 0; i < tabList.size(); ++i)
-        {
+        for (i = 0; i < tabList.size(); ++i) {
         	if (i != this.tabIndex) {
 	            tab = tabList.get(i);
 	            this.mc.renderEngine.bindTexture("/gui/allitems.png");
@@ -438,7 +425,6 @@ public class GuiAchievements extends GuiScreen
             this.fontRenderer.drawStringWithShadow(name, x2, y2, ac.canUnlock(mc.thePlayer, achievementHovered) ? (achievementHovered.getSpecial() ? -128 : -1) : (achievementHovered.getSpecial() ? -8355776 : -8355712));
         }
         
-        // AA
         // Render the selected tab in front of the window.
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         tab = tabList.get(this.tabIndex);
@@ -690,4 +676,20 @@ public class GuiAchievements extends GuiScreen
         
         return mouseX >= rightPos && mouseX <= rightPos + 10 && mouseY >= yPos && mouseY <= yPos + 15 && tabList.size() > MAX_TABS * page;
     }
+	
+	// Recursively check if any of the parents are hidden, and if so we want to hide this achievement as well.
+	private boolean shouldHide(Achievement achievement) {
+		if (achievement == null || ac.hasUnlocked(mc.thePlayer, achievement)) {
+			return false;
+		} else if (achievement.isHidden) {
+			return true;
+		} else {
+			for (Achievement parent : achievement.parentAchievements) {
+				if (shouldHide(parent)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 }
