@@ -21,10 +21,15 @@ public class Achievement extends StatBase
     public final int displayRow;
 
     /**
-     * Holds the parent achievements, that must be taken before this achievement is avaiable.
+     * Holds the parent achievements, that must be taken before this achievement is available.
      */
     public final Achievement parentAchievement;
     public final Achievement[] parentAchievements;
+    
+    /**
+     * Holds the tab this achievement is in.
+     */
+    public AchievementTab tab;
 
     /**
      * Holds the description of the achievement, ready to be formatted and/or displayed.
@@ -113,32 +118,33 @@ public class Achievement extends StatBase
     /**
      * Registers an achievement to a custom tab.
      * 
-     * @param tab is the custom tab to register to
+     * @param achievementtab is the custom tab to register to
      * @return this
      */
-    public Achievement registerAchievement(AchievementTab tab)
+    public Achievement registerAchievement(AchievementTab achievementtab)
     {
         super.registerStat();
-        tab.add(this);
+        achievementtab.add(this);
+        this.tab = achievementtab;
         
-        if (this.displayColumn < tab.minDisplayColumn)
+        if (this.displayColumn < achievementtab.minDisplayColumn)
         {
-        	tab.minDisplayColumn = this.displayColumn;
+        	achievementtab.minDisplayColumn = this.displayColumn;
         }
 
-        if (this.displayRow < tab.minDisplayRow)
+        if (this.displayRow < achievementtab.minDisplayRow)
         {
-        	tab.minDisplayRow = this.displayRow;
+        	achievementtab.minDisplayRow = this.displayRow;
         }
 
-        if (this.displayColumn > tab.maxDisplayColumn)
+        if (this.displayColumn > achievementtab.maxDisplayColumn)
         {
-        	tab.maxDisplayColumn = this.displayColumn;
+        	achievementtab.maxDisplayColumn = this.displayColumn;
         }
 
-        if (this.displayRow > tab.maxDisplayRow)
+        if (this.displayRow > achievementtab.maxDisplayRow)
         {
-        	tab.maxDisplayRow = this.displayRow;
+        	achievementtab.maxDisplayRow = this.displayRow;
         }
         return this;
     }

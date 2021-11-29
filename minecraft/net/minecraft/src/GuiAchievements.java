@@ -243,8 +243,8 @@ public class GuiAchievements extends GuiScreen
         int x1;
         int y1;
         
+        // Draw background
         AchievementTab tab = tabList.get(this.tabIndex);
-
         for (i = 0; i * 16 - mapHeight < 155; ++i)
         {
             for (x1 = 0; x1 * 16 - mapWidth < 224; ++x1)
@@ -260,14 +260,13 @@ public class GuiAchievements extends GuiScreen
         int y2;
         int flash;
         int x2;
-
-        for (i = 0; i < tab.achievementList.size(); ++i)
-        {
+        
+        // Draw lines connecting achievements.
+        for (i = 0; i < tab.achievementList.size(); ++i) {
             Achievement achievement = tab.achievementList.get(i);
             
-            for (Achievement parent : achievement.parentAchievements)
-            {
-            	if (parent == null) { break; }
+            for (Achievement parent : achievement.parentAchievements) {
+            	if (parent == null || (achievement.tab != parent.tab)) { continue; }
                 x1 = achievement.displayColumn * 24 - windowX + 11 + xShift;
                 y1 = achievement.displayRow * 24 - windowY + 11 + yShift;
                 x2 = parent.displayColumn * 24 - windowX + 11 + xShift;
@@ -277,12 +276,10 @@ public class GuiAchievements extends GuiScreen
                 flash = Math.sin((double)(Minecraft.getSystemTime() % 600L) / 600.0D * Math.PI * 2.0D) > 0.6D ? 255 : 130;
                 int color = -16777216;
 
-                if (hasUnlocked)
-                {
+                if (hasUnlocked) {
                     color = -9408400;
                 }
-                else if (canUnlock)
-                {
+                else if (canUnlock) {
                     color = 65280 + (flash << 24);
                 }
 

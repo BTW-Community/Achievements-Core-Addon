@@ -84,14 +84,12 @@ public class AchievementsCore extends FCAddOn {
 		if (!achievementsMap.containsKey(player.username)) {
 			createBlankAchievements(player.username);
 		}
-		return achievementsMap.get(player.username)[achievement.statId] > 0;
+		return achievement != null && achievementsMap.get(player.username)[achievement.statId] > 0;
 	}
 	
 	public boolean canUnlock(EntityPlayer player, Achievement achievement) {
 		for (Achievement parent : achievement.parentAchievements) {
-			if (parent == null) {
-				return true;
-			} else if (!hasUnlocked(player, parent)) {
+			if (parent != null && !hasUnlocked(player, parent)) {
 				return false;
 			}
 		}
