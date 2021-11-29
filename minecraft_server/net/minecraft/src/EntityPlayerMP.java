@@ -764,8 +764,9 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
                 this.playerNetServerHandler.sendPacket(new Packet200Statistic(par1StatBase.statId, par2));
             }
             
-            if (par1StatBase instanceof Achievement && !AchievementsCore.getInstance().hasUnlocked(this, (Achievement) par1StatBase)) {
-            	AchievementsCore.getInstance().triggerAchievement(this, (Achievement) par1StatBase);
+            AchievementsCore ac = AchievementsCore.getInstance();
+            if (par1StatBase instanceof Achievement && !ac.hasUnlocked(this, (Achievement) par1StatBase) && ac.canUnlock(this, (Achievement) par1StatBase)) {
+            	ac.triggerAchievement(this, (Achievement) par1StatBase);
             	
             	String name = par1StatBase.toString();
             	String announce = StatCollector.translateToLocal("achievement.announce");
