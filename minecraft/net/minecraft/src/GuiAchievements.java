@@ -423,7 +423,16 @@ public class GuiAchievements extends GuiScreen
             else
             {
                 stringWidth = Math.max(this.fontRenderer.getStringWidth(name), 120);
-                String requiredDesc = StatCollector.translateToLocalFormatted("achievement.requires", new Object[] {StatCollector.translateToLocal(achievementHovered.parentAchievements[0].getName())});
+                
+                int lockedIndex = 0;
+                for (i = 0; i < achievementHovered.parentAchievements.length; i++) {
+                	if (!ac.hasUnlocked(mc.thePlayer, achievementHovered.parentAchievements[i])) {
+                		lockedIndex = i;
+                		break;
+                	}
+                }
+                
+                String requiredDesc = StatCollector.translateToLocalFormatted("achievement.requires", new Object[] {StatCollector.translateToLocal(achievementHovered.parentAchievements[lockedIndex].getName())});
                 flash = this.fontRenderer.splitStringWidth(requiredDesc, stringWidth);
                 this.drawGradientRect(x2 - 3, y2 - 3, x2 + stringWidth + 3, y2 + flash + 12 + 3, -1073741824, -1073741824);
                 this.fontRenderer.drawSplitString(requiredDesc, x2, y2 + 12, stringWidth, -9416624);
