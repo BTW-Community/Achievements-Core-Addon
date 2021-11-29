@@ -16,10 +16,10 @@ achievement.killPig=Pig
 achievement.killPig.desc=pig
 
 achievement.cookPork=Time to Feast!
-achievement.chiselStone.desc=Cook some pork
+achievement.cookPork.desc=Cook some pork
 
 achievement.cookIron=Acquire Hardware?
-achievement.chiselStone.desc=Smelt an iron nugget
+achievement.cookIron.desc=Smelt an iron nugget
 
 
 achievementtab.custom=Custom Test Tab
