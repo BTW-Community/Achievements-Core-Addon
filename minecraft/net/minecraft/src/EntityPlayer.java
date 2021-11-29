@@ -1933,7 +1933,7 @@ public abstract class EntityPlayer extends EntityLiving implements ICommandSende
      */
     public void onKillEntity(EntityLiving par1EntityLiving)
     {
-    	EventDispatcher.onEntityInteraction(this, par1EntityLiving);  // ACA
+    	EventDispatcher.onKilled(this, par1EntityLiving);
         if (par1EntityLiving instanceof IMob)
         {
             this.triggerAchievement(AchievementList.killEnemy);
