@@ -1123,7 +1123,7 @@ public abstract class EntityPlayer extends EntityLiving implements ICommandSende
     {
         if (par1Entity.interact(this))
         {
-        	EventDispatcher.onEntityInteraction(this, par1Entity);  // ACA
+        	EventDispatcher.onEntityInteraction(this, par1Entity);
             return true;
         }
         else
@@ -1143,7 +1143,7 @@ public abstract class EntityPlayer extends EntityLiving implements ICommandSende
                     {
                         this.destroyCurrentEquippedItem();
                     }
-                    EventDispatcher.onEntityInteraction(this, par1Entity);  // ACA
+                    EventDispatcher.onEntityInteraction(this, par1Entity);
                     return true;
                 }
             }
@@ -2206,6 +2206,17 @@ public abstract class EntityPlayer extends EntityLiving implements ICommandSende
     public String getTranslatedEntityName()
     {
         return ScorePlayerTeam.func_96667_a(this.getTeam(), this.username);
+    }
+    
+    private boolean usingSpecialKey = false;
+    
+    @Override
+    public boolean isUsingSpecialKey() {
+    	return this.usingSpecialKey;
+    }
+    
+    public void setUsingSpecialKey(boolean usingSpecialKey) {
+    	this.usingSpecialKey = usingSpecialKey;
     }
 
     // FCMOD: Added New

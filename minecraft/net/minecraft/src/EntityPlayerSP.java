@@ -39,8 +39,8 @@ public class EntityPlayerSP extends EntityPlayer
         if (par3Session != null && par3Session.username != null && par3Session.username.length() > 0)
         {
         	// FCMOD: Changed, client only        	
-            //this.skinUrl = "http://skins.minecraft.net/MinecraftSkins/" + StringUtils.stripControlCodes(par3Session.username) + ".png";
-            this.skinUrl = FCBetterThanWolves.fcPlayerSkinURL + fetchUuid(par3Session.username);
+            this.skinUrl = "http://skins.minecraft.net/MinecraftSkins/" + StringUtils.stripControlCodes(par3Session.username) + ".png";
+            //this.skinUrl = FCBetterThanWolves.fcPlayerSkinURL + fetchUuid(par3Session.username);
             // END FCMOD
         }
 
@@ -107,13 +107,6 @@ public class EntityPlayerSP extends EntityPlayer
         }
         else
         {
-        	/* AC
-            if (!this.mc.statFileWriter.hasAchievementUnlocked(AchievementList.openInventory))
-            {
-                this.mc.guiAchievement.queueAchievementInformation(AchievementList.openInventory);
-            }
-            */
-
             this.prevTimeInPortal = this.timeInPortal;
 
             if (this.inPortal)
@@ -462,6 +455,11 @@ public class EntityPlayerSP extends EntityPlayer
     {
         return this.movementInput.sneak && !this.sleeping;
     }
+    
+    @Override
+    public boolean isUsingSpecialKey() {
+    	return this.movementInput.special;
+    }
 
     /**
      * Updates health locally.
@@ -507,9 +505,9 @@ public class EntityPlayerSP extends EntityPlayer
             if (par1StatBase.isAchievement())
             {
                 Achievement var3 = (Achievement)par1StatBase;
+                
                 AchievementsCore ac = AchievementsCore.getInstance();
-
-                if (var3.parentAchievements == null || ac.canUnlock(this, var3))
+                if (var3.parentAchievement == null || ac.canUnlock(this, var3))
                 {
                     if (!ac.hasUnlocked(this, var3))
                     {
