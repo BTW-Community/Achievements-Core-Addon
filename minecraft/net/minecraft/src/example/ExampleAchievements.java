@@ -55,7 +55,7 @@ private static ExampleAchievements instance;
 		killPig = (new Achievement("killPig", 2, -1, Item.porkRaw, chiselStone)).registerAchievement(tabSimple);
 		cookPork = (new Achievement("cookPork", 2, -2, Item.porkCooked, killPig)).registerAchievement(tabSimple);
 		cookIron = (new Achievement("cookIron", 3, 0, FCBetterThanWolves.fcItemNuggetIron, chiselStone)).registerAchievement(tabSimple);
-		neuterCreeper = (new Achievement("neuterCreeper", 3, 1, FCBetterThanWolves.fcItemCreeperOysters, cookIron)).setHidden().registerAchievement(tabSimple);
+		neuterCreeper = (new Achievement("neuterCreeper", 3, 1, FCBetterThanWolves.fcItemCreeperOysters, cookIron)).setHidden().setSpecial().registerAchievement(tabSimple);
 		System.out.println("Simple Tab: " + tabSimple.size() + " achievements");
 		
 		AchievementTab tabCustom = new CustomAchievementTab("custom").setIcon(FCBetterThanWolves.fcItemWaterWheel);

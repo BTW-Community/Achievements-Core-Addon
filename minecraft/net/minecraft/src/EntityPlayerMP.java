@@ -759,12 +759,16 @@ public class EntityPlayerMP extends EntityPlayer implements ICrafting
             }
             
             AchievementsCore ac = AchievementsCore.getInstance();
-            if (par1StatBase.isAchievement() && !ac.hasUnlocked(this, (Achievement) par1StatBase) && ac.canUnlock(this, (Achievement) par1StatBase)) {
-            	ac.triggerAchievement(this, (Achievement) par1StatBase);
+            if (par1StatBase.isAchievement() && !ac.hasUnlocked(this, (Achievement) par1StatBase) &&
+            		ac.canUnlock(this, (Achievement) par1StatBase)) {
             	
-            	String name = par1StatBase.toString();
+            	Achievement achievement = (Achievement) par1StatBase;
+            	ac.triggerAchievement(this, achievement);
+            	
+            	String name = achievement.toString();
             	String announce = StatCollector.translateToLocal("achievement.announce");
-            	String msg = String.format("%s %s §a[%s]", this.username, announce, name);
+            	String formatCode = achievement.formatCode;
+            	String msg = String.format("%s %s %s[%s]", this.username, announce, formatCode, name);
             	this.mcServer.getConfigurationManager().sendChatMsg(msg);
             }
         }

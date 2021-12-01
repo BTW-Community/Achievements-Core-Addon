@@ -1,11 +1,13 @@
 package net.minecraft.src;
 
 import net.minecraft.src.AchievementsCore;
+import net.minecraft.src.example.ExampleAchievements;
 
 public class Achievement extends StatBase
 {
 	static {
 		AchievementsCore.getInstance();
+		ExampleAchievements.getInstance();
 	}
 	
     /**
@@ -33,6 +35,12 @@ public class Achievement extends StatBase
      * Determines if this achievement should be shown to the player when locked.
      */
     public boolean isHidden = false;
+    
+    /**
+     * The format code to be used when the achievement is announce to chat.
+     * See https://minecraft.fandom.com/wiki/Formatting_codes
+     */
+    public String formatCode = "§a";
 
     /**
      * Holds the description of the achievement, ready to be formatted and/or displayed.
@@ -99,6 +107,7 @@ public class Achievement extends StatBase
     public Achievement setSpecial()
     {
         this.isSpecial = true;
+        this.formatCode = "§5";
         return this;
     }
     
@@ -108,6 +117,17 @@ public class Achievement extends StatBase
     public Achievement setHidden()
     {
         this.isHidden = true;
+        return this;
+    }
+    
+    /**
+     * The format code to be used when the achievement is announce to chat.
+     * This is set to §a (green) by default, and $5 (dark_purple) for special achievements.
+     * See https://minecraft.fandom.com/wiki/Formatting_codes
+     */
+    public Achievement setFormatCode(String formatCode)
+    {
+        this.formatCode = formatCode;
         return this;
     }
     
