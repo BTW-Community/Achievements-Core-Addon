@@ -324,15 +324,10 @@ public class GuiAchievements extends GuiScreen
                     GL11.glColor4f(brightness, brightness, brightness, 1.0F);
                 }
 
-                this.mc.renderEngine.bindTexture("/achievement/bg.png");
+                this.mc.renderEngine.bindTexture(String.format("/achievement/shape/%s.png", achievement.frameSet));
                 stringWidth = xShift + x2;
                 tooltipY = yShift + y2;
-
-                if (achievement.getSpecial()) {
-                    this.drawTexturedModalRect(stringWidth - 2, tooltipY - 2, 26, 202, 26, 26);
-                } else {
-                    this.drawTexturedModalRect(stringWidth - 2, tooltipY - 2, 0, 202, 26, 26);
-                }
+                this.drawTexturedModalRect(stringWidth - 2, tooltipY - 2, achievement.u, achievement.v, 26, 26);
 
                 if (!ac.canUnlock(mc.thePlayer, achievement)) {
                     float borderBrightness = 0.1F;
@@ -370,7 +365,7 @@ public class GuiAchievements extends GuiScreen
         	}
         }
         
-        this.mc.renderEngine.bindTexture("/achievement/achievementscore_bg.png");  // AA
+        this.mc.renderEngine.bindTexture("/achievement/achievementscore_bg.png");
         this.drawTexturedModalRect(guiLeft, guiTop, 0, 0, this.achievementsPaneWidth, this.achievementsPaneHeight);
         GL11.glPopMatrix();
         this.zLevel = 0.0F;

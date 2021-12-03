@@ -41,6 +41,21 @@ public class Achievement extends StatBase
      * See https://minecraft.fandom.com/wiki/Formatting_codes
      */
     public String formatCode = "§a";
+    
+    /**
+     * The name of the file containing the achievement's frame.
+     */
+    public String frameSet = "default";
+    
+    /**
+     * The left coordinate of the frame in frameSet.
+     */
+    public int u = 0;
+    
+    /**
+     * The top coordinate of the frame in frameSet.
+     */
+    public int v = 0;
 
     /**
      * Holds the description of the achievement, ready to be formatted and/or displayed.
@@ -107,13 +122,15 @@ public class Achievement extends StatBase
     }
 
     /**
-     * Special achievements have a 'spiked' (on normal texture pack) frame, special achievements are the hardest ones to
-     * achieve.
+     * Special achievements have a 'spiked' (on normal texture pack) frame,
+     * as well as having a dark purple announcement color.
+     * Special achievements are the hardest ones to achieve.
      */
     public Achievement setSpecial()
     {
         this.isSpecial = true;
         this.formatCode = "§5";
+        this.u = 26;
         return this;
     }
     
@@ -134,6 +151,25 @@ public class Achievement extends StatBase
     public Achievement setFormatCode(String formatCode)
     {
         this.formatCode = formatCode;
+        return this;
+    }
+    
+    /**
+     * The name of the file containing the achievement's frame.
+     */
+    public Achievement setFrameSet(String frameSetName)
+    {
+        this.frameSet = frameSetName;
+        return this;
+    }
+    
+    /**
+     * The name of the file containing the achievement's frame.
+     */
+    public Achievement setFrameUV(int u, int v)
+    {
+        this.u = u;
+        this.v = v;
         return this;
     }
     
