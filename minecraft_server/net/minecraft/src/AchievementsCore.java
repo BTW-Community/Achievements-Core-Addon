@@ -15,7 +15,6 @@ import net.minecraft.src.Block;
 import net.minecraft.src.FCAddOnHandler;
 import net.minecraft.src.FCBetterThanWolves;
 import net.minecraft.src.Item;
-import net.minecraft.src.example.ExampleAchievements;
 
 /**
  * Achievements Core Addon.
@@ -27,7 +26,7 @@ public class AchievementsCore extends FCAddOn {
 	public int achievementsLength;
 	
 	public AchievementsCore() {
-		super("Achievements Core", "2.1.0", "AC");
+		super("Achievements Core", "2.2.0", "AC");
 	}
 
 	public static AchievementsCore getInstance() {

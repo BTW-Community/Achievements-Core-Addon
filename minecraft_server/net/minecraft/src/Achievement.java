@@ -1,13 +1,11 @@
 package net.minecraft.src;
 
 import net.minecraft.src.AchievementsCore;
-import net.minecraft.src.example.ExampleAchievements;
 
 public class Achievement extends StatBase
 {
 	static {
 		AchievementsCore.getInstance();
-		//ExampleAchievements.getInstance();
 	}
 	
     /**
