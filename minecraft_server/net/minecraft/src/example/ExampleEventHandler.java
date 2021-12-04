@@ -13,6 +13,7 @@ import net.minecraft.src.Item;
 import net.minecraft.src.ItemPotion;
 import net.minecraft.src.ItemShears;
 import net.minecraft.src.ItemStack;
+import net.minecraft.src.MerchantRecipe;
 
 /**
  * An example event handler.
@@ -80,6 +81,13 @@ public class ExampleEventHandler {
 			if (currentItem instanceof ItemShears) {
 				player.triggerAchievement(ExampleAchievements.neuterCreeper);				
 			}
+		}
+	}
+	
+	@EventListener(EventType.TRADED)
+	public void onEntityInteraction(EntityPlayer player, MerchantRecipe recipe) {
+		if (recipe.getItemToBuy().itemID == Item.hoeIron.itemID) {
+			player.triggerAchievement(ExampleAchievements.levelUpFarmer);
 		}
 	}
 }

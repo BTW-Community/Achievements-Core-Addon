@@ -94,4 +94,8 @@ public class EventDispatcher {
 	public static void onDeath(EntityPlayer player, DamageSource damageSource) {
 		handleEvent(EventType.DEATH, player, damageSource);
 	}
+	
+	public static void onTraded(EntityPlayer player, MerchantRecipe recipe) {
+		handleEvent(EventType.TRADED, player, recipe);
+	}
 }

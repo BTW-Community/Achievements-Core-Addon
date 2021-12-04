@@ -14,17 +14,18 @@ public class ExampleAchievements extends FCAddOn {
 private static ExampleAchievements instance;
 	
 	/* List of custom achievements */
+	public static Achievement mineBark;
+	public static Achievement mineStick;
 	public static Achievement chiselWood;
 	public static Achievement chiselStone;
 	public static Achievement killPig;
 	public static Achievement cookPork;
 	public static Achievement cookIron;
-	
-	public static Achievement mineBark;
-	public static Achievement mineStick;
 	public static Achievement neuterCreeper;
+		
 	public static Achievement netherPortal;
 	public static Achievement firePotion;
+	public static Achievement levelUpFarmer;
 
 	public ExampleAchievements() {
 		super("Example Achievements", "1.0.0", "EA");
@@ -61,10 +62,10 @@ private static ExampleAchievements instance;
 		AchievementTab tabCustom = new AchievementTab("custom").setIcon(FCBetterThanWolves.fcItemWaterWheel);
 		netherPortal = (new Achievement("netherPortal", 0, 0, Block.obsidian, neuterCreeper)).registerAchievement(tabCustom);
 		firePotion = (new Achievement("firePotion", 0, 1, Item.potion, netherPortal)).setSpecial().registerAchievement(tabCustom);
+		levelUpFarmer = (new Achievement("levelUpFarmer", 1, 0, Item.emerald, netherPortal)).setFrameUV(52, 0).registerAchievement(tabCustom);
 		System.out.println("Custom Tab: " + tabCustom.size() + " achievements");
 		
 		EventDispatcher.register(new ExampleEventHandler());
-		
 		FCAddOnHandler.LogMessage(this.getName() + " Initialized");
 	}
 	

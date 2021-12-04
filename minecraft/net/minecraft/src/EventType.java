@@ -10,4 +10,5 @@ public enum EventType {
 	ENTITY_INTERACT,
 	CONVERTED_BLOCK,
 	DEATH,
+	TRADED,
 }

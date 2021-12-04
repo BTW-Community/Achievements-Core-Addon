@@ -16,39 +16,26 @@ An example addon has been created to help you create your own achievements (*Cur
   - ENTITY_INTERACT  (right-clicking an entity)
   - CONVERTED_BLOCK  (converting a block, i.e. creating a work stump)
   - DEATH  (getting killed)
+  - TRADED  (trading with a villager)
 </details>
 
 If you would like to see more events, please create an Issue on GitHub or feel free to contribute one yourself.
 
-## List of modified classes
+## Compatibility
 <details>
-  <summary>Client</summary>
+  <summary>Modified classes</summary>
   
-  - Achievement
-  - AchievementList
-  - EntityItem
-  - EntityPlayer
-  - EntityPlayerMP
-  - EntityPlayerSP
-  - FCBlockCampfire
-  - FCBlockFurnaceBrick
-  - GuiAchievements
-  - ItemInWorldManager
-  - SlotBrewingStandPotion
-  - SlotCrafting
-</details>
-
-<details>
-  <summary>Server</summary>
-  
-  - Achievement
-  - AchievementList
-  - EntityItem
-  - EntityPlayer
-  - EntityPlayerMP
-  - FCBlockCampfire
-  - FCBlockFurnaceBrick
-  - ItemInWorldManager
-  - SlotBrewingStandPotion
-  - SlotCrafting
+  - Achievement (Client|Server)
+  - AchievementList (Client|Server)
+  - EntityItem (Client|Server)
+  - EntityPlayer (Client|Server)
+  - EntityPlayerMP (Client|Server)
+  - EntityPlayerSP (Client)
+  - FCBlockCampfire (Client|Server)
+  - FCBlockFurnaceBrick (Client|Server)
+  - FCEntityVillager (Client|Server)
+  - GuiAchievements (Client)
+  - ItemInWorldManager (Client|Server)
+  - SlotBrewingStandPotion (Client|Server)
+  - SlotCrafting (Client|Server)
 </details>
