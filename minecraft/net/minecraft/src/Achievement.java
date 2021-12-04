@@ -7,7 +7,7 @@ public class Achievement extends StatBase
 {
 	static {
 		AchievementsCore.getInstance();
-		ExampleAchievements.getInstance();
+		//ExampleAchievements.getInstance();
 	}
 	
     /**
