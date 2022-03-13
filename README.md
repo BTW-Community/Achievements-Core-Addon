@@ -2,7 +2,7 @@
 Overhaul of the Achievement system for the Minecraft mod: Better Than Wolves.
 This addon doesn't do much on its own, but it allows for addon authors to create their own custom achievements.
 
-An example addon has been created to help you create your own achievements (*Currently this is slightly outdated, but may still be helpful*): [Achievements Example Addon](https://github.com/Joel-Paul/Achievement-Example-Addon)
+An example addon has been created to help you create your own achievements: [Example Achievements](https://github.com/Joel-Paul/Achievement-Example-Addon)
 
 ## Currently Implemented Events
 <details>
