@@ -2027,7 +2027,7 @@ public abstract class EntityPlayer extends EntityLiving implements ICommandSende
     	// FCMOD: Code added to prevent the player from placing blocks while in mid air
     	if ( !capabilities.isCreativeMode && !onGround && !inWater && !isOnLadder() && ridingEntity == null && !handleLavaMovement() )
     	{
-    		return false;
+    		return FCBetterThanWolves.allowPlaceWhileJumping;
     	}
     	// END FCMOD
     	
@@ -2549,7 +2549,13 @@ public abstract class EntityPlayer extends EntityLiving implements ICommandSende
 	@Override
     protected float GetLadderVerticalMovementModifier()
     {
-		return GetHealthAndExhaustionModifierWithSightlessModifier();
+		float modifier = GetHealthAndExhaustionModifierWithSightlessModifier(); 
+
+		if (this.isUsingItem()) {
+			modifier *= 0.5F;
+		}
+
+		return modifier;
     }    
     
 	protected float GetJumpingHorizontalMovementModifier()        
