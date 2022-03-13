@@ -250,14 +250,14 @@ public class GuiAchievements extends GuiScreen
         GL11.glEnable(GL12.GL_RESCALE_NORMAL);
         GL11.glEnable(GL11.GL_COLOR_MATERIAL);
         
-        Achievement achievementHovered = this.renderAchievements(tab, windowX, windowY);
+        Achievement achievementHovered = this.renderAchievements(tab, windowX, windowY, mouseX, mouseY);
         
         GL11.glDisable(GL11.GL_DEPTH_TEST);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         
         this.renderFrame(tab, par3);
-        this.renderHoveredAchievement(achievementHovered);
+        this.renderHoveredAchievement(achievementHovered, mouseX, mouseY);
 
         // Render page buttons.
         this.mc.renderEngine.bindTexture("/btwmodtex/fcguitrading.png");
@@ -356,7 +356,7 @@ public class GuiAchievements extends GuiScreen
         }
     }
     
-    protected Achievement renderAchievements(AchievementTab tab, int windowX, int windowY) {
+    protected Achievement renderAchievements(AchievementTab tab, int windowX, int windowY, int mouseX, int mouseY) {
     	if (tab == null) { return null; }
     	
     	int guiLeft = (this.width - this.achievementsPaneWidth) / 2;
@@ -445,7 +445,7 @@ public class GuiAchievements extends GuiScreen
         super.drawScreen(mouseX, mouseY, par3);
     }
     
-    protected void renderHoveredAchievement(Achievement achievementHovered) {
+    protected void renderHoveredAchievement(Achievement achievementHovered, int mouseX, int mouseY) {
     	if (achievementHovered != null)
         {
             String name = StatCollector.translateToLocal(achievementHovered.getName());
