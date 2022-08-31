@@ -17,6 +17,8 @@ An example addon has been created to help you create your own achievements: [Exa
   - CONVERTED_BLOCK  (converting a block, i.e. creating a work stump)
   - DEATH  (getting killed)
   - TRADED  (trading with a villager)
+  - CURED (curing a zombie villager)
+  - CONSUMED (eating/drinking an item)
 </details>
 
 If you would like to see more events, please create an Issue on GitHub or feel free to contribute one yourself.
@@ -33,9 +35,11 @@ If you would like to see more events, please create an Issue on GitHub or feel f
   - EntityPlayerSP (Client)
   - FCBlockCampfire (Client|Server)
   - FCBlockFurnaceBrick (Client|Server)
+  - FCEntityUrn (Client|Server)
   - FCEntityVillager (Client|Server)
   - GuiAchievements (Client)
   - ItemInWorldManager (Client|Server)
+  - ItemStack (Client|Server)
   - SlotBrewingStandPotion (Client|Server)
   - SlotCrafting (Client|Server)
 </details>
