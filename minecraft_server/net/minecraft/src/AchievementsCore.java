@@ -26,7 +26,7 @@ public class AchievementsCore extends FCAddOn {
 	public int achievementsLength;
 	
 	public AchievementsCore() {
-		super("Achievements Core", "2.1.1", "AC");
+		super("Achievements Core", "2.2.0", "AC");
 	}
 
 	public static AchievementsCore getInstance() {

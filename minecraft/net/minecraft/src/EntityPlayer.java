@@ -62,6 +62,11 @@ public abstract class EntityPlayer extends EntityLiving implements ICommandSende
     public float field_71079_bU;
     public float field_71082_cx;
     public float field_71089_bV;
+    
+    public int lastDeathLocationX;
+    public int lastDeathLocationY;
+    public int lastDeathLocationZ;
+    public int lastDeathDimension;
 
     /**
      * Holds the last coordinate to spawn based on last bed that the player sleep.
@@ -549,7 +554,7 @@ public abstract class EntityPlayer extends EntityLiving implements ICommandSende
         {
             this.heal(1);
         }
-
+        
         this.inventory.decrementAnimations();
         this.prevCameraYaw = this.cameraYaw;
         super.onLivingUpdate();
@@ -1425,12 +1430,7 @@ public abstract class EntityPlayer extends EntityLiving implements ICommandSende
      */
     public EnumStatus sleepInBedAt(int par1, int par2, int par3)
     {
-    	// FCMOD: Code added
-        return EnumStatus.OTHER_PROBLEM;
-        // END FCMOD
-    	// FCMOD: Code removed
-        /*
-        if (!this.worldObj.isRemote)
+    	if (!this.worldObj.isRemote)
         {
             if (this.isPlayerSleeping() || !this.isEntityAlive())
             {
@@ -1509,8 +1509,6 @@ public abstract class EntityPlayer extends EntityLiving implements ICommandSende
         }
 
         return EnumStatus.OK;
-        */
-        // END FCMOD
     }
 
     private void func_71013_b(int par1)
@@ -1547,7 +1545,7 @@ public abstract class EntityPlayer extends EntityLiving implements ICommandSende
         ChunkCoordinates var4 = this.playerLocation;
         ChunkCoordinates var5 = this.playerLocation;
 
-        if (var4 != null && this.worldObj.getBlockId(var4.posX, var4.posY, var4.posZ) == Block.bed.blockID)
+        if (var4 != null && Block.blocksList[this.worldObj.getBlockId(var4.posX, var4.posY, var4.posZ)] instanceof FCBlockBedBase)
         {
             BlockBed.setBedOccupied(this.worldObj, var4.posX, var4.posY, var4.posZ, false);
             var5 = BlockBed.getNearestEmptyChunkCoordinates(this.worldObj, var4.posX, var4.posY, var4.posZ, 0);
@@ -1575,11 +1573,6 @@ public abstract class EntityPlayer extends EntityLiving implements ICommandSende
         {
             this.sleepTimer = 100;
         }
-
-        if (par3)
-        {
-            this.setSpawnChunk(this.playerLocation, false);
-        }
     }
 
     /**
@@ -1587,7 +1580,7 @@ public abstract class EntityPlayer extends EntityLiving implements ICommandSende
      */
     private boolean isInBed()
     {
-        return this.worldObj.getBlockId(this.playerLocation.posX, this.playerLocation.posY, this.playerLocation.posZ) == Block.bed.blockID;
+        return Block.blocksList[this.worldObj.getBlockId(this.playerLocation.posX, this.playerLocation.posY, this.playerLocation.posZ)] instanceof FCBlockBedBase;
     }
 
     /**
@@ -1953,54 +1946,19 @@ public abstract class EntityPlayer extends EntityLiving implements ICommandSende
     /**
      * Gets the Icon Index of the item currently held
      */
-    public Icon getItemIcon(ItemStack par1ItemStack, int par2)
-    {
-        Icon var3 = super.getItemIcon(par1ItemStack, par2);
+    public Icon getItemIcon(ItemStack itemStack, int index) {
+        Icon icon = super.getItemIcon(itemStack, index);
 
-        if (par1ItemStack.itemID == Item.fishingRod.itemID && this.fishEntity != null)
+        if (itemStack.getItem().requiresMultipleRenderPasses())
         {
-            var3 = Item.fishingRod.func_94597_g();
+            return itemStack.getItem().getIconFromDamageForRenderPass(itemStack.getItemDamage(), index);
         }
-        else
-        {
-            if (par1ItemStack.getItem().requiresMultipleRenderPasses())
-            {
-                return par1ItemStack.getItem().getIconFromDamageForRenderPass(par1ItemStack.getItemDamage(), par2);
-            }
-
-            if (this.itemInUse != null && par1ItemStack.itemID == Item.bow.itemID)
-            {
-                int var4 = par1ItemStack.getMaxItemUseDuration() - this.itemInUseCount;
-
-                if (var4 >= 18)
-                {
-                    return Item.bow.getItemIconForUseDuration(2);
-                }
-
-                if (var4 > 13)
-                {
-                    return Item.bow.getItemIconForUseDuration(1);
-                }
-
-                if (var4 > 0)
-                {
-                    return Item.bow.getItemIconForUseDuration(0);
-                }
-            }
+        
+        if(itemStack.getItem().getAnimationIcon(this) != null) {
+        	return itemStack.getItem().getAnimationIcon(this);
         }
-
-        // FCMOD: Code added (client only)
-        if ( par1ItemStack.itemID == FCBetterThanWolves.fcItemFishingRodBaited.itemID && fishEntity != null )
-        {
-        	var3 = ((FCItemFishingRodBaited)FCBetterThanWolves.fcItemFishingRodBaited).GetCastIcon();
-        }
-        else if ( isUsingItem() && getItemInUse().itemID == FCBetterThanWolves.fcItemCompositeBow.itemID )
-        {
-        	var3 = ((FCItemCompositeBow)FCBetterThanWolves.fcItemCompositeBow).getDrawIcon( getItemInUseDuration() );
-        }
-        // END FCMOD
-
-        return var3;
+        
+        return icon;
     }
 
     public ItemStack getCurrentArmor(int par1)
@@ -2231,12 +2189,12 @@ public abstract class EntityPlayer extends EntityLiving implements ICommandSende
     }
 
     /**
-     * Copies the values from the given player into this player if boolean par2 is true. Always clones Ender Chest
+     * Copies the values from the given player into this player if boolean playerLeavingTheEnd is true. Always clones Ender Chest
      * Inventory.
      */
-    public void clonePlayer(EntityPlayer par1EntityPlayer, boolean par2)
+    public void clonePlayer(EntityPlayer par1EntityPlayer, boolean playerLeavingTheEnd )
     {
-        if (par2)
+        if (playerLeavingTheEnd)
         {
             this.inventory.copyInventory(par1EntityPlayer.inventory);
             this.health = par1EntityPlayer.health;
@@ -2255,6 +2213,8 @@ public abstract class EntityPlayer extends EntityLiving implements ICommandSende
             this.experience = par1EntityPlayer.experience;
             this.setScore(par1EntityPlayer.getScore());
         }
+        
+        this.deathCount = par1EntityPlayer.deathCount;
 
         this.theInventoryEnderChest = par1EntityPlayer.theInventoryEnderChest;
     }
@@ -2401,7 +2361,9 @@ public abstract class EntityPlayer extends EntityLiving implements ICommandSende
     public int m_iAirRecoveryCountdown = 0;
     public int m_iTicksSinceEmoteSound = 0;
     
-	protected float m_fCurrentMiningSpeedModifier = 1F;	
+	protected float m_fCurrentMiningSpeedModifier = 1F;
+	
+	public int deathCount = 0;	
     
     public static final int m_iGloomCounterBetweenStateChanges = 1200; // 1 minute
     
@@ -2453,6 +2415,16 @@ public abstract class EntityPlayer extends EntityLiving implements ICommandSende
 	    {
 	    	m_iInGloomCounter = tag.getInteger( "fcGloomCounter" );
 	    }
+	    
+	    if (tag.hasKey("fcDeathCount")) {
+	    	deathCount = tag.getInteger("fcDeathCount");
+	    }
+	 	if (deathCount > 0) {
+	 		lastDeathLocationX = tag.getInteger("fcLastDeathLocationX");
+	 		lastDeathLocationY = tag.getInteger("fcLastDeathLocationY");
+	 		lastDeathLocationZ = tag.getInteger("fcLastDeathLocationZ");
+	 		lastDeathDimension = tag.getInteger("fcLastDeathDimension");
+	 	}
     }
     
     protected void WriteModDataToNBT( NBTTagCompound tag )
@@ -2472,6 +2444,15 @@ public abstract class EntityPlayer extends EntityLiving implements ICommandSende
 	 	
 	 	tag.setInteger( "fcGloomLevel", GetGloomLevel() );
 	 	tag.setInteger( "fcGloomCounter", m_iInGloomCounter );
+	 	
+	 	tag.setInteger("fcDeathCount", deathCount);
+	 	
+	 	if (deathCount > 0) {
+	 		tag.setInteger("fcLastDeathLocationX", lastDeathLocationX);
+	 		tag.setInteger("fcLastDeathLocationY", lastDeathLocationY);
+	 		tag.setInteger("fcLastDeathLocationZ", lastDeathLocationZ);
+	 		tag.setInteger("fcLastDeathDimension", lastDeathDimension);
+	 	}
     }
     
     @Override
@@ -2645,15 +2626,15 @@ public abstract class EntityPlayer extends EntityLiving implements ICommandSende
 	        
 	        if ( blockAbove != null && blockAbove.IsGroundCover( ) )
 	        {
-	        	StepSound stepSound = blockAbove.stepSound;
+	        	StepSound stepSound = blockAbove.GetStepSound(this.worldObj, i, j, k);
 	            
-	            worldObj.playSoundAtEntity( this, stepSound.getStepSound(), stepSound.getVolume() * 0.3F, stepSound.getPitch() * 0.75F );
+	            worldObj.playSoundAtEntity( this, stepSound.getStepSound(), stepSound.getStepVolume() * 0.3F, stepSound.getStepPitch() * 0.75F );
 	        }
 	        else if ( !Block.blocksList[iBlockID].blockMaterial.isLiquid() )
 	        {
 		        StepSound stepSound = Block.blocksList[iBlockID].GetStepSound( worldObj, i, j, k );    	
 
-	            worldObj.playSoundAtEntity( this, stepSound.getStepSound(), stepSound.getVolume() * 0.3F, stepSound.getPitch() * 0.5F );
+	            worldObj.playSoundAtEntity( this, stepSound.getStepSound(), stepSound.getStepVolume() * 0.3F, stepSound.getStepPitch() * 0.5F );
 	        }
 		}
 		else

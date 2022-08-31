@@ -53,6 +53,11 @@ public abstract class EntityPlayer extends EntityLiving implements ICommandSende
     public float field_71079_bU;
     public float field_71089_bV;
 
+    public int lastDeathLocationX;
+    public int lastDeathLocationY;
+    public int lastDeathLocationZ;
+    public int lastDeathDimension;
+
     /** holds the spawn chunk of the player */
     private ChunkCoordinates spawnChunk;
 
@@ -491,7 +496,7 @@ public abstract class EntityPlayer extends EntityLiving implements ICommandSende
             --this.flyToggleTimer;
         }
 
-        if (this.worldObj.difficultySetting == 0 && this.getHealth() < this.getMaxHealth() && this.ticksExisted % 20 * 12 == 0)
+        if (this.worldObj.difficultySetting == 0 && this.getHealth() < this.getMaxHealth() && this.ticksExisted % 20 * 10 == 0)
         {
             this.heal(1);
         }
@@ -1368,11 +1373,6 @@ public abstract class EntityPlayer extends EntityLiving implements ICommandSende
      */
     public EnumStatus sleepInBedAt(int par1, int par2, int par3)
     {
-    	// FCMOD: Code added
-        return EnumStatus.OTHER_PROBLEM;
-        // END FCMOD
-    	// FCMOD: Code removed
-        /*
         if (!this.worldObj.isRemote)
         {
             if (this.isPlayerSleeping() || !this.isEntityAlive())
@@ -1452,8 +1452,6 @@ public abstract class EntityPlayer extends EntityLiving implements ICommandSende
         }
 
         return EnumStatus.OK;
-        */
-        // END FCMOD
     }
 
     private void func_71013_b(int par1)
@@ -1490,7 +1488,7 @@ public abstract class EntityPlayer extends EntityLiving implements ICommandSende
         ChunkCoordinates var4 = this.playerLocation;
         ChunkCoordinates var5 = this.playerLocation;
 
-        if (var4 != null && this.worldObj.getBlockId(var4.posX, var4.posY, var4.posZ) == Block.bed.blockID)
+        if (var4 != null && Block.blocksList[this.worldObj.getBlockId(var4.posX, var4.posY, var4.posZ)] instanceof FCBlockBedBase)
         {
             BlockBed.setBedOccupied(this.worldObj, var4.posX, var4.posY, var4.posZ, false);
             var5 = BlockBed.getNearestEmptyChunkCoordinates(this.worldObj, var4.posX, var4.posY, var4.posZ, 0);
@@ -1530,7 +1528,7 @@ public abstract class EntityPlayer extends EntityLiving implements ICommandSende
      */
     private boolean isInBed()
     {
-        return this.worldObj.getBlockId(this.playerLocation.posX, this.playerLocation.posY, this.playerLocation.posZ) == Block.bed.blockID;
+    	return Block.blocksList[this.worldObj.getBlockId(this.playerLocation.posX, this.playerLocation.posY, this.playerLocation.posZ)] instanceof FCBlockBedBase;
     }
 
     /**
@@ -2077,12 +2075,12 @@ public abstract class EntityPlayer extends EntityLiving implements ICommandSende
     }
 
     /**
-     * Copies the values from the given player into this player if boolean par2 is true. Always clones Ender Chest
+     * Copies the values from the given player into this player if boolean playerLeavingTheEnd is true. Always clones Ender Chest
      * Inventory.
      */
-    public void clonePlayer(EntityPlayer par1EntityPlayer, boolean par2)
+    public void clonePlayer(EntityPlayer par1EntityPlayer, boolean playerLeavingTheEnd)
     {
-        if (par2)
+        if (playerLeavingTheEnd)
         {
             this.inventory.copyInventory(par1EntityPlayer.inventory);
             this.health = par1EntityPlayer.health;
@@ -2101,6 +2099,8 @@ public abstract class EntityPlayer extends EntityLiving implements ICommandSende
             this.experience = par1EntityPlayer.experience;
             this.setScore(par1EntityPlayer.getScore());
         }
+
+        this.deathCount = par1EntityPlayer.deathCount;
 
         this.theInventoryEnderChest = par1EntityPlayer.theInventoryEnderChest;
     }
@@ -2233,6 +2233,8 @@ public abstract class EntityPlayer extends EntityLiving implements ICommandSende
     public int m_iTicksSinceEmoteSound = 0;
     
 	protected float m_fCurrentMiningSpeedModifier = 1F;
+
+	public int deathCount = 0;	
     
     public static final int m_iGloomCounterBetweenStateChanges = 1200; // 1 minute
     
@@ -2284,6 +2286,16 @@ public abstract class EntityPlayer extends EntityLiving implements ICommandSende
 	    {
 	    	m_iInGloomCounter = tag.getInteger( "fcGloomCounter" );
 	    }
+	    
+	    if (tag.hasKey("fcDeathCount")) {
+	    	deathCount = tag.getInteger("fcDeathCount");
+	    }
+	 	if (deathCount > 0) {
+	 		lastDeathLocationX = tag.getInteger("fcLastDeathLocationX");
+	 		lastDeathLocationY = tag.getInteger("fcLastDeathLocationY");
+	 		lastDeathLocationZ = tag.getInteger("fcLastDeathLocationZ");
+	 		lastDeathDimension = tag.getInteger("fcLastDeathDimension");
+	 	}
     }
     
     protected void WriteModDataToNBT( NBTTagCompound tag )
@@ -2303,6 +2315,17 @@ public abstract class EntityPlayer extends EntityLiving implements ICommandSende
 	 	
 	 	tag.setInteger( "fcGloomLevel", GetGloomLevel() );
 	 	tag.setInteger( "fcGloomCounter", m_iInGloomCounter );
+
+	 	tag.setInteger("fcDeathCount", deathCount);
+
+	 	if (deathCount > 0) {
+	 		tag.setInteger("fcLastDeathLocationX", lastDeathLocationX);
+	 		tag.setInteger("fcLastDeathLocationY", lastDeathLocationY);
+	 		tag.setInteger("fcLastDeathLocationZ", lastDeathLocationZ);
+	 		tag.setInteger("fcLastDeathDimension", lastDeathDimension);
+	 	}
+
+	 	tag.setInteger("fcDeathCount", deathCount);
     }
     
     @Override
@@ -2476,15 +2499,15 @@ public abstract class EntityPlayer extends EntityLiving implements ICommandSende
 	        
 	        if ( blockAbove != null && blockAbove.IsGroundCover( ) )
 	        {
-	        	StepSound stepSound = blockAbove.stepSound;
-	            
-	            worldObj.playSoundAtEntity( this, stepSound.getStepSound(), stepSound.getVolume() * 0.3F, stepSound.getPitch() * 0.75F );
+	        	StepSound stepSound = blockAbove.GetStepSound(this.worldObj, i, j, k);
+
+	            worldObj.playSoundAtEntity( this, stepSound.getStepSound(), stepSound.getStepVolume() * 0.3F, stepSound.getStepPitch() * 0.75F );
 	        }
 	        else if ( !Block.blocksList[iBlockID].blockMaterial.isLiquid() )
 	        {
 		        StepSound stepSound = Block.blocksList[iBlockID].GetStepSound( worldObj, i, j, k );    	
 
-	            worldObj.playSoundAtEntity( this, stepSound.getStepSound(), stepSound.getVolume() * 0.3F, stepSound.getPitch() * 0.5F );
+	            worldObj.playSoundAtEntity( this, stepSound.getStepSound(), stepSound.getStepVolume() * 0.3F, stepSound.getStepPitch() * 0.5F );
 	        }
 		}
 		else

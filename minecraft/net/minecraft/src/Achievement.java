@@ -162,12 +162,12 @@ public class Achievement extends StatBase
     }
     
     /**
-     * The name of the file containing the achievement's frame.
+     * The coordinate of the achievement's frame.
      */
-    public Achievement setFrameUV(int u, int v)
+    public Achievement setFrame(int x, int y)
     {
-        this.u = u;
-        this.v = v;
+        this.u = x * 26;
+        this.v = y * 26;
         return this;
     }
     

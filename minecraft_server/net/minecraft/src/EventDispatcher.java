@@ -98,4 +98,12 @@ public class EventDispatcher {
 	public static void onTraded(EntityPlayer player, MerchantRecipe recipe) {
 		handleEvent(EventType.TRADED, player, recipe);
 	}
+	
+	public static void onCured(EntityPlayer player, FCEntityZombie zombieVillager) {
+		handleEvent(EventType.CURED, player, zombieVillager);
+	}
+	
+	public static void onEaten(EntityPlayer player, ItemStack foodStack) {
+		handleEvent(EventType.CONSUMED, player, foodStack);
+	}
 }

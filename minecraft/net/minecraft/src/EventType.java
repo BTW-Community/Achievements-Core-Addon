@@ -11,4 +11,6 @@ public enum EventType {
 	CONVERTED_BLOCK,
 	DEATH,
 	TRADED,
+	CURED,
+	CONSUMED,
 }
