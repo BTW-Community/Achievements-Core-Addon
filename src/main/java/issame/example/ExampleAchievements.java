@@ -1,0 +1,81 @@
+package issame.example;
+
+import issame.achievements_core.achievements.Achievement;
+import issame.achievements_core.achievements.AchievementTab;
+import issame.achievements_core.event.EventDispatcher;
+import net.minecraft.src.*;
+
+public class ExampleAchievements extends FCAddOn {
+
+private static ExampleAchievements instance;
+	
+	/* List of custom achievements */
+	public static Achievement mineBark;
+	public static Achievement mineStick;
+	public static Achievement chiselWood;
+	public static Achievement chiselStone;
+	public static Achievement killPig;
+	public static Achievement cookPork;
+	public static Achievement drinkMilk;
+	public static Achievement cookIron;
+	public static Achievement neuterCreeper;
+		
+	public static Achievement netherPortal;
+	public static Achievement firePotion;
+	public static Achievement cureVillager;
+	public static Achievement levelUpFarmer;
+
+	public ExampleAchievements() {
+		super("Example Achievements", "1.0.0", "EA");
+	}
+
+	public static ExampleAchievements getInstance() {
+		if (instance == null) {
+			instance = new ExampleAchievements();
+		}
+		return instance;
+	}
+
+	@Override
+	public void Initialize() {
+		FCAddOnHandler.LogMessage(this.getName() + " Version " + this.getVersionString() + " Initializing...");
+		
+		AchievementTab tabSimple = new AchievementTab("simple").setIcon(FCBetterThanWolves.fcCompanionCube);
+		mineBark = new Achievement("mineBark", 0, -1, FCBetterThanWolves.fcItemBark, tabSimple);
+		/*
+		mineStick = new Achievement("mineStick", 0, 1, Item.stick, tabSimple);
+		chiselWood = new Achievement("chiselWood", 1, 0, FCBetterThanWolves.fcItemChiselWood, tabSimple)
+				.setParents(mineBark, mineStick);
+		chiselStone = new Achievement("chiselStone", 2, 0, FCBetterThanWolves.fcItemChiselStone, tabSimple)
+				.setParents(chiselWood);
+		killPig = (new Achievement("killPig", 2, -1, Item.porkRaw, tabSimple))
+				.setParents(chiselStone).setFrame(2, 0);
+		cookPork = (new Achievement("cookPork", 2, -2, Item.porkCooked, tabSimple))
+				.setParents(killPig).setFrame(3, 0);
+		drinkMilk = (new Achievement("drinkMilk", 2, -3, Item.bucketMilk, tabSimple))
+				.setParents(cookPork).setFrame(3, 1);
+		cookIron = (new Achievement("cookIron", 3, 0, FCBetterThanWolves.fcBlockChunkOreIron, tabSimple))
+				.setParents(chiselStone);
+		neuterCreeper = (new Achievement("neuterCreeper", 3, 1, FCBetterThanWolves.fcItemCreeperOysters, tabSimple))
+				.setParents(cookIron).setHidden();
+		*/
+		System.out.println("Simple Tab: " + tabSimple.size() + " achievements");
+
+		/*
+		AchievementTab tabCustom = new CustomAchievementTab("custom").setIcon(FCBetterThanWolves.fcItemWaterWheel);
+		netherPortal = (new Achievement("netherPortal", 0, 0, Block.obsidian, neuterCreeper)).registerAchievement(tabCustom);
+		firePotion = (new Achievement("firePotion", 0, 1, Item.potion, netherPortal)).setSpecial().registerAchievement(tabCustom);
+		cureVillager = (new Achievement("cureVillager", 1, 0, Item.emerald, netherPortal)).setFrame(2, 0).registerAchievement(tabCustom);
+		levelUpFarmer = (new Achievement("levelUpFarmer", 2, 0, Item.emerald, cureVillager)).setFrame(1, 1).registerAchievement(tabCustom);
+		System.out.println("Custom Tab: " + tabCustom.size() + " achievements");
+		 */
+
+		EventDispatcher.register(new ExampleEventHandler());
+		FCAddOnHandler.LogMessage(this.getName() + " Initialized");
+	}
+
+	@Override
+	public String GetLanguageFilePrefix() {
+		return "example";
+	}
+}
