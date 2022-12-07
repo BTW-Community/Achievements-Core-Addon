@@ -42,7 +42,7 @@ private static ExampleAchievements instance;
 		
 		AchievementTab tabSimple = new AchievementTab("simple").setIcon(FCBetterThanWolves.fcCompanionCube);
 		mineBark = new Achievement("mineBark", 0, 0, FCBetterThanWolves.fcItemBark, tabSimple);
-		/*
+
 		mineStick = new Achievement("mineStick", 0, 1, Item.stick, tabSimple);
 		chiselWood = new Achievement("chiselWood", 1, 0, FCBetterThanWolves.fcItemChiselWood, tabSimple)
 				.setParents(mineBark, mineStick);
@@ -58,7 +58,7 @@ private static ExampleAchievements instance;
 				.setParents(chiselStone);
 		neuterCreeper = (new Achievement("neuterCreeper", 3, 1, FCBetterThanWolves.fcItemCreeperOysters, tabSimple))
 				.setParents(cookIron).setHidden();
-		*/
+		
 		System.out.println("Simple Tab: " + tabSimple.size() + " achievements");
 
 		/*

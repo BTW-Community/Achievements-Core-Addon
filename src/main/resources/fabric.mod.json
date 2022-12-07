@@ -14,14 +14,13 @@
   },
 
   "license": "CC0-1.0",
-  "icon": "assets/achievements_core/icon.png",
+  "icon": "/achievements_core/icon.png",
 
   "environment": "*",
   "entrypoints": {
     "init": [
     ],
     "preLaunch": [
-      "issame.achievements_core.ACPreLaunchInitializer"
     ]
   },
   "mixins": [
