@@ -1,9 +1,9 @@
 package issame.achievements_core;
 
-import net.minecraft.src.FCAddOn;
-import net.minecraft.src.FCAddOnHandler;
+import btw.AddonHandler;
+import btw.BTWAddon;
 
-public class AchievementsCore extends FCAddOn {
+public class AchievementsCore extends BTWAddon {
     private static AchievementsCore instance;
 
     private AchievementsCore() {
@@ -11,13 +11,7 @@ public class AchievementsCore extends FCAddOn {
     }
 
     @Override
-    public void Initialize() {
-        FCAddOnHandler.LogMessage(this.getName() + " Version " + this.getVersionString() + " Initializing...");
-    }
-
-    public static AchievementsCore getInstance() {
-        if (instance == null)
-            instance = new AchievementsCore();
-        return instance;
+    public void initialize() {
+        AddonHandler.logMessage(this.getName() + " Version " + this.getVersionString() + " Initializing...");
     }
 }

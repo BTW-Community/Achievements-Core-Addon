@@ -1,11 +1,15 @@
 package issame.example;
 
+import btw.AddonHandler;
+import btw.BTWAddon;
+import btw.block.BTWBlocks;
+import btw.item.BTWItems;
 import issame.achievements_core.achievements.Achievement;
 import issame.achievements_core.achievements.AchievementTab;
 import issame.achievements_core.event.EventDispatcher;
 import net.minecraft.src.*;
 
-public class ExampleAchievements extends FCAddOn {
+public class ExampleAchievements extends BTWAddon {
 
 private static ExampleAchievements instance;
 	
@@ -37,16 +41,16 @@ private static ExampleAchievements instance;
 	}
 
 	@Override
-	public void Initialize() {
-		FCAddOnHandler.LogMessage(this.getName() + " Version " + this.getVersionString() + " Initializing...");
+	public void initialize() {
+		AddonHandler.logMessage(this.getName() + " Version " + this.getVersionString() + " Initializing...");
 		
-		AchievementTab tabSimple = new AchievementTab("simple").setIcon(FCBetterThanWolves.fcCompanionCube);
-		mineBark = new Achievement("mineBark", 0, 0, FCBetterThanWolves.fcItemBark, tabSimple);
+		AchievementTab tabSimple = new AchievementTab("simple").setIcon(BTWBlocks.companionCube);
+		mineBark = new Achievement("mineBark", 0, 0, BTWItems.bark, tabSimple);
 
 		mineStick = new Achievement("mineStick", 0, 1, Item.stick, tabSimple);
-		chiselWood = new Achievement("chiselWood", 1, 0, FCBetterThanWolves.fcItemChiselWood, tabSimple)
+		chiselWood = new Achievement("chiselWood", 1, 0, BTWItems.pointyStick, tabSimple)
 				.setParents(mineBark, mineStick);
-		chiselStone = new Achievement("chiselStone", 2, 0, FCBetterThanWolves.fcItemChiselStone, tabSimple)
+		chiselStone = new Achievement("chiselStone", 2, 0, BTWItems.sharpStone, tabSimple)
 				.setParents(chiselWood);
 		killPig = (new Achievement("killPig", 2, -1, Item.porkRaw, tabSimple))
 				.setParents(chiselStone).setFrame(2, 0);
@@ -54,11 +58,11 @@ private static ExampleAchievements instance;
 				.setParents(killPig).setFrame(3, 0);
 		drinkMilk = (new Achievement("drinkMilk", 2, -3, Item.bucketMilk, tabSimple))
 				.setParents(cookPork).setFrame(3, 1);
-		cookIron = (new Achievement("cookIron", 3, 0, FCBetterThanWolves.fcBlockChunkOreIron, tabSimple))
+		cookIron = (new Achievement("cookIron", 3, 0, BTWBlocks.ironOreChunk, tabSimple))
 				.setParents(chiselStone);
-		neuterCreeper = (new Achievement("neuterCreeper", 3, 1, FCBetterThanWolves.fcItemCreeperOysters, tabSimple))
+		neuterCreeper = (new Achievement("neuterCreeper", 3, 1, BTWItems.creeperOysters, tabSimple))
 				.setParents(cookIron).setHidden();
-		
+
 		System.out.println("Simple Tab: " + tabSimple.size() + " achievements");
 
 		/*
@@ -71,11 +75,6 @@ private static ExampleAchievements instance;
 		 */
 
 		EventDispatcher.register(new ExampleEventHandler());
-		FCAddOnHandler.LogMessage(this.getName() + " Initialized");
-	}
-
-	@Override
-	public String GetLanguageFilePrefix() {
-		return "example";
+		AddonHandler.logMessage(this.getName() + " Initialized");
 	}
 }

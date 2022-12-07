@@ -84,15 +84,10 @@ public class GuiAchievements extends GuiScreen {
                 int iconX = i + Math.floorDiv(mapX, TILE_SIZE);
 
                 Icon icon = tab == null ? Block.dirt.getIcon(0, 0) : tab.genAchievementIcon(iconX, iconY);
-                if (iconX == 0 && iconY == 0) {
-                    icon = Block.blockDiamond.getIcon(0, 0);
-                } else if (iconX * iconX + iconY * iconY < 5 * 5) {
-                    icon = Block.oreDiamond.getIcon(0, 0);
-                }
-
                 drawTexturedModelRectFromIcon(posX, posY, icon, TILE_SIZE, TILE_SIZE);
             }
         }
+        GL11.glColor4f(1, 1, 1, 1);
     }
 
     private void drawFrame() {

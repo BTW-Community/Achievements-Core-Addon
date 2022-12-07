@@ -73,7 +73,7 @@ public class AchievementTab {
 
         random.setSeed(1234 + x);
         random.nextInt();
-        int y1 = random.nextInt(1 + y) + y / 2;
+        int y1 = random.nextInt(1 + Math.abs(y)) + Math.abs(y) / 2;
         Icon icon = Block.sand.getIcon(0, 0);
 
         if (y1 <= 37 && y != 35) {
