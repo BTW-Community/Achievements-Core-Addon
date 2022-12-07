@@ -17,8 +17,8 @@ public class GuiAchievements extends GuiScreen {
     private int mapX = 0;
     private int mapY = 0;
 
-    private int prevMouseX;
-    private int prevMouseY;
+    private int prevMouseX = 0;
+    private int prevMouseY = 0;
 
     private int tabIndex = 0;
 
@@ -30,12 +30,20 @@ public class GuiAchievements extends GuiScreen {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawDefaultBackground();
-        moveAchievementMap(mouseX, mouseY, partialTicks);
-        drawAchievementTabs(mouseX, mouseY, partialTicks);
+        moveAchievementMap(mouseX, mouseY);
+        drawAchievementMap();
+        // Draw connections
+        // Draw Achievements
+        // Draw unselected tabs
+        drawFrame();
+        // Draw selected tab
         drawTitle();
+        // Draw page buttons
+        // Draw hovered achievement
+        // Draw hovered tab
     }
 
-    private void moveAchievementMap(int mouseX, int mouseY, float partialTicks) {
+    private void moveAchievementMap(int mouseX, int mouseY) {
         if (Mouse.isButtonDown(0) && isInsideMap(mouseX, mouseY)) {
             // Move the map in the opposite direction to the mouse movement,
             // i.e. moving the mouse to the left should move the map to the right.
@@ -56,21 +64,7 @@ public class GuiAchievements extends GuiScreen {
                 && (yPos >= mapTop && yPos <= mapBottom);
     }
 
-    private void drawAchievementTabs(int mouseX, int mouseY, float partialTicks) {
-        drawAchievementMap(mouseX, mouseY, partialTicks);
-        // Draw connections
-        // Draw Achievements
-
-        // Draw unselected tabs
-        drawFrame();
-        // Draw selected tab
-
-        // Draw page buttons
-        // Draw hovered achievement
-        // Draw hovered tab
-    }
-
-    private void drawAchievementMap(int mouseX, int mouseY, float partialTicks) {
+    private void drawAchievementMap() {
         mc.renderEngine.bindTexture("/terrain.png");
 
         AchievementTab tab = AchievementTabList.get(tabIndex);
@@ -90,6 +84,11 @@ public class GuiAchievements extends GuiScreen {
                 int iconX = i + Math.floorDiv(mapX, TILE_SIZE);
 
                 Icon icon = tab == null ? Block.dirt.getIcon(0, 0) : tab.genAchievementIcon(iconX, iconY);
+                if (iconX == 0 && iconY == 0) {
+                    icon = Block.blockDiamond.getIcon(0, 0);
+                } else if (iconX * iconX + iconY * iconY < 5 * 5) {
+                    icon = Block.oreDiamond.getIcon(0, 0);
+                }
 
                 drawTexturedModelRectFromIcon(posX, posY, icon, TILE_SIZE, TILE_SIZE);
             }
@@ -108,7 +107,7 @@ public class GuiAchievements extends GuiScreen {
 
         int guiX = (width - PANE_WIDTH) / 2;
         int guiY = (height - PANE_HEIGHT) / 2;
-        fontRenderer.drawString("BetterThenAchievements",
+        fontRenderer.drawString("Achievements",
                 guiX + TILE_SIZE, guiY + TILE_SIZE / 2, TITLE_COLOR);
 
         GL11.glEnable(GL11.GL_LIGHTING);
