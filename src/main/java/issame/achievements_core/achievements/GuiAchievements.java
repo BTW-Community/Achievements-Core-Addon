@@ -8,7 +8,7 @@ import org.lwjgl.opengl.GL11;
 
 public class GuiAchievements extends GuiScreen {
     private static final int PANE_WIDTH = 252;
-    private static final int PANE_HEIGHT = 192;
+    private static final int PANE_HEIGHT = 193;
 
     private static final int TILE_SIZE = 16;
 
@@ -37,8 +37,10 @@ public class GuiAchievements extends GuiScreen {
 
     private void moveAchievementMap(int mouseX, int mouseY, float partialTicks) {
         if (Mouse.isButtonDown(0) && isInsideMap(mouseX, mouseY)) {
-            mapX -= mouseX - prevMouseX;
-            mapY -= mouseY - prevMouseY;
+            // Move the map in the opposite direction to the mouse movement,
+            // i.e. moving the mouse to the left should move the map to the right.
+            mapX += prevMouseX - mouseX;
+            mapY += prevMouseY - mouseY;
         }
         prevMouseX = mouseX;
         prevMouseY = mouseY;
@@ -71,35 +73,23 @@ public class GuiAchievements extends GuiScreen {
     private void drawAchievementMap(int mouseX, int mouseY, float partialTicks) {
         mc.renderEngine.bindTexture("/terrain.png");
 
-        /*
-        int mapLeft = guiX + TILE_SIZE;
-        int mapRight = guiX + PANE_WIDTH - TILE_SIZE;
-        int mapTop = guiY + TILE_SIZE;
-        int mapBottom = guiY + PANE_HEIGHT - TILE_SIZE;
-         */
+        AchievementTab tab = AchievementTabList.get(tabIndex);
 
-//        AchievementTab tab = AchievementTabList.get(tabIndex);
-        int tileWidth = Math.floorDiv(PANE_WIDTH, TILE_SIZE);
-        int tileHeight = Math.floorDiv(PANE_HEIGHT, TILE_SIZE);
+        int offsetX = TILE_SIZE - Math.floorMod(mapX, TILE_SIZE);
+        int offsetY = TILE_SIZE - Math.floorMod(mapY, TILE_SIZE);
 
-        int offsetX = getGuiX() - mapX % TILE_SIZE;
-        int offsetY = getGuiY() - mapY % TILE_SIZE;
+        int tileWidth = Math.floorDiv(PANE_WIDTH - offsetX, TILE_SIZE);
+        int tileHeight = Math.floorDiv(PANE_HEIGHT - offsetY, TILE_SIZE);
 
         for (int j = 0; j < tileHeight; j++) {
-            int posY = j * TILE_SIZE + offsetY;
-            int iconY = j + mapY / TILE_SIZE;
+            int posY = j * TILE_SIZE + getGuiY() + offsetY;
+            int iconY = j + Math.floorDiv(mapY, TILE_SIZE);
 
             for (int i = 0; i < tileWidth; i++) {
-                int posX = i * TILE_SIZE + offsetX;
-                int iconX = i + mapX / TILE_SIZE;
+                int posX = i * TILE_SIZE + getGuiX() + offsetX;
+                int iconX = i + Math.floorDiv(mapX, TILE_SIZE);
 
-                Icon icon = Block.dirt.getIcon(0, 0);
-                if (iconX == 0 && iconY == 0) {
-                    icon = Block.stone.getIcon(0, 0);
-                } else if ((iconX % 2 == 0 && iconY % 2 == 0) || (iconX % 2 != 0 && iconY % 2 != 0)) {
-                    icon = Block.sand.getIcon(0, 0);
-                }
-                //Icon icon = tab == null ? Block.dirt.getIcon(0, 0) : tab.genAchievementIcon(i, j, i, i);
+                Icon icon = tab == null ? Block.dirt.getIcon(0, 0) : tab.genAchievementIcon(iconX, iconY);
 
                 drawTexturedModelRectFromIcon(posX, posY, icon, TILE_SIZE, TILE_SIZE);
             }

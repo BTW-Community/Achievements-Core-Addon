@@ -41,7 +41,7 @@ private static ExampleAchievements instance;
 		FCAddOnHandler.LogMessage(this.getName() + " Version " + this.getVersionString() + " Initializing...");
 		
 		AchievementTab tabSimple = new AchievementTab("simple").setIcon(FCBetterThanWolves.fcCompanionCube);
-		mineBark = new Achievement("mineBark", 0, -1, FCBetterThanWolves.fcItemBark, tabSimple);
+		mineBark = new Achievement("mineBark", 0, 0, FCBetterThanWolves.fcItemBark, tabSimple);
 		/*
 		mineStick = new Achievement("mineStick", 0, 1, Item.stick, tabSimple);
 		chiselWood = new Achievement("chiselWood", 1, 0, FCBetterThanWolves.fcItemChiselWood, tabSimple)

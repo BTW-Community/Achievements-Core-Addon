@@ -64,22 +64,19 @@ public class AchievementTab {
      * Uses the vanilla background by default.
      * Override this method to create a custom background.
      */
-    protected Icon genAchievementIcon(int mapX, int mapY, int windowX, int windowY)
+    protected Icon genAchievementIcon(int x, int y)
     {
-        int xPos = (windowX + 288 >> 4) + mapX;
-        int yPos = (windowY + 288 >> 4) + mapY;
-
         Random random = new Random();
 
-        float brightness = 0.6F - yPos / 25.0F * 0.3F;
+        float brightness = 0.6F - y / 25.0F * 0.3F;
         GL11.glColor4f(brightness, brightness, brightness, 1.0F);
 
-        random.setSeed(1234 + xPos);
+        random.setSeed(1234 + x);
         random.nextInt();
-        int y1 = random.nextInt(1 + yPos) + yPos / 2;
+        int y1 = random.nextInt(1 + y) + y / 2;
         Icon icon = Block.sand.getIcon(0, 0);
 
-        if (y1 <= 37 && yPos != 35) {
+        if (y1 <= 37 && y != 35) {
             if (y1 == 22) {
                 if (random.nextInt(2) == 0) {
                     icon = Block.oreDiamond.getIcon(0, 0);

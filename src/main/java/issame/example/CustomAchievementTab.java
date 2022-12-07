@@ -13,20 +13,16 @@ public class CustomAchievementTab extends AchievementTab {
 	}
 
 	@Override
-	protected Icon genAchievementIcon(int mapX, int mapY, int windowX, int windowY)
-    {   
-		// Honestly not sure how this works, but it works.
-		int xPos = (windowX + 288 >> 4) + mapX;
-        int yPos = (windowY + 288 >> 4) + mapY;
+	protected Icon genAchievementIcon(int x, int y) {
         
 		Icon icon = Block.planks.getIcon(0, 0);
-    	if (xPos % 4 == 0) {
+    	if (x % 4 == 0) {
     		icon = Block.wood.getIcon(2, 0);
     	}
-    	else if (xPos % 2 == 0 && yPos % 4 == 0) {
+    	else if (x % 2 == 0 && y % 4 == 0) {
     		icon = Block.glass.getIcon(0, 0);
     	}
-    	if (yPos >= 36) {
+    	if (y >= 36) {
     		icon = Block.cobblestone.getIcon(0, 0);
     	}
         return icon;
