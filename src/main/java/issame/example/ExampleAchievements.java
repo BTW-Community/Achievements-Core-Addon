@@ -65,14 +65,16 @@ private static ExampleAchievements instance;
 
 		System.out.println("Simple Tab: " + tabSimple.size() + " achievements");
 
-		/*
-		AchievementTab tabCustom = new CustomAchievementTab("custom").setIcon(FCBetterThanWolves.fcItemWaterWheel);
-		netherPortal = (new Achievement("netherPortal", 0, 0, Block.obsidian, neuterCreeper)).registerAchievement(tabCustom);
-		firePotion = (new Achievement("firePotion", 0, 1, Item.potion, netherPortal)).setSpecial().registerAchievement(tabCustom);
-		cureVillager = (new Achievement("cureVillager", 1, 0, Item.emerald, netherPortal)).setFrame(2, 0).registerAchievement(tabCustom);
-		levelUpFarmer = (new Achievement("levelUpFarmer", 2, 0, Item.emerald, cureVillager)).setFrame(1, 1).registerAchievement(tabCustom);
+		AchievementTab tabCustom = new CustomAchievementTab("custom").setIcon(BTWItems.waterWheel);
+		netherPortal = (new Achievement("netherPortal", 0, 0, Block.obsidian, tabCustom))
+				.setParents(neuterCreeper);
+		firePotion = (new Achievement("firePotion", 0, 1, Item.potion, tabCustom))
+				.setParents(netherPortal);
+		cureVillager = (new Achievement("cureVillager", 1, 0, Item.emerald, tabCustom))
+				.setParents(netherPortal).setFrame(2, 0);
+		levelUpFarmer = (new Achievement("levelUpFarmer", 2, 0, Item.emerald, tabCustom))
+				.setParents(cureVillager).setFrame(1, 1);
 		System.out.println("Custom Tab: " + tabCustom.size() + " achievements");
-		 */
 
 		EventDispatcher.register(new ExampleEventHandler());
 		AddonHandler.logMessage(this.getName() + " Initialized");
