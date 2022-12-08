@@ -62,7 +62,6 @@ private static ExampleAchievements instance;
 				.setParents(chiselStone);
 		neuterCreeper = (new Achievement("neuterCreeper", 3, 1, BTWItems.creeperOysters, tabSimple))
 				.setParents(cookIron).setHidden();
-
 		System.out.println("Simple Tab: " + tabSimple.size() + " achievements");
 
 		AchievementTab tabCustom = new CustomAchievementTab("custom").setIcon(BTWItems.waterWheel);
