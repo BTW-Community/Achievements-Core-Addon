@@ -64,8 +64,7 @@ public class AchievementTab {
      * Uses the vanilla background by default.
      * Override this method to create a custom background.
      */
-    protected Icon genAchievementIcon(int x, int y)
-    {
+    protected Icon genAchievementIcon(int x, int y) {
         Random random = new Random();
 
         float brightness = 0.6F - y / 25.0F * 0.3F;
@@ -73,7 +72,8 @@ public class AchievementTab {
 
         random.setSeed(1234 + x);
         random.nextInt();
-        int y1 = random.nextInt(1 + Math.abs(y)) + Math.abs(y) / 2;
+        int y1 = Math.max(0, y);
+        y1 = random.nextInt(1 + y1) + y1 / 2;
         Icon icon = Block.sand.getIcon(0, 0);
 
         if (y1 <= 37 && y != 35) {
