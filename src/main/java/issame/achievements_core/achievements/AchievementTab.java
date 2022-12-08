@@ -3,13 +3,13 @@ package issame.achievements_core.achievements;
 import net.minecraft.src.Block;
 import net.minecraft.src.Icon;
 import net.minecraft.src.Item;
+import org.jetbrains.annotations.NotNull;
 import org.lwjgl.opengl.GL11;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+import java.util.function.Consumer;
 
-public class AchievementTab {
+public class AchievementTab implements Iterable<Achievement> {
     private final String name;
 
     private final List<Achievement> achievements;
@@ -96,5 +96,11 @@ public class AchievementTab {
             icon = Block.bedrock.getIcon(0, 0);
         }
         return icon;
+    }
+
+    @NotNull
+    @Override
+    public Iterator<Achievement> iterator() {
+        return achievements.iterator();
     }
 }

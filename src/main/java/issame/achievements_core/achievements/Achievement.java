@@ -41,6 +41,14 @@ public class Achievement {
         return this;
     }
 
+    public Achievement[] getParents() {
+        return parents;
+    }
+
+    public AchievementTab getTab() {
+        return tab;
+    }
+
     public Achievement setFrame(int x, int y) {
         return this;
     }

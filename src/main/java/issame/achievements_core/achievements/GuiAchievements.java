@@ -6,11 +6,14 @@ import net.minecraft.src.Icon;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
+import java.util.Arrays;
+
 public class GuiAchievements extends GuiScreen {
     private static final int PANE_WIDTH = 252;
     private static final int PANE_HEIGHT = 193;
 
     private static final int TILE_SIZE = 16;
+    private static final int FRAME_SIZE = 26;
 
     private static final int TITLE_COLOR = 4210752;
 
@@ -30,9 +33,9 @@ public class GuiAchievements extends GuiScreen {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawDefaultBackground();
-        moveAchievementMap(mouseX, mouseY);
-        drawAchievementMap();
-        // Draw connections
+        updateMapPosition(mouseX, mouseY);
+        drawMapBackground();
+        drawMapConnections();
         // Draw Achievements
         // Draw unselected tabs
         drawFrame();
@@ -43,7 +46,7 @@ public class GuiAchievements extends GuiScreen {
         // Draw hovered tab
     }
 
-    private void moveAchievementMap(int mouseX, int mouseY) {
+    private void updateMapPosition(int mouseX, int mouseY) {
         if (Mouse.isButtonDown(0) && isInsideMap(mouseX, mouseY)) {
             // Move the map in the opposite direction to the mouse movement,
             // i.e. moving the mouse to the left should move the map to the right.
@@ -64,7 +67,7 @@ public class GuiAchievements extends GuiScreen {
                 && (yPos >= mapTop && yPos <= mapBottom);
     }
 
-    private void drawAchievementMap() {
+    private void drawMapBackground() {
         mc.renderEngine.bindTexture("/terrain.png");
 
         AchievementTab tab = AchievementTabList.get(tabIndex);
@@ -90,8 +93,36 @@ public class GuiAchievements extends GuiScreen {
         GL11.glColor4f(1, 1, 1, 1);
     }
 
+    private void drawMapConnections() {
+        AchievementTab tab = AchievementTabList.get(tabIndex);
+        if (tab == null) { return; }
+
+        for (Achievement achievement : tab) {
+            // TODO: skip hidden achievements
+            drawConnectionsToParent(achievement);
+        }
+    }
+
+    private void drawConnectionsToParent(Achievement achievement) {
+        if (achievement.getParents() == null) { return; }
+        for (Achievement parent : achievement.getParents()) {
+            if (parent == null || achievement.getTab() != parent.getTab()) { continue; }
+
+            int col1 = achievement.getColumn() * FRAME_SIZE + getGuiX() - mapX;
+            int row1 = achievement.getRow() * FRAME_SIZE + getGuiY() - mapY;
+
+            int col2 = parent.getColumn() * FRAME_SIZE + getGuiX() - mapX;
+            int row2 = parent.getRow() * FRAME_SIZE + getGuiY() - mapY;
+
+            int color = -16777216;
+            drawHorizontalLine(col1, col2, row1, color);
+            drawVerticalLine(col2, row1, row2, color);
+        }
+    }
+
     private void drawFrame() {
         GL11.glEnable(GL11.GL_BLEND);
+        GL11.glColor4f(1, 1, 1, 1);
         mc.renderEngine.bindTexture("/achievements_core/achievement/frame.png");
         drawTexturedModalRect(getGuiX(), getGuiY(), 0, 0, PANE_WIDTH, PANE_HEIGHT);
     }
