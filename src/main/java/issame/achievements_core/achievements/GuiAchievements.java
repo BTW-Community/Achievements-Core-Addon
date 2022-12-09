@@ -5,9 +5,6 @@ import net.minecraft.src.GuiScreen;
 import net.minecraft.src.Icon;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
-import java.util.Arrays;
 
 public class GuiAchievements extends GuiScreen {
     private static final int PANE_WIDTH = 252;
@@ -63,6 +60,16 @@ public class GuiAchievements extends GuiScreen {
         // Draw hovered tab
     }
 
+    @Override
+    protected void keyTyped(char keyChar, int keyCode) {
+        if (keyCode == mc.gameSettings.keyBindInventory.keyCode) {
+            mc.displayGuiScreen(null);
+            mc.setIngameFocus();
+        } else {
+            super.keyTyped(keyChar, keyCode);
+        }
+    }
+
     private void updateMapPosition(int mouseX, int mouseY) {
         if (Mouse.isButtonDown(0) && isInsideMap(mouseX, mouseY)) {
             // Move the map in the opposite direction to the mouse movement,
@@ -111,7 +118,9 @@ public class GuiAchievements extends GuiScreen {
 
     private void drawMapConnections() {
         AchievementTab tab = AchievementTabList.get(tabIndex);
-        if (tab == null) { return; }
+        if (tab == null) {
+            return;
+        }
 
         for (Achievement achievement : tab) {
             // TODO: skip hidden achievements
@@ -120,9 +129,13 @@ public class GuiAchievements extends GuiScreen {
     }
 
     private void drawConnectionsToParent(Achievement achievement) {
-        if (achievement.getParents() == null) { return; }
+        if (achievement.getParents() == null) {
+            return;
+        }
         for (Achievement parent : achievement.getParents()) {
-            if (parent == null || achievement.getTab() != parent.getTab()) { continue; }
+            if (parent == null || achievement.getTab() != parent.getTab()) {
+                continue;
+            }
 
             int x1 = achievement.getColumn() * FRAME_SIZE + getGuiX() - mapX;
             int y1 = achievement.getRow() * FRAME_SIZE + getGuiY() - mapY;
@@ -154,15 +167,5 @@ public class GuiAchievements extends GuiScreen {
 
     private int getGuiY() {
         return (height - PANE_HEIGHT) / 2;
-    }
-
-    @Override
-    protected void keyTyped(char keyChar, int keyCode) {
-        if (keyCode == mc.gameSettings.keyBindInventory.keyCode) {
-            mc.displayGuiScreen(null);
-            mc.setIngameFocus();
-        } else {
-            super.keyTyped(keyChar, keyCode);
-        }
     }
 }
