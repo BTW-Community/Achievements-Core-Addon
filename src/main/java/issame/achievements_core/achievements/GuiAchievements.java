@@ -3,6 +3,7 @@ package issame.achievements_core.achievements;
 import net.minecraft.src.Block;
 import net.minecraft.src.GuiScreen;
 import net.minecraft.src.Icon;
+import net.minecraft.src.RenderItem;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
@@ -11,7 +12,6 @@ public class GuiAchievements extends GuiScreen {
     private static final int PANE_HEIGHT = 193;
 
     private static final int TILE_SIZE = 16;
-    private static final int FRAME_SIZE = 26;
 
     private static final int TITLE_COLOR = 4210752;
 
@@ -44,8 +44,8 @@ public class GuiAchievements extends GuiScreen {
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glDepthFunc(GL11.GL_LEQUAL);
 
-        drawMapConnections();
-        // Draw Achievements
+        drawAchievementConnections();
+        drawAchievements();
         // Draw unselected tabs
 
         GL11.glColor4f(1, 1, 1, 1);
@@ -116,7 +116,7 @@ public class GuiAchievements extends GuiScreen {
         }
     }
 
-    private void drawMapConnections() {
+    private void drawAchievementConnections() {
         AchievementTab tab = AchievementTabList.get(tabIndex);
         if (tab == null) {
             return;
@@ -137,20 +137,47 @@ public class GuiAchievements extends GuiScreen {
                 continue;
             }
 
-            int x1 = achievement.getColumn() * FRAME_SIZE + getGuiX() - mapX;
-            int y1 = achievement.getRow() * FRAME_SIZE + getGuiY() - mapY;
+            int x1 = achievement.getColumn() * Achievement.SIZE + getGuiX() - mapX;
+            int y1 = achievement.getRow() * Achievement.SIZE + getGuiY() - mapY;
 
-            int x2 = parent.getColumn() * FRAME_SIZE + getGuiX() - mapX;
-            int y2 = parent.getRow() * FRAME_SIZE + getGuiY() - mapY;
+            int x2 = parent.getColumn() * Achievement.SIZE + getGuiX() - mapX;
+            int y2 = parent.getRow() * Achievement.SIZE + getGuiY() - mapY;
 
+            // TODO: Change color based on unlock status
             int color = -16777216;
             drawHorizontalLine(x1, x2, y1, color);
             drawVerticalLine(x2, y1, y2, color);
         }
     }
 
+    private void drawAchievements() {
+        AchievementTab tab = AchievementTabList.get(tabIndex);
+        if (tab == null) {
+            return;
+        }
+
+        RenderItem renderItem = new RenderItem();
+
+        for (Achievement achievement : tab) {
+            // TODO: skip hidden achievements
+            // TODO: Change color based on unlock status
+            float brightness = 1;
+            GL11.glColor4f(brightness, brightness, brightness, 1);
+
+            int offset = Achievement.SIZE / 2;
+            int x = achievement.getColumn() * Achievement.SIZE + getGuiX() - mapX - offset;
+            int y = achievement.getRow() * Achievement.SIZE + getGuiY() - mapY - offset;
+
+            mc.renderEngine.bindTexture(String.format("/achievements_core/shape/%s.png", achievement.getFrameSet()));
+            drawTexturedModalRect(x, y, achievement.getFrameU(), achievement.getFrameV(), Achievement.SIZE, Achievement.SIZE);
+
+            offset = (Achievement.SIZE - TILE_SIZE) / 2;
+            renderItem.renderItemAndEffectIntoGUI(mc.fontRenderer, mc.renderEngine, achievement.getIcon(), x + offset, y + offset);
+        }
+    }
+
     private void drawFrame() {
-        mc.renderEngine.bindTexture("/achievements_core/achievement/frame.png");
+        mc.renderEngine.bindTexture("/achievements_core/frame.png");
         drawTexturedModalRect(getGuiX(), getGuiY(), 0, 0, PANE_WIDTH, PANE_HEIGHT);
     }
 

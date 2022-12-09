@@ -6,16 +6,22 @@ import net.minecraft.src.ItemStack;
 import net.minecraft.src.StatCollector;
 
 public class Achievement {
+    public static final int SIZE = 26;
+
+    public boolean isHidden = false;
+    public String frameSet = "default";
+
     private final String name;
     private final int column;
     private final int row;
     private final ItemStack icon;
     private final AchievementTab tab;
 
-    private final String description;
+    private Achievement[] parents;
 
-    private Achievement[] parents = null;
-    private boolean isHidden = false;
+    // uv coordinates from frameSet.
+    private int u = 0;
+    private int v = 0;
 
     public Achievement(String name, int column, int row, ItemStack icon, AchievementTab tab) {
         this.name = "achievement." + name;
@@ -24,7 +30,7 @@ public class Achievement {
         this.icon = icon;
         this.tab = tab;
 
-        description = this.name + ".desc";
+//        description = this.name + ".desc";
         tab.add(this);
     }
 
@@ -34,6 +40,10 @@ public class Achievement {
 
     public Achievement(String name, int column, int row, Block icon, AchievementTab tab) {
         this(name, column, row, new ItemStack(icon), tab);
+    }
+
+    public ItemStack getIcon() {
+        return icon;
     }
 
     public Achievement setParents(Achievement... parents) {
@@ -49,8 +59,22 @@ public class Achievement {
         return tab;
     }
 
+    public String getFrameSet() {
+        return frameSet;
+    }
+
     public Achievement setFrame(int x, int y) {
+        u = SIZE * x;
+        v = SIZE * y;
         return this;
+    }
+
+    public int getFrameU() {
+        return u;
+    }
+
+    public int getFrameV() {
+        return v;
     }
 
     public Achievement setHidden() {
