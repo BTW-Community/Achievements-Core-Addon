@@ -5,6 +5,7 @@ import net.minecraft.src.GuiScreen;
 import net.minecraft.src.Icon;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 import java.util.Arrays;
 
@@ -34,10 +35,26 @@ public class GuiAchievements extends GuiScreen {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawDefaultBackground();
         updateMapPosition(mouseX, mouseY);
+
+        // I have no idea how graphics work.
+        // Most of the GL11 stuff here was achieved through trial and error.
+        // Apologies in advance.
+        GL11.glDepthFunc(GL11.GL_GEQUAL);
+        GL11.glTranslatef(0, 0, -1);
+
         drawMapBackground();
+
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
+        GL11.glDepthFunc(GL11.GL_LEQUAL);
+
         drawMapConnections();
         // Draw Achievements
         // Draw unselected tabs
+
+        GL11.glColor4f(1, 1, 1, 1);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
+
         drawFrame();
         // Draw selected tab
         drawTitle();
@@ -90,7 +107,6 @@ public class GuiAchievements extends GuiScreen {
                 drawTexturedModelRectFromIcon(posX, posY, icon, TILE_SIZE, TILE_SIZE);
             }
         }
-        GL11.glColor4f(1, 1, 1, 1);
     }
 
     private void drawMapConnections() {
@@ -108,36 +124,28 @@ public class GuiAchievements extends GuiScreen {
         for (Achievement parent : achievement.getParents()) {
             if (parent == null || achievement.getTab() != parent.getTab()) { continue; }
 
-            int col1 = achievement.getColumn() * FRAME_SIZE + getGuiX() - mapX;
-            int row1 = achievement.getRow() * FRAME_SIZE + getGuiY() - mapY;
+            int x1 = achievement.getColumn() * FRAME_SIZE + getGuiX() - mapX;
+            int y1 = achievement.getRow() * FRAME_SIZE + getGuiY() - mapY;
 
-            int col2 = parent.getColumn() * FRAME_SIZE + getGuiX() - mapX;
-            int row2 = parent.getRow() * FRAME_SIZE + getGuiY() - mapY;
+            int x2 = parent.getColumn() * FRAME_SIZE + getGuiX() - mapX;
+            int y2 = parent.getRow() * FRAME_SIZE + getGuiY() - mapY;
 
             int color = -16777216;
-            drawHorizontalLine(col1, col2, row1, color);
-            drawVerticalLine(col2, row1, row2, color);
+            drawHorizontalLine(x1, x2, y1, color);
+            drawVerticalLine(x2, y1, y2, color);
         }
     }
 
     private void drawFrame() {
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glColor4f(1, 1, 1, 1);
         mc.renderEngine.bindTexture("/achievements_core/achievement/frame.png");
         drawTexturedModalRect(getGuiX(), getGuiY(), 0, 0, PANE_WIDTH, PANE_HEIGHT);
     }
 
     private void drawTitle() {
-        GL11.glDisable(GL11.GL_LIGHTING);
-        GL11.glDisable(GL11.GL_DEPTH_TEST);
-
         int guiX = (width - PANE_WIDTH) / 2;
         int guiY = (height - PANE_HEIGHT) / 2;
         fontRenderer.drawString("Achievements",
                 guiX + TILE_SIZE, guiY + TILE_SIZE / 2, TITLE_COLOR);
-
-        GL11.glEnable(GL11.GL_LIGHTING);
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
     }
 
     private int getGuiX() {
