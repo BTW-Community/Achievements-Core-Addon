@@ -3,6 +3,7 @@ package issame.achievements_core.achievements;
 import net.minecraft.src.Block;
 import net.minecraft.src.Icon;
 import net.minecraft.src.Item;
+import net.minecraft.src.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.opengl.GL11;
 

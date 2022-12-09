@@ -1,19 +1,22 @@
 package issame.achievements_core.achievements;
 
-import net.minecraft.src.Block;
-import net.minecraft.src.GuiScreen;
-import net.minecraft.src.Icon;
-import net.minecraft.src.RenderItem;
+import net.minecraft.src.*;
+import org.jetbrains.annotations.NotNull;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
+
+import java.util.Iterator;
 
 public class GuiAchievements extends GuiScreen {
     private static final int PANE_WIDTH = 252;
     private static final int PANE_HEIGHT = 193;
 
-    private static final int TILE_SIZE = 16;
+    private static final int TAB_WIDTH = 28;
+    private static final int TAB_HEIGHT = 32;
 
+    private static final int TILE_SIZE = 16;
     private static final int TITLE_COLOR = 4210752;
+    private static final int TABS_P_PAGE = 9;
 
     private int mapX = 0;
     private int mapY = 0;
@@ -21,7 +24,10 @@ public class GuiAchievements extends GuiScreen {
     private int prevMouseX = 0;
     private int prevMouseY = 0;
 
-    private int tabIndex = 0;
+    private int selectedTabIndex = 0;
+    private int page = 1;
+
+    private final RenderItem renderItem = new RenderItem();
 
     @Override
     public void initGui() {
@@ -36,6 +42,7 @@ public class GuiAchievements extends GuiScreen {
         // I have no idea how graphics work.
         // Most of the GL11 stuff here was achieved through trial and error.
         // Apologies in advance.
+        GL11.glPushMatrix();
         GL11.glDepthFunc(GL11.GL_GEQUAL);
         GL11.glTranslatef(0, 0, -1);
 
@@ -46,18 +53,20 @@ public class GuiAchievements extends GuiScreen {
 
         drawAchievementConnections();
         drawAchievements();
-        // Draw unselected tabs
 
-        GL11.glColor4f(1, 1, 1, 1);
+        GL11.glPopMatrix();
         GL11.glEnable(GL11.GL_BLEND);
-        GL11.glDisable(GL11.GL_DEPTH_TEST);
+        GL11.glColor4f(1, 1, 1, 1);
 
+        drawUnselectedTabs();
         drawFrame();
-        // Draw selected tab
+        drawTab(selectedTabIndex);
         drawTitle();
         // Draw page buttons
         // Draw hovered achievement
         // Draw hovered tab
+
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
     }
 
     @Override
@@ -94,7 +103,7 @@ public class GuiAchievements extends GuiScreen {
     private void drawMapBackground() {
         mc.renderEngine.bindTexture("/terrain.png");
 
-        AchievementTab tab = AchievementTabList.get(tabIndex);
+        AchievementTab tab = AchievementTabList.get(selectedTabIndex);
 
         int offsetX = TILE_SIZE - Math.floorMod(mapX, TILE_SIZE);
         int offsetY = TILE_SIZE - Math.floorMod(mapY, TILE_SIZE);
@@ -117,7 +126,7 @@ public class GuiAchievements extends GuiScreen {
     }
 
     private void drawAchievementConnections() {
-        AchievementTab tab = AchievementTabList.get(tabIndex);
+        AchievementTab tab = AchievementTabList.get(selectedTabIndex);
         if (tab == null) {
             return;
         }
@@ -151,12 +160,10 @@ public class GuiAchievements extends GuiScreen {
     }
 
     private void drawAchievements() {
-        AchievementTab tab = AchievementTabList.get(tabIndex);
+        AchievementTab tab = AchievementTabList.get(selectedTabIndex);
         if (tab == null) {
             return;
         }
-
-        RenderItem renderItem = new RenderItem();
 
         for (Achievement achievement : tab) {
             // TODO: skip hidden achievements
@@ -174,6 +181,38 @@ public class GuiAchievements extends GuiScreen {
             offset = (Achievement.SIZE - TILE_SIZE) / 2;
             renderItem.renderItemAndEffectIntoGUI(mc.fontRenderer, mc.renderEngine, achievement.getIcon(), x + offset, y + offset);
         }
+    }
+
+    private void drawUnselectedTabs() {
+        for (int tabIndex = 0; tabIndex < AchievementTabList.size(); tabIndex++) {
+            if (tabIndex == selectedTabIndex) {
+                continue;
+            }
+            drawTab(tabIndex);
+        }
+    }
+
+    private void drawTab(int tabIndex) {
+        AchievementTab tab = AchievementTabList.get(tabIndex);
+        if (tab == null || !isTabOnPage(tabIndex)) {
+            return;
+        }
+
+        int x = getGuiX() + TAB_WIDTH * (tabIndex % TABS_P_PAGE);
+        int y = getGuiY() - TAB_HEIGHT;
+
+        int u = 0;
+        int v = tabIndex == selectedTabIndex ? TAB_HEIGHT : 0;
+
+        mc.renderEngine.bindTexture("/gui/allitems.png");
+        drawTexturedModalRect(x, y, u, v, TAB_WIDTH, TAB_HEIGHT);
+
+        ItemStack icon = new ItemStack(Item.itemsList[tab.getIconID()]);
+        renderItem.renderItemAndEffectIntoGUI(fontRenderer, mc.renderEngine, icon, x, y);
+    }
+
+    private boolean isTabOnPage(int tabIndex) {
+        return (tabIndex + 1 <= TABS_P_PAGE * page) && (tabIndex + 1 > TABS_P_PAGE * (page - 1));
     }
 
     private void drawFrame() {
