@@ -58,7 +58,7 @@ private static ExampleAchievements instance;
 				.setParents(killPig).setFrame(3, 0);
 		drinkMilk = (new Achievement("drinkMilk", 2, -3, Item.bucketMilk, tabSimple))
 				.setParents(cookPork).setFrame(3, 1);
-		cookIron = (new Achievement("cookIron", 3, 0, BTWBlocks.ironOreChunk, tabSimple))
+		cookIron = (new Achievement("cookIron", 3, 0, BTWItems.ironOreChunk, tabSimple))
 				.setParents(chiselStone);
 		neuterCreeper = (new Achievement("neuterCreeper", 3, 1, BTWItems.creeperOysters, tabSimple))
 				.setParents(cookIron).setHidden();
@@ -71,7 +71,7 @@ private static ExampleAchievements instance;
 				.setParents(netherPortal);
 		cureVillager = (new Achievement("cureVillager", 1, 0, Item.emerald, tabCustom))
 				.setParents(netherPortal).setFrame(2, 0);
-		levelUpFarmer = (new Achievement("levelUpFarmer", 2, 0, Item.emerald, tabCustom))
+		levelUpFarmer = (new Achievement("levelUpFarmer", 2, 0, Block.blockEmerald, tabCustom))
 				.setParents(cureVillager).setFrame(1, 1);
 		System.out.println("Custom Tab: " + tabCustom.size() + " achievements");
 
