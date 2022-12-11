@@ -1,11 +1,8 @@
 package issame.achievements_core.achievements;
 
 import net.minecraft.src.*;
-import org.jetbrains.annotations.NotNull;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
-
-import java.util.Iterator;
 
 public class GuiAchievements extends GuiScreen {
     private static final int PANE_WIDTH = 252;
@@ -13,6 +10,12 @@ public class GuiAchievements extends GuiScreen {
 
     private static final int TAB_WIDTH = 28;
     private static final int TAB_HEIGHT = 32;
+
+    private static final int ARROW_WIDTH = 10;
+    private static final int ARROW_HEIGHT = 15;
+
+    private static final int ARROW_OFFSET_X = 1;
+    private static final int ARROW_OFFSET_Y = 6;
 
     private static final int TILE_SIZE = 16;
     private static final int TITLE_COLOR = 4210752;
@@ -62,6 +65,10 @@ public class GuiAchievements extends GuiScreen {
         drawFrame();
         drawTab(selectedTabIndex);
         drawTitle();
+
+        GL11.glColor4f(1, 1, 1, 1);
+
+        drawPageButtons(mouseX, mouseY);
         // Draw page buttons
         // Draw hovered achievement
         // Draw hovered tab
@@ -228,6 +235,31 @@ public class GuiAchievements extends GuiScreen {
         int guiY = (height - PANE_HEIGHT) / 2;
         fontRenderer.drawString("Achievements",
                 guiX + TILE_SIZE, guiY + TILE_SIZE / 2, TITLE_COLOR);
+    }
+
+    private void drawPageButtons(int mouseX, int mouseY) {
+        this.mc.renderEngine.bindTexture("/btwmodtex/fcguitrading.png");
+
+        int leftX = getGuiX() - ARROW_WIDTH - ARROW_OFFSET_X;
+        int rightX = getGuiX() + PANE_WIDTH + ARROW_OFFSET_X;
+        int y = getGuiY() - ARROW_HEIGHT - ARROW_OFFSET_Y;
+
+        if (page > 1) {
+            // Show left button.
+            int u = isPosInRect(mouseX, mouseY, leftX, y, ARROW_WIDTH, ARROW_HEIGHT) ? 189 : 177;
+            drawTexturedModalRect(leftX, y, u, 21, ARROW_WIDTH, ARROW_HEIGHT);
+        }
+        if (AchievementTabList.size() > TABS_P_PAGE * page) {
+            // Show right button.
+            int u = isPosInRect(mouseX, mouseY, rightX, y, ARROW_WIDTH, ARROW_HEIGHT) ? 189 : 177;
+            drawTexturedModalRect(rightX, y, u, 2, ARROW_WIDTH, ARROW_HEIGHT);
+        }
+    }
+
+    private boolean isPosInRect(int posX, int posY, int rectX, int rectY, int rectW, int rectH) {
+        boolean x = posX >= rectX && posX <= rectX + rectW;
+        boolean y = posY >= rectY && posY <= rectY + rectH;
+        return x && y;
     }
 
     private int getGuiX() {
