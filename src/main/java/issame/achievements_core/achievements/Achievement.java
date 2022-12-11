@@ -30,7 +30,6 @@ public class Achievement {
         this.icon = icon;
         this.tab = tab;
 
-//        description = this.name + ".desc";
         tab.add(this);
     }
 
@@ -90,8 +89,11 @@ public class Achievement {
         return row;
     }
 
-    @Override
-    public String toString() {
+    public String getName() {
         return StatCollector.translateToLocal(name);
+    }
+
+    public String getDescription() {
+        return StatCollector.translateToLocal(name + ".desc");
     }
 }

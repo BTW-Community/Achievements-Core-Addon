@@ -56,7 +56,7 @@ public class GuiAchievements extends GuiScreen {
         RenderHelper.enableGUIStandardItemLighting();
 
         drawAchievementConnections();
-        drawAchievements();
+        Achievement hovered = drawAchievements(mouseX, mouseY);
 
         GL11.glPopMatrix();
         GL11.glEnable(GL11.GL_BLEND);
@@ -69,7 +69,7 @@ public class GuiAchievements extends GuiScreen {
         GL11.glColor4f(1, 1, 1, 1);
 
         drawPageButtons(mouseX, mouseY);
-        // Draw page buttons
+        drawAchievementHoverText(mouseX, mouseY, hovered);
         // Draw hovered achievement
         // Draw hovered tab
 
@@ -166,12 +166,13 @@ public class GuiAchievements extends GuiScreen {
         }
     }
 
-    private void drawAchievements() {
+    private Achievement drawAchievements(int mouseX, int mouseY) {
         AchievementTab tab = AchievementTabList.get(selectedTabIndex);
         if (tab == null) {
-            return;
+            return null;
         }
 
+        Achievement hovered = null;
         for (Achievement achievement : tab) {
             // TODO: skip hidden achievements
             // TODO: Change color based on unlock status
@@ -182,12 +183,17 @@ public class GuiAchievements extends GuiScreen {
             int x = achievement.getColumn() * Achievement.SIZE + getGuiX() - mapX - offset;
             int y = achievement.getRow() * Achievement.SIZE + getGuiY() - mapY - offset;
 
+            if (isPosInRect(mouseX, mouseY, x, y, Achievement.SIZE, Achievement.SIZE)) {
+                hovered = achievement;
+            }
+
             mc.renderEngine.bindTexture(String.format("/achievements_core/shape/%s.png", achievement.getFrameSet()));
             drawTexturedModalRect(x, y, achievement.getFrameU(), achievement.getFrameV(), Achievement.SIZE, Achievement.SIZE);
 
             offset = (Achievement.SIZE - TILE_SIZE) / 2;
             renderItem.renderItemAndEffectIntoGUI(mc.fontRenderer, mc.renderEngine, achievement.getIcon(), x + offset, y + offset);
         }
+        return hovered;
     }
 
     private void drawUnselectedTabs() {
@@ -254,6 +260,18 @@ public class GuiAchievements extends GuiScreen {
             int u = isPosInRect(mouseX, mouseY, rightX, y, ARROW_WIDTH, ARROW_HEIGHT) ? 189 : 177;
             drawTexturedModalRect(rightX, y, u, 2, ARROW_WIDTH, ARROW_HEIGHT);
         }
+    }
+
+    private void drawAchievementHoverText(int mouseX, int mouseY, Achievement hovered) {
+        if (hovered == null) {
+            return;
+        }
+
+        String name = hovered.getName();
+        String description = hovered.getDescription();
+        int color = -1;
+
+        fontRenderer.drawStringWithShadow(name, mouseX, mouseY, color);
     }
 
     private boolean isPosInRect(int posX, int posY, int rectX, int rectY, int rectW, int rectH) {
