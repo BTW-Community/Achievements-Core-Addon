@@ -50,13 +50,13 @@ public class GuiAchievements extends GuiScreen {
 
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glDepthFunc(GL11.GL_LEQUAL);
+        RenderHelper.enableGUIStandardItemLighting();
 
         drawAchievementConnections();
         drawAchievements();
 
         GL11.glPopMatrix();
         GL11.glEnable(GL11.GL_BLEND);
-        GL11.glColor4f(1, 1, 1, 1);
 
         drawUnselectedTabs();
         drawFrame();
@@ -66,7 +66,7 @@ public class GuiAchievements extends GuiScreen {
         // Draw hovered achievement
         // Draw hovered tab
 
-        GL11.glDisable(GL11.GL_DEPTH_TEST);
+        RenderHelper.disableStandardItemLighting();
     }
 
     @Override
@@ -198,8 +198,9 @@ public class GuiAchievements extends GuiScreen {
             return;
         }
 
+        int offset = 4;
         int x = getGuiX() + TAB_WIDTH * (tabIndex % TABS_P_PAGE);
-        int y = getGuiY() - TAB_HEIGHT;
+        int y = getGuiY() - TAB_HEIGHT + offset;
 
         int u = 0;
         int v = tabIndex == selectedTabIndex ? TAB_HEIGHT : 0;
@@ -208,7 +209,9 @@ public class GuiAchievements extends GuiScreen {
         drawTexturedModalRect(x, y, u, v, TAB_WIDTH, TAB_HEIGHT);
 
         ItemStack icon = new ItemStack(Item.itemsList[tab.getIconID()]);
-        renderItem.renderItemAndEffectIntoGUI(fontRenderer, mc.renderEngine, icon, x, y);
+        x += (TAB_WIDTH - TILE_SIZE) / 2;
+        y += (TAB_HEIGHT - TILE_SIZE) / 4;
+        renderItem.renderItemAndEffectIntoGUI(fontRenderer, mc.renderEngine, icon, x, y + offset);
     }
 
     private boolean isTabOnPage(int tabIndex) {
