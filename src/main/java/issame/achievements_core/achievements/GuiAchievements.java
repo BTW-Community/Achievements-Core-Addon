@@ -269,9 +269,17 @@ public class GuiAchievements extends GuiScreen {
 
         String name = hovered.getName();
         String description = hovered.getDescription();
-        int color = -1;
 
-        fontRenderer.drawStringWithShadow(name, mouseX, mouseY, color);
+        int x = mouseX;
+        int y = mouseY;
+
+        int lineHeight = fontRenderer.FONT_HEIGHT;
+        int textWidth = Math.max(fontRenderer.getStringWidth(name), 120);
+        int textHeight = fontRenderer.splitStringWidth(description, textWidth) + lineHeight;
+
+        drawGradientRect(x, y, x + textWidth, y + textHeight, -1073741824, -1073741824);
+        fontRenderer.drawStringWithShadow(name, x, y, -1);
+        fontRenderer.drawSplitString(description, x, y + lineHeight, textWidth, -1);
     }
 
     private boolean isPosInRect(int posX, int posY, int rectX, int rectY, int rectW, int rectH) {
