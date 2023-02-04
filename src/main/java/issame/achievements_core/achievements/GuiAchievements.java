@@ -3,7 +3,6 @@ package issame.achievements_core.achievements;
 import net.minecraft.src.*;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 
 public class GuiAchievements extends GuiScreen {
     private static final int PANE_WIDTH = 252;
@@ -21,12 +20,16 @@ public class GuiAchievements extends GuiScreen {
     private static final int TILE_SIZE = 16;
     private static final int TITLE_COLOR = 4210752;
     private static final int TABS_P_PAGE = 9;
+    private static final int TAB_OFFSET = 4;
 
     private static final int HOVER_OFFSET_X = 12;
     private static final int HOVER_OFFSET_Y = -4;
     private static final int HOVER_PADDING = 3;
+    private static final int HOVER_COLOR = -1073741824;
 
     private static final int DESC_PADDING = 3;
+    private static final int DESC_COLOUR = -6250336;
+    private static final int NAME_COLOUR = -1;
 
     private int mapX = 0;
     private int mapY = 0;
@@ -78,7 +81,7 @@ public class GuiAchievements extends GuiScreen {
 
         drawPageButtons(mouseX, mouseY);
         drawAchievementHoverText(mouseX, mouseY, hovered);
-        // Draw hovered tab
+        drawTabHoverText(mouseX, mouseY);
 
         RenderHelper.disableStandardItemLighting();
     }
@@ -214,13 +217,12 @@ public class GuiAchievements extends GuiScreen {
 
     private void drawTab(int tabIndex) {
         AchievementTab tab = AchievementTabList.get(tabIndex);
-        if (tab == null || !isTabOnPage(tabIndex)) {
+        if (tab == null || isTabOffPage(tabIndex)) {
             return;
         }
 
-        int offset = 4;
         int x = getGuiX() + TAB_WIDTH * (tabIndex % TABS_P_PAGE);
-        int y = getGuiY() - TAB_HEIGHT + offset;
+        int y = getGuiY() - TAB_HEIGHT + TAB_OFFSET;
 
         int u = 0;
         int v = tabIndex == selectedTabIndex ? TAB_HEIGHT : 0;
@@ -231,11 +233,11 @@ public class GuiAchievements extends GuiScreen {
         ItemStack icon = new ItemStack(Item.itemsList[tab.getIconID()]);
         x += (TAB_WIDTH - TILE_SIZE) / 2;
         y += (TAB_HEIGHT - TILE_SIZE) / 4;
-        renderItem.renderItemAndEffectIntoGUI(fontRenderer, mc.renderEngine, icon, x, y + offset);
+        renderItem.renderItemAndEffectIntoGUI(fontRenderer, mc.renderEngine, icon, x, y + TAB_OFFSET);
     }
 
-    private boolean isTabOnPage(int tabIndex) {
-        return (tabIndex + 1 <= TABS_P_PAGE * page) && (tabIndex + 1 > TABS_P_PAGE * (page - 1));
+    private boolean isTabOffPage(int tabIndex) {
+        return (tabIndex + 1 <= TABS_P_PAGE * (page - 1)) || (tabIndex + 1 > TABS_P_PAGE * page);
     }
 
     private void drawFrame() {
@@ -285,10 +287,48 @@ public class GuiAchievements extends GuiScreen {
 
         drawGradientRect(x - HOVER_PADDING, y - HOVER_PADDING,
                 x + textWidth + HOVER_PADDING, y + textHeight + HOVER_PADDING,
-                -1073741824, -1073741824);
-        fontRenderer.drawStringWithShadow(name, x, y, -1);
+                HOVER_COLOR, HOVER_COLOR);
+        fontRenderer.drawStringWithShadow(name, x, y, NAME_COLOUR);
         fontRenderer.drawSplitString(description, x, y + fontRenderer.FONT_HEIGHT + DESC_PADDING,
-                textWidth, -6250336);
+                textWidth, DESC_COLOUR);
+    }
+
+    private void drawTabHoverText(int mouseX, int mouseY) {
+        AchievementTab hovered = getHoveredTab(mouseX, mouseY);
+        if (hovered == null) {
+            return;
+        }
+
+        String name = hovered.getName();
+
+        int x = mouseX + HOVER_OFFSET_X;
+        int y = mouseY + HOVER_OFFSET_Y;
+
+        int textWidth = Math.max(fontRenderer.getStringWidth(name), 120);
+        int textHeight = fontRenderer.FONT_HEIGHT;
+
+        drawGradientRect(x - HOVER_PADDING, y - HOVER_PADDING,
+                x + textWidth + HOVER_PADDING, y + textHeight + HOVER_PADDING,
+                HOVER_COLOR, HOVER_COLOR);
+
+        fontRenderer.drawStringWithShadow(name, x, y, NAME_COLOUR);
+    }
+
+    private AchievementTab getHoveredTab(int mouseX, int mouseY) {
+        for (int tabIndex = 0; tabIndex < AchievementTabList.size(); tabIndex++) {
+            AchievementTab tab = AchievementTabList.get(tabIndex);
+            if (tab == null || isTabOffPage(tabIndex)) {
+                continue;
+            }
+
+            int x = getGuiX() + TAB_WIDTH * (tabIndex % TABS_P_PAGE);
+            int y = getGuiY() - TAB_HEIGHT + TAB_OFFSET;
+
+            if (isPosInRect(mouseX, mouseY, x, y, TAB_WIDTH, TAB_HEIGHT)) {
+                return tab;
+            }
+        }
+        return null;
     }
 
     private boolean isPosInRect(int posX, int posY, int rectX, int rectY, int rectW, int rectH) {

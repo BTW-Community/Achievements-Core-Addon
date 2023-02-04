@@ -1,14 +1,10 @@
 package issame.achievements_core.achievements;
 
-import net.minecraft.src.Block;
-import net.minecraft.src.Icon;
-import net.minecraft.src.Item;
-import net.minecraft.src.ItemStack;
+import net.minecraft.src.*;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.opengl.GL11;
 
 import java.util.*;
-import java.util.function.Consumer;
 
 public class AchievementTab implements Iterable<Achievement> {
     private final String name;
@@ -41,6 +37,10 @@ public class AchievementTab implements Iterable<Achievement> {
 
     public AchievementTab setIcon(Block block) {
         return setIcon(block.blockID);
+    }
+
+    public String getName() {
+        return StatCollector.translateToLocal(name);
     }
 
     public void add(Achievement achievement) {
