@@ -80,6 +80,7 @@ public class GuiAchievements extends GuiScreen {
 
         GL11.glColor4f(1, 1, 1, 1);
         GL11.glDisable(GL11.GL_LIGHTING);
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
 
         drawPageButtons(mouseX, mouseY);
         drawAchievementHoverText(mouseX, mouseY, hovered);
