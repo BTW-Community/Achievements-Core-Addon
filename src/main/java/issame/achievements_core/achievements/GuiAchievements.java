@@ -288,7 +288,7 @@ public class GuiAchievements extends GuiScreen {
     }
 
     private void drawAchievementHoverText(int mouseX, int mouseY, Achievement hovered) {
-        if (hovered == null) {
+        if (hovered == null || !isInsideMap(mouseX, mouseY)) {
             return;
         }
 
