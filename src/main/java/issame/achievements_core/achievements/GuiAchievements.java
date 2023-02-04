@@ -3,6 +3,7 @@ package issame.achievements_core.achievements;
 import net.minecraft.src.*;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 public class GuiAchievements extends GuiScreen {
     private static final int PANE_WIDTH = 252;
@@ -63,6 +64,7 @@ public class GuiAchievements extends GuiScreen {
 
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glDepthFunc(GL11.GL_LEQUAL);
+        GL11.glEnable(GL12.GL_RESCALE_NORMAL);
         RenderHelper.enableGUIStandardItemLighting();
 
         drawAchievementConnections();
