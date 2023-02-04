@@ -286,7 +286,7 @@ public class GuiAchievements extends GuiScreen {
         int textHeight = fontRenderer.splitStringWidth(description, textWidth) + fontRenderer.FONT_HEIGHT;
 
         drawGradientRect(x - HOVER_PADDING, y - HOVER_PADDING,
-                x + textWidth + HOVER_PADDING, y + textHeight + HOVER_PADDING,
+                x + textWidth + HOVER_PADDING, y + textHeight + HOVER_PADDING + DESC_PADDING,
                 HOVER_COLOR, HOVER_COLOR);
         fontRenderer.drawStringWithShadow(name, x, y, NAME_COLOUR);
         fontRenderer.drawSplitString(description, x, y + fontRenderer.FONT_HEIGHT + DESC_PADDING,
