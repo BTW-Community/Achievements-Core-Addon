@@ -72,7 +72,7 @@ public class GuiAchievements extends GuiScreen {
         GL11.glEnable(GL11.GL_BLEND);
 
         drawUnselectedTabs();
-        drawFrame();
+        drawBorder();
         drawTab(selectedTabIndex);
         drawTitle();
 
@@ -203,11 +203,12 @@ public class GuiAchievements extends GuiScreen {
                 hovered = achievement;
             }
 
-            mc.renderEngine.bindTexture(String.format("/achievements_core/shape/%s.png", achievement.getFrameSet()));
+            mc.renderEngine.bindTexture(String.format("/achievements_core/frame_set/%s.png", achievement.getFrameSet()));
             drawTexturedModalRect(x, y, achievement.getFrameU(), achievement.getFrameV(), Achievement.SIZE, Achievement.SIZE);
 
             offset = (Achievement.SIZE - TILE_SIZE) / 2;
-            renderItem.renderItemAndEffectIntoGUI(mc.fontRenderer, mc.renderEngine, achievement.getIcon(), x + offset, y + offset);
+            renderItem.renderItemAndEffectIntoGUI(mc.fontRenderer, mc.renderEngine, achievement.getIcon(),
+                    x + offset, y + offset);
         }
         return hovered;
     }
@@ -245,15 +246,15 @@ public class GuiAchievements extends GuiScreen {
         return (tabIndex + 1 <= TABS_P_PAGE * (page - 1)) || (tabIndex + 1 > TABS_P_PAGE * page);
     }
 
-    private void drawFrame() {
-        mc.renderEngine.bindTexture("/achievements_core/frame.png");
+    private void drawBorder() {
+        mc.renderEngine.bindTexture("/achievements_core/border.png");
         drawTexturedModalRect(getGuiX(), getGuiY(), 0, 0, PANE_WIDTH, PANE_HEIGHT);
     }
 
     private void drawTitle() {
         int guiX = (width - PANE_WIDTH) / 2;
         int guiY = (height - PANE_HEIGHT) / 2;
-        fontRenderer.drawString("Achievements",
+        fontRenderer.drawString(StatCollector.translateToLocal("achievement.title"),
                 guiX + TILE_SIZE, guiY + TILE_SIZE / 2, Colors.TITLE_COLOR);
     }
 

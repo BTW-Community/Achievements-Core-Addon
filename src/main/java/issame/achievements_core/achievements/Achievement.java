@@ -9,19 +9,15 @@ public class Achievement {
     public static final int SIZE = 26;
 
     public boolean isHidden = false;
-    public String frameSet = "default";
 
     private final String name;
     private final int column;
     private final int row;
     private final ItemStack icon;
     private final AchievementTab tab;
+    private final AchievementFrame frame = new AchievementFrame(this);
 
     private Achievement[] parents;
-
-    // uv coordinates from frameSet.
-    private int u = 0;
-    private int v = 0;
 
     public Achievement(String name, int column, int row, ItemStack icon, AchievementTab tab) {
         this.name = "achievement." + name;
@@ -59,21 +55,25 @@ public class Achievement {
     }
 
     public String getFrameSet() {
-        return frameSet;
+        return frame.frameSet;
     }
 
-    public Achievement setFrame(int x, int y) {
-        u = SIZE * x;
-        v = SIZE * y;
+    public Achievement setFrameSet(String frameSet) {
+        frame.frameSet = frameSet;
+        return this;
+    }
+
+    public Achievement setFrame(int index) {
+        frame.setFrame(index);
         return this;
     }
 
     public int getFrameU() {
-        return u;
+        return frame.getU();
     }
 
     public int getFrameV() {
-        return v;
+        return frame.getV();
     }
 
     public Achievement setHidden() {
