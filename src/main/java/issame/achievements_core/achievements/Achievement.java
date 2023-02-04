@@ -96,4 +96,8 @@ public class Achievement {
     public String getDescription() {
         return StatCollector.translateToLocal(name + ".desc");
     }
+
+    public AchievementStatus getStatus() {
+        return AchievementStatus.CAN_UNLOCK;
+    }
 }

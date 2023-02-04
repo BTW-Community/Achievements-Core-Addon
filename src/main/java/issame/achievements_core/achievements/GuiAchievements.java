@@ -150,8 +150,9 @@ public class GuiAchievements extends GuiScreen {
         }
 
         for (Achievement achievement : tab) {
-            // TODO: skip hidden achievements
-            drawConnectionsToParent(achievement);
+            if (!achievement.isHidden) {
+                drawConnectionsToParent(achievement);
+            }
         }
     }
 
@@ -170,9 +171,9 @@ public class GuiAchievements extends GuiScreen {
             int x2 = parent.getColumn() * Achievement.SIZE + getGuiX() - mapX;
             int y2 = parent.getRow() * Achievement.SIZE + getGuiY() - mapY;
 
-            // TODO: Change color based on unlock status
-            drawHorizontalLine(x1, x2, y1, Colors.LOCKED);
-            drawVerticalLine(x2, y1, y2, Colors.LOCKED);
+            int color = Colors.getConnectionColor(achievement);
+            drawHorizontalLine(x1, x2, y1, color);
+            drawVerticalLine(x2, y1, y2, color);
         }
     }
 
