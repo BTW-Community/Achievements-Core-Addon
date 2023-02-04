@@ -37,7 +37,7 @@ public class GuiAchievements extends GuiScreen {
     private int prevMouseY = 0;
 
     private int selectedTabIndex = 0;
-    private int page = 1;
+    private int page = 0;
 
     private final RenderItem renderItem = new RenderItem();
 
@@ -95,6 +95,35 @@ public class GuiAchievements extends GuiScreen {
         } else {
             super.keyTyped(keyChar, keyCode);
         }
+    }
+
+    @Override
+    protected void mouseMovedOrUp(int mouseX, int mouseY, int which) {
+        AchievementTab tab = getHoveredTab(mouseX, mouseY);
+        if (which < 0 || tab == null) {
+            super.mouseMovedOrUp(mouseX, mouseY, which);
+            return;
+        }
+        selectedTabIndex = tab.getIndex();
+    }
+
+    @Override
+    public void handleMouseInput() {
+        int direction = -Mouse.getEventDWheel();
+        if (direction < 0 && hasPrevPage()) {
+            page--;
+        } else if (direction > 0 && hasNextPage()) {
+            page++;
+        }
+        super.handleMouseInput();
+    }
+
+    private boolean hasNextPage() {
+        return AchievementTabList.size() > TABS_P_PAGE * (page + 1);
+    }
+
+    private boolean hasPrevPage() {
+        return page > 0;
     }
 
     private void updateMapPosition(int mouseX, int mouseY) {
@@ -253,7 +282,7 @@ public class GuiAchievements extends GuiScreen {
     }
 
     private boolean isTabOffPage(int tabIndex) {
-        return (tabIndex + 1 <= TABS_P_PAGE * (page - 1)) || (tabIndex + 1 > TABS_P_PAGE * page);
+        return (tabIndex + 1 <= TABS_P_PAGE * page) || (tabIndex + 1 > TABS_P_PAGE * (page + 1));
     }
 
     private void drawBorder() {
@@ -275,12 +304,12 @@ public class GuiAchievements extends GuiScreen {
         int rightX = getGuiX() + PANE_WIDTH + ARROW_OFFSET_X;
         int y = getGuiY() - ARROW_HEIGHT - ARROW_OFFSET_Y;
 
-        if (page > 1) {
+        if (hasPrevPage()) {
             // Show left button.
             int u = isPosInRect(mouseX, mouseY, leftX, y, ARROW_WIDTH, ARROW_HEIGHT) ? 189 : 177;
             drawTexturedModalRect(leftX, y, u, 21, ARROW_WIDTH, ARROW_HEIGHT);
         }
-        if (AchievementTabList.size() > TABS_P_PAGE * page) {
+        if (hasNextPage()) {
             // Show right button.
             int u = isPosInRect(mouseX, mouseY, rightX, y, ARROW_WIDTH, ARROW_HEIGHT) ? 189 : 177;
             drawTexturedModalRect(rightX, y, u, 2, ARROW_WIDTH, ARROW_HEIGHT);

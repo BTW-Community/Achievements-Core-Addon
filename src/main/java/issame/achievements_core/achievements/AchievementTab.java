@@ -56,6 +56,10 @@ public class AchievementTab implements Iterable<Achievement> {
         return iconID;
     }
 
+    public int getIndex() {
+        return index;
+    }
+
     public int size() {
         return achievements.size();
     }
