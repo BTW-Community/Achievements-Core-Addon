@@ -185,9 +185,14 @@ public class GuiAchievements extends GuiScreen {
 
         Achievement hovered = null;
         for (Achievement achievement : tab) {
-            // TODO: skip hidden achievements
-            // TODO: Change color based on unlock status
+            if (achievement.isHidden) {
+                continue;
+            }
+
             float brightness = 1;
+            if (achievement.getStatus() == AchievementStatus.LOCKED) {
+                brightness = 0.3f;
+            }
             GL11.glColor4f(brightness, brightness, brightness, 1);
 
             int offset = Achievement.SIZE / 2;

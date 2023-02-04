@@ -98,6 +98,6 @@ public class Achievement {
     }
 
     public AchievementStatus getStatus() {
-        return AchievementStatus.CAN_UNLOCK;
+        return AchievementStatus.LOCKED;
     }
 }
