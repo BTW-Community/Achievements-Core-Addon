@@ -1,5 +1,6 @@
 package issame.achievements_core.achievements;
 
+import issame.achievements_core.Colors;
 import net.minecraft.src.*;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
@@ -19,18 +20,15 @@ public class GuiAchievements extends GuiScreen {
     private static final int ARROW_OFFSET_Y = 6;
 
     private static final int TILE_SIZE = 16;
-    private static final int TITLE_COLOR = 4210752;
+
     private static final int TABS_P_PAGE = 9;
     private static final int TAB_OFFSET = 4;
 
     private static final int HOVER_OFFSET_X = 12;
     private static final int HOVER_OFFSET_Y = -4;
     private static final int HOVER_PADDING = 3;
-    private static final int HOVER_COLOR = -1073741824;
 
     private static final int DESC_PADDING = 3;
-    private static final int DESC_COLOUR = -6250336;
-    private static final int NAME_COLOUR = -1;
 
     private int mapX = 0;
     private int mapY = 0;
@@ -173,9 +171,8 @@ public class GuiAchievements extends GuiScreen {
             int y2 = parent.getRow() * Achievement.SIZE + getGuiY() - mapY;
 
             // TODO: Change color based on unlock status
-            int color = -16777216;
-            drawHorizontalLine(x1, x2, y1, color);
-            drawVerticalLine(x2, y1, y2, color);
+            drawHorizontalLine(x1, x2, y1, Colors.LOCKED);
+            drawVerticalLine(x2, y1, y2, Colors.LOCKED);
         }
     }
 
@@ -251,7 +248,7 @@ public class GuiAchievements extends GuiScreen {
         int guiX = (width - PANE_WIDTH) / 2;
         int guiY = (height - PANE_HEIGHT) / 2;
         fontRenderer.drawString("Achievements",
-                guiX + TILE_SIZE, guiY + TILE_SIZE / 2, TITLE_COLOR);
+                guiX + TILE_SIZE, guiY + TILE_SIZE / 2, Colors.TITLE_COLOR);
     }
 
     private void drawPageButtons(int mouseX, int mouseY) {
@@ -289,10 +286,10 @@ public class GuiAchievements extends GuiScreen {
 
         drawGradientRect(x - HOVER_PADDING, y - HOVER_PADDING,
                 x + textWidth + HOVER_PADDING, y + textHeight + HOVER_PADDING + DESC_PADDING,
-                HOVER_COLOR, HOVER_COLOR);
-        fontRenderer.drawStringWithShadow(name, x, y, NAME_COLOUR);
+                Colors.HOVER_COLOR, Colors.HOVER_COLOR);
+        fontRenderer.drawStringWithShadow(name, x, y, Colors.NAME_COLOUR);
         fontRenderer.drawSplitString(description, x, y + fontRenderer.FONT_HEIGHT + DESC_PADDING,
-                textWidth, DESC_COLOUR);
+                textWidth, Colors.DESC_COLOUR);
     }
 
     private void drawTabHoverText(int mouseX, int mouseY) {
@@ -311,9 +308,9 @@ public class GuiAchievements extends GuiScreen {
 
         drawGradientRect(x - HOVER_PADDING, y - HOVER_PADDING,
                 x + textWidth + HOVER_PADDING, y + textHeight + HOVER_PADDING,
-                HOVER_COLOR, HOVER_COLOR);
+                Colors.HOVER_COLOR, Colors.HOVER_COLOR);
 
-        fontRenderer.drawStringWithShadow(name, x, y, NAME_COLOUR);
+        fontRenderer.drawStringWithShadow(name, x, y, Colors.NAME_COLOUR);
     }
 
     private AchievementTab getHoveredTab(int mouseX, int mouseY) {
