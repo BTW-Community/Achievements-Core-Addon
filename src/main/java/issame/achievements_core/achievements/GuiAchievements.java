@@ -58,7 +58,7 @@ public class GuiAchievements extends GuiScreen {
         // Apologies in advance.
         GL11.glPushMatrix();
         GL11.glDepthFunc(GL11.GL_GEQUAL);
-        GL11.glTranslatef(0, 0, -1);
+        GL11.glTranslatef(0, 0, -200);
 
         drawMapBackground();
 
