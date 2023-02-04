@@ -26,6 +26,8 @@ public class GuiAchievements extends GuiScreen {
     private static final int HOVER_OFFSET_Y = -4;
     private static final int HOVER_PADDING = 3;
 
+    private static final int DESC_PADDING = 3;
+
     private int mapX = 0;
     private int mapY = 0;
 
@@ -76,7 +78,6 @@ public class GuiAchievements extends GuiScreen {
 
         drawPageButtons(mouseX, mouseY);
         drawAchievementHoverText(mouseX, mouseY, hovered);
-        // Draw hovered achievement
         // Draw hovered tab
 
         RenderHelper.disableStandardItemLighting();
@@ -286,7 +287,8 @@ public class GuiAchievements extends GuiScreen {
                 x + textWidth + HOVER_PADDING, y + textHeight + HOVER_PADDING,
                 -1073741824, -1073741824);
         fontRenderer.drawStringWithShadow(name, x, y, -1);
-        fontRenderer.drawSplitString(description, x, y + fontRenderer.FONT_HEIGHT, textWidth, -6250336);
+        fontRenderer.drawSplitString(description, x, y + fontRenderer.FONT_HEIGHT + DESC_PADDING,
+                textWidth, -6250336);
     }
 
     private boolean isPosInRect(int posX, int posY, int rectX, int rectY, int rectW, int rectH) {
