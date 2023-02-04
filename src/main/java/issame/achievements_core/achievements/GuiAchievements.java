@@ -3,6 +3,7 @@ package issame.achievements_core.achievements;
 import net.minecraft.src.*;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 public class GuiAchievements extends GuiScreen {
     private static final int PANE_WIDTH = 252;
@@ -20,6 +21,10 @@ public class GuiAchievements extends GuiScreen {
     private static final int TILE_SIZE = 16;
     private static final int TITLE_COLOR = 4210752;
     private static final int TABS_P_PAGE = 9;
+
+    private static final int HOVER_OFFSET_X = 12;
+    private static final int HOVER_OFFSET_Y = -4;
+    private static final int HOVER_PADDING = 3;
 
     private int mapX = 0;
     private int mapY = 0;
@@ -270,16 +275,17 @@ public class GuiAchievements extends GuiScreen {
         String name = hovered.getName();
         String description = hovered.getDescription();
 
-        int x = mouseX;
-        int y = mouseY;
+        int x = mouseX + HOVER_OFFSET_X;
+        int y = mouseY + HOVER_OFFSET_Y;
 
-        int lineHeight = fontRenderer.FONT_HEIGHT;
         int textWidth = Math.max(fontRenderer.getStringWidth(name), 120);
-        int textHeight = fontRenderer.splitStringWidth(description, textWidth) + lineHeight;
+        int textHeight = fontRenderer.splitStringWidth(description, textWidth) + fontRenderer.FONT_HEIGHT;
 
-        drawGradientRect(x, y, x + textWidth, y + textHeight, -1073741824, -1073741824);
+        drawGradientRect(x - HOVER_PADDING, y - HOVER_PADDING,
+                x + textWidth + HOVER_PADDING, y + textHeight + HOVER_PADDING,
+                -1073741824, -1073741824);
         fontRenderer.drawStringWithShadow(name, x, y, -1);
-        fontRenderer.drawSplitString(description, x, y + lineHeight, textWidth, -1);
+        fontRenderer.drawSplitString(description, x, y + fontRenderer.FONT_HEIGHT, textWidth, -6250336);
     }
 
     private boolean isPosInRect(int posX, int posY, int rectX, int rectY, int rectW, int rectH) {
