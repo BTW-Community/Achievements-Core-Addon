@@ -191,7 +191,7 @@ public class GuiAchievements extends GuiScreen {
 
             float brightness = 1;
             if (achievement.getStatus() == AchievementStatus.LOCKED) {
-                brightness = 0.3f;
+                brightness = .3f;
             }
             GL11.glColor4f(brightness, brightness, brightness, 1);
 
@@ -206,9 +206,19 @@ public class GuiAchievements extends GuiScreen {
             mc.renderEngine.bindTexture(String.format("/achievements_core/frame_set/%s.png", achievement.getFrameSet()));
             drawTexturedModalRect(x, y, achievement.getFrameU(), achievement.getFrameV(), Achievement.SIZE, Achievement.SIZE);
 
+            if (achievement.getStatus() == AchievementStatus.LOCKED) {
+                brightness = .1f;
+                GL11.glColor4f(brightness, brightness, brightness, 1);
+                renderItem.renderWithColor = false;
+            }
+
             offset = (Achievement.SIZE - TILE_SIZE) / 2;
             renderItem.renderItemAndEffectIntoGUI(mc.fontRenderer, mc.renderEngine, achievement.getIcon(),
                     x + offset, y + offset);
+            GL11.glDisable(GL11.GL_LIGHTING);
+            renderItem.renderWithColor = true;
+
+            GL11.glColor4f(1, 1, 1, 1);
         }
         return hovered;
     }
