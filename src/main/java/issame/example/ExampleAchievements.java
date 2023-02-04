@@ -58,7 +58,7 @@ private static ExampleAchievements instance;
 				.setParents(killPig).setFrame(3, 0);
 		drinkMilk = (new Achievement("drinkMilk", 2, -3, Item.bucketMilk, tabSimple))
 				.setParents(cookPork).setFrame(3, 1);
-		cookIron = (new Achievement("cookIron", 3, 0, BTWItems.ironOreChunk, tabSimple))
+		cookIron = (new Achievement("cookIron", 3, 0, BTWBlocks.ironOreChunkStorage, tabSimple))
 				.setParents(chiselStone);
 		neuterCreeper = (new Achievement("neuterCreeper", 3, 1, BTWItems.creeperOysters, tabSimple))
 				.setParents(cookIron).setHidden();
