@@ -208,10 +208,9 @@ public class GuiAchievements extends GuiScreen {
 
     private void drawUnselectedTabs() {
         for (int tabIndex = 0; tabIndex < AchievementTabList.size(); tabIndex++) {
-            if (tabIndex == selectedTabIndex) {
-                continue;
+            if (tabIndex != selectedTabIndex) {
+                drawTab(tabIndex);
             }
-            drawTab(tabIndex);
         }
     }
 
