@@ -250,8 +250,10 @@ public class GuiAchievements extends GuiScreen {
             }
 
             offset = (Achievement.SIZE - TILE_SIZE) / 2;
+            renderItem.zLevel = 100;
             renderItem.renderItemAndEffectIntoGUI(mc.fontRenderer, mc.renderEngine, achievement.getIcon(),
                     x + offset, y + offset);
+            renderItem.zLevel = 0;
             GL11.glDisable(GL11.GL_LIGHTING);
             renderItem.renderWithColor = true;
 
@@ -288,13 +290,16 @@ public class GuiAchievements extends GuiScreen {
         int u = 0;
         int v = tabIndex == selectedTabIndex ? TAB_HEIGHT : 0;
 
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         mc.renderEngine.bindTexture("/gui/allitems.png");
         drawTexturedModalRect(x, y, u, v, TAB_WIDTH, TAB_HEIGHT);
 
         ItemStack icon = new ItemStack(Item.itemsList[tab.getIconID()]);
         x += (TAB_WIDTH - TILE_SIZE) / 2;
         y += (TAB_HEIGHT - TILE_SIZE) / 4;
+        renderItem.zLevel = 100;
         renderItem.renderItemAndEffectIntoGUI(fontRenderer, mc.renderEngine, icon, x, y + TAB_OFFSET);
+        renderItem.zLevel = 0;
     }
 
     private boolean isTabOffPage(int tabIndex) {
