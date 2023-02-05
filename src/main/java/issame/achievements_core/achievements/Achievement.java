@@ -98,6 +98,14 @@ public class Achievement {
     }
 
     public AchievementStatus getStatus() {
+        if (parents == null) {
+            return AchievementStatus.CAN_UNLOCK;
+        }
+        for (Achievement parent : parents) {
+            if (parent.getStatus() == AchievementStatus.UNLOCKED) {
+                return AchievementStatus.CAN_UNLOCK;
+            }
+        }
         return AchievementStatus.LOCKED;
     }
 }

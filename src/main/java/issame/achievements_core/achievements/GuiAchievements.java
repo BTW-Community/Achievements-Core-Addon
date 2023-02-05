@@ -109,6 +109,7 @@ public class GuiAchievements extends GuiScreen {
 
     @Override
     public void handleMouseInput() {
+        // Scroll to change pages.
         int direction = -Mouse.getEventDWheel();
         if (direction < 0 && hasPrevPage()) {
             page--;
@@ -194,11 +195,11 @@ public class GuiAchievements extends GuiScreen {
                 continue;
             }
 
-            int x1 = achievement.getColumn() * Achievement.SIZE + getGuiX() - mapX;
-            int y1 = achievement.getRow() * Achievement.SIZE + getGuiY() - mapY;
+            int x1 = getAchievementPosX(achievement);
+            int y1 = getAchievementPosY(achievement);
 
-            int x2 = parent.getColumn() * Achievement.SIZE + getGuiX() - mapX;
-            int y2 = parent.getRow() * Achievement.SIZE + getGuiY() - mapY;
+            int x2 = getAchievementPosX(parent);
+            int y2 = getAchievementPosY(parent);
 
             int color = Colors.getConnectionColor(achievement);
             drawHorizontalLine(x1, x2, y1, color);
@@ -225,8 +226,8 @@ public class GuiAchievements extends GuiScreen {
             GL11.glColor4f(brightness, brightness, brightness, 1);
 
             int offset = Achievement.SIZE / 2;
-            int x = achievement.getColumn() * Achievement.SIZE + getGuiX() - mapX - offset;
-            int y = achievement.getRow() * Achievement.SIZE + getGuiY() - mapY - offset;
+            int x = getAchievementPosX(achievement) - offset;
+            int y = getAchievementPosY(achievement) - offset;
 
             if (isPosInRect(mouseX, mouseY, x, y, Achievement.SIZE, Achievement.SIZE)) {
                 hovered = achievement;
@@ -252,6 +253,14 @@ public class GuiAchievements extends GuiScreen {
         return hovered;
     }
 
+    private int getAchievementPosX(Achievement achievement) {
+        return (int) (achievement.getColumn() / 2.0 * Achievement.SIZE + getGuiX() - mapX);
+    }
+
+    private int getAchievementPosY(Achievement achievement) {
+        return (int) (achievement.getRow() / 2.0 * Achievement.SIZE + getGuiY() - mapY);
+    }
+
     private void drawUnselectedTabs() {
         for (int tabIndex = 0; tabIndex < AchievementTabList.size(); tabIndex++) {
             if (tabIndex != selectedTabIndex) {
@@ -260,6 +269,7 @@ public class GuiAchievements extends GuiScreen {
         }
     }
 
+    // TODO: Fix unselected tab icons rendering without shadow...
     private void drawTab(int tabIndex) {
         AchievementTab tab = AchievementTabList.get(tabIndex);
         if (tab == null || isTabOffPage(tabIndex)) {

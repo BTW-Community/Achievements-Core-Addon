@@ -45,33 +45,32 @@ private static ExampleAchievements instance;
 		AddonHandler.logMessage(this.getName() + " Version " + this.getVersionString() + " Initializing...");
 		
 		AchievementTab tabSimple = new AchievementTab("simple").setIcon(BTWBlocks.companionCube);
-		mineBark = new Achievement("mineBark", 0, 0, BTWItems.bark, tabSimple);
-
+		mineBark = new Achievement("mineBark", 0, -1, BTWItems.bark, tabSimple);
 		mineStick = new Achievement("mineStick", 0, 1, Item.stick, tabSimple);
-		chiselWood = new Achievement("chiselWood", 1, 0, BTWItems.pointyStick, tabSimple)
+		chiselWood = new Achievement("chiselWood", 2, 0, BTWItems.pointyStick, tabSimple)
 				.setParents(mineBark, mineStick);
-		chiselStone = new Achievement("chiselStone", 2, 0, BTWItems.sharpStone, tabSimple)
+		chiselStone = new Achievement("chiselStone", 4, 0, BTWItems.sharpStone, tabSimple)
 				.setParents(chiselWood);
-		killPig = (new Achievement("killPig", 2, -1, Item.porkRaw, tabSimple))
+		killPig = (new Achievement("killPig", 4, -2, Item.porkRaw, tabSimple))
 				.setParents(chiselStone).setFrame(2);
-		cookPork = (new Achievement("cookPork", 2, -2, Item.porkCooked, tabSimple))
+		cookPork = (new Achievement("cookPork", 4, -4, Item.porkCooked, tabSimple))
 				.setParents(killPig).setFrame(1);
-		drinkMilk = (new Achievement("drinkMilk", 2, -3, Item.bucketMilk, tabSimple))
+		drinkMilk = (new Achievement("drinkMilk", 4, -6, Item.bucketMilk, tabSimple))
 				.setParents(cookPork).setFrame(3);
-		cookIron = (new Achievement("cookIron", 3, 0, BTWBlocks.ironOreChunkStorage, tabSimple))
+		cookIron = (new Achievement("cookIron", 6, 0, BTWBlocks.ironOreChunkStorage, tabSimple))
 				.setParents(chiselStone);
-		neuterCreeper = (new Achievement("neuterCreeper", 3, 1, BTWItems.creeperOysters, tabSimple))
+		neuterCreeper = (new Achievement("neuterCreeper", 6, 2, BTWItems.creeperOysters, tabSimple))
 				.setParents(cookIron).setHidden();
 		System.out.println("Simple Tab: " + tabSimple.size() + " achievements");
 
 		AchievementTab tabCustom = new CustomAchievementTab("custom").setIcon(BTWItems.waterWheel);
 		netherPortal = (new Achievement("netherPortal", 0, 0, Block.obsidian, tabCustom))
 				.setParents(neuterCreeper);
-		firePotion = (new Achievement("firePotion", 0, 1, Item.potion, tabCustom))
+		firePotion = (new Achievement("firePotion", 0, 2, Item.potion, tabCustom))
 				.setParents(netherPortal);
-		cureVillager = (new Achievement("cureVillager", 1, 0, Item.emerald, tabCustom))
+		cureVillager = (new Achievement("cureVillager", 2, 0, Item.emerald, tabCustom))
 				.setParents(netherPortal).setFrame(2);
-		levelUpFarmer = (new Achievement("levelUpFarmer", 2, 0, Block.blockEmerald, tabCustom))
+		levelUpFarmer = (new Achievement("levelUpFarmer", 4, 0, Block.blockEmerald, tabCustom))
 				.setParents(cureVillager).setFrame(1);
 		System.out.println("Custom Tab: " + tabCustom.size() + " achievements");
 
