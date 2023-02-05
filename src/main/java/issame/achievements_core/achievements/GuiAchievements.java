@@ -48,6 +48,9 @@ public class GuiAchievements extends GuiScreen {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        // TODO: Stop enchantment glint appearing outside border
+        // TODO: Fix rendering when background has a transparent block
+
         drawDefaultBackground();
         updateMapPosition(mouseX, mouseY);
 
