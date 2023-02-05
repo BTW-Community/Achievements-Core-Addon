@@ -63,12 +63,12 @@ private static ExampleAchievements instance;
 				.setParents(cookIron).setHidden();
 		System.out.println("Simple Tab: " + tabSimple.size() + " achievements");
 
-		AchievementTab tabCustom = new CustomAchievementTab("custom").setIcon(BTWItems.waterWheel);
+		AchievementTab tabCustom = new CustomAchievementTab("custom").setIcon(Item.netherStar);
 		netherPortal = (new Achievement("netherPortal", 0, 0, Block.obsidian, tabCustom))
 				.setParents(neuterCreeper);
 		firePotion = (new Achievement("firePotion", 0, 2, Item.potion, tabCustom))
 				.setParents(netherPortal);
-		cureVillager = (new Achievement("cureVillager", 2, 0, Item.emerald, tabCustom))
+		cureVillager = (new Achievement("cureVillager", 2, 0, BTWItems.soulUrn, tabCustom))
 				.setParents(netherPortal).setFrame(2);
 		levelUpFarmer = (new Achievement("levelUpFarmer", 4, 0, Block.blockEmerald, tabCustom))
 				.setParents(cureVillager).setFrame(1);
