@@ -146,13 +146,18 @@ public class GuiAchievements extends GuiScreen {
     }
 
     private boolean isInsideMap(int xPos, int yPos) {
-        int mapLeft = getGuiX() + TILE_SIZE;
-        int mapRight = getGuiX() + PANE_WIDTH - TILE_SIZE;
-        int mapTop = getGuiY() + TILE_SIZE;
-        int mapBottom = getGuiY() + PANE_HEIGHT - TILE_SIZE;
+        int mapX = getGuiX() + TILE_SIZE;
+        int mapY = getGuiY() + TILE_SIZE;
+        int mapWidth = (getGuiX() + PANE_WIDTH - TILE_SIZE) - mapX;
+        int mapHeight = (getGuiY() + PANE_HEIGHT - TILE_SIZE) - mapY;
 
-        return (xPos >= mapLeft && xPos <= mapRight)
-                && (yPos >= mapTop && yPos <= mapBottom);
+        return isPosInRect(xPos, yPos, mapX, mapY, mapWidth, mapHeight);
+    }
+
+    private boolean isPosInRect(int posX, int posY, int rectX, int rectY, int rectW, int rectH) {
+        boolean x = posX >= rectX && posX <= rectX + rectW;
+        boolean y = posY >= rectY && posY <= rectY + rectH;
+        return x && y;
     }
 
     private void drawMapBackground() {
@@ -395,12 +400,6 @@ public class GuiAchievements extends GuiScreen {
             }
         }
         return null;
-    }
-
-    private boolean isPosInRect(int posX, int posY, int rectX, int rectY, int rectW, int rectH) {
-        boolean x = posX >= rectX && posX <= rectX + rectW;
-        boolean y = posY >= rectY && posY <= rectY + rectH;
-        return x && y;
     }
 
     private int getGuiX() {
