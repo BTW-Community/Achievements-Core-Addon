@@ -70,6 +70,7 @@ public class GuiAchievements extends GuiScreen {
 
         GL11.glPopMatrix();
         GL11.glEnable(GL11.GL_BLEND);
+        GL11.glEnable(GL11.GL_LIGHTING);
 
         drawUnselectedTabs();
         drawBorder();
@@ -269,7 +270,6 @@ public class GuiAchievements extends GuiScreen {
         }
     }
 
-    // TODO: Fix unselected tab icons rendering without shadow...
     private void drawTab(int tabIndex) {
         AchievementTab tab = AchievementTabList.get(tabIndex);
         if (tab == null || isTabOffPage(tabIndex)) {
