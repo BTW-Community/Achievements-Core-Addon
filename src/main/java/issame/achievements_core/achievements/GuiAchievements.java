@@ -303,7 +303,7 @@ public class GuiAchievements extends GuiScreen {
     private void drawTitle() {
         int guiX = (width - PANE_WIDTH) / 2;
         int guiY = (height - PANE_HEIGHT) / 2;
-        fontRenderer.drawString(StatCollector.translateToLocal("achievement.title"),
+        fontRenderer.drawString(StatCollector.translateToLocal("gui.achievements"),
                 guiX + TILE_SIZE, guiY + TILE_SIZE / 2, Colors.TITLE_COLOR);
     }
 
