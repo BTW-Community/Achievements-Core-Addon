@@ -61,7 +61,6 @@ public class ExampleAchievements extends BTWAddon {
                 .setParents(chiselStone);
         neuterCreeper = (new Achievement("neuterCreeper", 6, 2, BTWItems.creeperOysters, tabSimple))
                 .setParents(cookIron).setHidden();
-        System.out.println("Simple Tab: " + tabSimple.size() + " achievements");
 
         AchievementTab tabCustom = new CustomAchievementTab("custom").setIcon(Item.netherStar);
         netherPortal = (new Achievement("netherPortal", 0, 0, Block.obsidian, tabCustom))
@@ -72,9 +71,8 @@ public class ExampleAchievements extends BTWAddon {
                 .setParents(netherPortal).setFrame(2);
         levelUpFarmer = (new Achievement("levelUpFarmer", 4, 0, Block.blockEmerald, tabCustom))
                 .setParents(cureVillager).setFrame(1);
-        System.out.println("Custom Tab: " + tabCustom.size() + " achievements");
 
         EventDispatcher.register(new ExampleEventHandler());
-        AddonHandler.logMessage(this.getName() + " Initialized");
+        AddonHandler.logMessage(this.getName() + " Initialization Complete.");
     }
 }

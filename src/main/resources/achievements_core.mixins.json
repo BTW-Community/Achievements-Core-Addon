@@ -4,7 +4,8 @@
   "package": "issame.achievements_core.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "MinecraftMixin"
+    "MinecraftMixin",
+    "SlotCraftingMixin"
   ],
   "client": [
   ],

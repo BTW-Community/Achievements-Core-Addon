@@ -1,5 +1,12 @@
 package issame.example;
 
+import btw.item.BTWItems;
+import issame.achievements_core.AchievementsCore;
+import issame.achievements_core.event.EventListener;
+import issame.achievements_core.event.EventType;
+import net.minecraft.src.EntityPlayer;
+import net.minecraft.src.ItemStack;
+
 /**
  * An example event handler.
  * <p>
@@ -7,17 +14,16 @@ package issame.example;
  * and the relevant parameters.
  */
 public class ExampleEventHandler {
-	/*
 	@EventListener(EventType.CRAFTED)
 	public void onCrafted(EntityPlayer player, ItemStack itemstack) {
-		if (itemstack.itemID == FCBetterThanWolves.fcItemChiselWood.itemID) {
-            player.triggerAchievement(ExampleAchievements.chiselWood);
+		if (itemstack.itemID == BTWItems.pointyStick.itemID) {
+            AchievementsCore.triggerAchievement(player, ExampleAchievements.chiselWood);
         }
-		else if (itemstack.itemID == FCBetterThanWolves.fcItemChiselStone.itemID) {
-            player.triggerAchievement(ExampleAchievements.chiselStone);
+		else if (itemstack.itemID == BTWItems.sharpStone.itemID) {
+            AchievementsCore.triggerAchievement(player, ExampleAchievements.chiselStone);
         }
 	}
-	
+	/*
 	@EventListener(EventType.COOKED)
 	public void onCooked(EntityPlayer player, ItemStack itemstack) {
 		if (itemstack.itemID == Item.porkCooked.itemID) {

@@ -1,8 +1,10 @@
 package issame.achievements_core.achievements;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class AchievementTabList {
@@ -23,5 +25,9 @@ public class AchievementTabList {
 
     public static int size() {
         return tabList.size();
+    }
+
+    public static Iterator<AchievementTab> iterator() {
+        return tabList.iterator();
     }
 }
