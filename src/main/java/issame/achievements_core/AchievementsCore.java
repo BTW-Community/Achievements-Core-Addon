@@ -2,10 +2,12 @@ package issame.achievements_core;
 
 import btw.AddonHandler;
 import btw.BTWAddon;
+import btw.world.util.WorldData;
 import issame.achievements_core.achievements.Achievement;
 import issame.achievements_core.achievements.AchievementTab;
 import issame.achievements_core.achievements.AchievementTabList;
 import net.minecraft.src.EntityPlayer;
+import net.minecraft.src.NBTTagCompound;
 
 import java.util.Iterator;
 
@@ -30,6 +32,18 @@ public class AchievementsCore extends BTWAddon {
             AchievementTab tab = it.next();
             AddonHandler.logMessage(String.format("%s: %d achievements", tab.getName(), tab.size()));
         }
+    }
+
+    @Override
+    public WorldData createWorldData() {
+        return new AchievementsCoreWorldData();
+    }
+
+    public static NBTTagCompound saveDataToNBT() {
+        return null;
+    }
+
+    public static void loadDataFromNBT(NBTTagCompound tag) {
     }
 
     public static void triggerAchievement(EntityPlayer player, Achievement achievement) {
