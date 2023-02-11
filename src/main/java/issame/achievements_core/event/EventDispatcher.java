@@ -14,14 +14,14 @@ public class EventDispatcher {
     }
 
     private static void handleEvent(EventType type, Object... args) {
-        for (Object listener: listeners) {
+        for (Object listener : listeners) {
             invokeMethods(listener, type, args);
         }
     }
 
     private static void invokeMethods(Object listener, EventType type, Object... args) {
         Method[] methods = listener.getClass().getMethods();
-        for (Method method: methods) {
+        for (Method method : methods) {
             tryToInvoke(listener, method, type, args);
         }
     }

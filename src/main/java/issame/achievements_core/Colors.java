@@ -1,7 +1,6 @@
 package issame.achievements_core;
 
 import issame.achievements_core.achievements.Achievement;
-import issame.achievements_core.achievements.AchievementStatus;
 
 public class Colors {
     public static final int TITLE_COLOR = 4210752;

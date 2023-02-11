@@ -1,10 +1,16 @@
 package issame.achievements_core.achievements;
 
-import net.minecraft.src.*;
+import net.minecraft.src.Block;
+import net.minecraft.src.Icon;
+import net.minecraft.src.Item;
+import net.minecraft.src.StatCollector;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.opengl.GL11;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
 
 public class AchievementTab implements Iterable<Achievement> {
     private final String name;

@@ -7,16 +7,13 @@ import net.minecraft.src.StatCollector;
 
 public class Achievement {
     public static final int SIZE = 26;
-
-    public boolean isHidden = false;
-
     private final String name;
     private final int column;
     private final int row;
     private final ItemStack icon;
     private final AchievementTab tab;
     private final AchievementFrame frame = new AchievementFrame(this);
-
+    public boolean isHidden = false;
     private Achievement[] parents;
 
     public Achievement(String name, int column, int row, ItemStack icon, AchievementTab tab) {
@@ -41,13 +38,13 @@ public class Achievement {
         return icon;
     }
 
+    public Achievement[] getParents() {
+        return parents;
+    }
+
     public Achievement setParents(Achievement... parents) {
         this.parents = parents;
         return this;
-    }
-
-    public Achievement[] getParents() {
-        return parents;
     }
 
     public AchievementTab getTab() {

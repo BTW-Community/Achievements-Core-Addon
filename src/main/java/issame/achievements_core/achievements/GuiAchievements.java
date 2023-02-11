@@ -29,17 +29,13 @@ public class GuiAchievements extends GuiScreen {
     private static final int HOVER_PADDING = 3;
 
     private static final int DESC_PADDING = 3;
-
+    private final RenderItem renderItem = new RenderItem();
     private int mapX = 0;
     private int mapY = 0;
-
     private int prevMouseX = 0;
     private int prevMouseY = 0;
-
     private int selectedTabIndex = 0;
     private int page = 0;
-
-    private final RenderItem renderItem = new RenderItem();
 
     @Override
     public void initGui() {

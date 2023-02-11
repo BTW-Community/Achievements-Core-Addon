@@ -1,12 +1,8 @@
 package issame.example;
 
-import issame.achievements_core.event.EventListener;
-import issame.achievements_core.event.EventType;
-import net.minecraft.src.*;
-
 /**
  * An example event handler.
- * 
+ * <p>
  * The names of the functions do not matter, all you need are the annotations
  * and the relevant parameters.
  */
