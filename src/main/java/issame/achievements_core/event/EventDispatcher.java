@@ -1,5 +1,7 @@
 package issame.achievements_core.event;
 
+import net.minecraft.src.*;
+
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +13,54 @@ public class EventDispatcher {
         if (!listeners.contains(listener)) {
             listeners.add(listener);
         }
+    }
+
+    public static void onCrafted(EntityPlayer player, ItemStack itemstack) {
+        handleEvent(EventType.CRAFTED, player, itemstack);
+    }
+
+    public static void onCooked(EntityPlayer player, ItemStack itemstack) {
+        handleEvent(EventType.COOKED, player, itemstack);
+    }
+
+    public static void onBrewed(EntityPlayer player, ItemStack itemstack) {
+        handleEvent(EventType.BREWED, player, itemstack);
+    }
+
+    public static void onPickup(EntityPlayer player, ItemStack itemstack) {
+        handleEvent(EventType.PICKUP, player, itemstack);
+    }
+
+    public static void onKilled(EntityPlayer player, EntityLiving entity) {
+        handleEvent(EventType.KILLED, player, entity);
+    }
+
+    public static void onTraveledDimension(EntityPlayer player, int dimension) {
+        handleEvent(EventType.PORTAL, player, dimension);
+    }
+
+    public static void onEntityInteraction(EntityPlayer player, Entity entity) {
+        handleEvent(EventType.ENTITY_INTERACT, player, entity);
+    }
+
+    public static void onBlockConverted(EntityPlayer player, Block block) {
+        handleEvent(EventType.CONVERTED_BLOCK, player, block);
+    }
+
+    public static void onDeath(EntityPlayer player, DamageSource damageSource) {
+        handleEvent(EventType.DEATH, player, damageSource);
+    }
+
+    public static void onTraded(EntityPlayer player, MerchantRecipe recipe) {
+        handleEvent(EventType.TRADED, player, recipe);
+    }
+
+    public static void onCured(EntityPlayer player, EntityZombie zombieVillager) {
+        handleEvent(EventType.CURED, player, zombieVillager);
+    }
+
+    public static void onEaten(EntityPlayer player, ItemStack foodStack) {
+        handleEvent(EventType.EATEN, player, foodStack);
     }
 
     private static void handleEvent(EventType type, Object... args) {
