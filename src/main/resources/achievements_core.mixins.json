@@ -4,6 +4,7 @@
   "package": "issame.achievements_core.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "CampfireBlockMixin",
     "MinecraftMixin",
     "SlotCraftingMixin"
   ],

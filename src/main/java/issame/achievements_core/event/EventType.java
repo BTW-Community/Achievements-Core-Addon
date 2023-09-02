@@ -12,5 +12,5 @@ public enum EventType {
     DEATH,
     TRADED,
     CURED,
-    EATEN,
+    CONSUMED,
 }

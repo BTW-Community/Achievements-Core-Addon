@@ -60,7 +60,7 @@ public class EventDispatcher {
     }
 
     public static void onEaten(EntityPlayer player, ItemStack foodStack) {
-        handleEvent(EventType.EATEN, player, foodStack);
+        handleEvent(EventType.CONSUMED, player, foodStack);
     }
 
     private static void handleEvent(EventType type, Object... args) {
