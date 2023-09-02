@@ -80,16 +80,17 @@ public class AchievementsCore extends BTWAddon {
     /**
      * @param achievement
      * @param player
+     * @param amount
      * @return true when Achievement threshold is passed (triggered Achievement)
      */
-    public static boolean update(Achievement achievement, EntityPlayer player) {
+    public static boolean update(Achievement achievement, EntityPlayer player, int amount) {
         if (!achievementsMap.containsKey(player.getEntityName())) {
             Map<String, Integer> playerAchievements = new HashMap<>();
             achievementsMap.put(player.getEntityName(), playerAchievements);
         }
 
         Map<String, Integer> playerAchievements = achievementsMap.get(player.getEntityName());
-        int count = playerAchievements.getOrDefault(achievement.getUnlocalizedName(), 0) + 1;
+        int count = playerAchievements.getOrDefault(achievement.getUnlocalizedName(), 0) + amount;
 
         if (count > achievement.threshold) {
             return false;
@@ -100,6 +101,10 @@ public class AchievementsCore extends BTWAddon {
         playerAchievements.put(achievement.getUnlocalizedName(), count);
 
         return count == achievement.threshold;
+    }
+
+    public static boolean update(Achievement achievement, EntityPlayer player) {
+        return update(achievement, player, 1);
     }
 
     public static boolean hasUnlocked(Achievement achievement, EntityPlayer player) {

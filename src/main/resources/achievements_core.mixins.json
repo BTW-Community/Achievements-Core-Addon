@@ -4,10 +4,11 @@
   "package": "issame.achievements_core.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "SlotBrewingStandPotionMixin",
     "CampfireBlockMixin",
+    "EntityItemMixin",
     "MinecraftMixin",
     "OvenBlockMixin",
+    "SlotBrewingStandPotionMixin",
     "SlotCraftingMixin"
   ],
   "client": [
