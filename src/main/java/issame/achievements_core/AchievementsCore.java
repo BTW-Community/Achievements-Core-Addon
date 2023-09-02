@@ -8,11 +8,16 @@ import issame.achievements_core.achievements.AchievementTab;
 import issame.achievements_core.achievements.AchievementTabList;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.NBTTagCompound;
+import net.minecraft.src.NBTTagInt;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 public class AchievementsCore extends BTWAddon {
-    private static AchievementsCore instance;
+    // Key is the player name, value is a map of achievement names to values.
+    private static Map<String, Map<String, Integer>> achievementsMap = new HashMap<>();
 
     private AchievementsCore() {
         super("Achievements Core", "3.0.0", "AC");
@@ -40,13 +45,34 @@ public class AchievementsCore extends BTWAddon {
     }
 
     public static NBTTagCompound saveDataToNBT() {
-        return null;
+        NBTTagCompound tag = new NBTTagCompound("Achievements");
+        for (String playerName : achievementsMap.keySet()) {
+            NBTTagCompound playerTag = new NBTTagCompound(playerName);
+            tag.setCompoundTag(playerName, playerTag);
+
+            Map<String, Integer> playerAchievements = achievementsMap.get(playerName);
+            for (String achievementName : playerAchievements.keySet()) {
+                playerTag.setInteger(achievementName, playerAchievements.get(achievementName));
+            }
+        }
+        return tag;
     }
 
     public static void loadDataFromNBT(NBTTagCompound tag) {
+        achievementsMap.clear();
+        for (Object playerObj : tag.getTags()) {
+            NBTTagCompound playerTag = (NBTTagCompound) playerObj;
+            Map<String, Integer> playerAchievements = new HashMap<>();
+            achievementsMap.put(playerTag.getName(), playerAchievements);
+
+            for (Object achievementObj : playerTag.getTags()) {
+                NBTTagInt achievementTag = (NBTTagInt) achievementObj;
+                playerAchievements.put(achievementTag.getName(), achievementTag.data);
+            }
+        }
     }
 
-    public static void triggerAchievement(EntityPlayer player, Achievement achievement) {
-        AddonHandler.logMessage(String.format("%s triggered %s", player.getEntityName(), achievement.getName()));
+    public static void loadBlankData() {
+        achievementsMap.clear();
     }
 }

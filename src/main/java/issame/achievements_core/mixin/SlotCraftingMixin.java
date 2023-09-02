@@ -20,6 +20,5 @@ public abstract class SlotCraftingMixin extends Slot {
     @Inject(method = "onCrafting(Lnet/minecraft/src/ItemStack;)V", at = @At("TAIL"))
     private void onCrafting(ItemStack itemStack, CallbackInfo ci) {
         EventDispatcher.onCrafted(thePlayer, itemStack);
-        System.out.println(itemStack.toString());
     }
 }

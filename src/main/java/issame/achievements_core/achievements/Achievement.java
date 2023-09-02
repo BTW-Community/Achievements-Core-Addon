@@ -1,9 +1,7 @@
 package issame.achievements_core.achievements;
 
-import net.minecraft.src.Block;
-import net.minecraft.src.Item;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.StatCollector;
+import btw.AddonHandler;
+import net.minecraft.src.*;
 
 public class Achievement {
     public static final int SIZE = 26;
@@ -104,5 +102,9 @@ public class Achievement {
             }
         }
         return AchievementStatus.LOCKED;
+    }
+
+    public void trigger(EntityPlayer player) {
+        AddonHandler.logMessage(String.format("%s triggered %s", player.getEntityName(), getName()));
     }
 }
