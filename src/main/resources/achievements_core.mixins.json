@@ -6,6 +6,7 @@
   "mixins": [
     "CampfireBlockMixin",
     "MinecraftMixin",
+    "OvenBlockMixin",
     "SlotCraftingMixin"
   ],
   "client": [
