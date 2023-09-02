@@ -27,7 +27,7 @@ public class AchievementTab implements Iterable<Achievement> {
     private int maxRow = 0;
 
     public AchievementTab(String name) {
-        this.name = "achievementtab." + name;
+        this.name = "tab." + name;
         achievements = new ArrayList<>();
         index = AchievementTabList.add(this);
     }

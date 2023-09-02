@@ -1,6 +1,7 @@
 package issame.achievements_core.achievements;
 
 import btw.AddonHandler;
+import issame.achievements_core.AchievementsCore;
 import net.minecraft.src.*;
 
 public class Achievement {
@@ -12,6 +13,8 @@ public class Achievement {
     private final AchievementTab tab;
     private final AchievementFrame frame = new AchievementFrame(this);
     public boolean isHidden = false;
+    public int threshold = 1;
+    public String formatCode = "§a";
     private Achievement[] parents;
 
     public Achievement(String name, int column, int row, ItemStack icon, AchievementTab tab) {
@@ -67,12 +70,17 @@ public class Achievement {
         return frame.getU();
     }
 
-    public int getFrameV() {
-        return frame.getV();
+    public int getFrameV(EntityPlayer player) {
+        return frame.getV(player);
     }
 
     public Achievement setHidden() {
         isHidden = true;
+        return this;
+    }
+
+    public Achievement setThreshold(int threshold) {
+        this.threshold = threshold;
         return this;
     }
 
@@ -88,23 +96,21 @@ public class Achievement {
         return StatCollector.translateToLocal(name);
     }
 
+    public String getUnlocalizedName() {
+        return name;
+    }
+
     public String getDescription() {
         return StatCollector.translateToLocal(name + ".desc");
     }
 
-    public AchievementStatus getStatus() {
-        if (parents == null) {
-            return AchievementStatus.CAN_UNLOCK;
-        }
+    public AchievementStatus getStatus(EntityPlayer player) {
+        if (AchievementsCore.hasUnlocked(this, player)) return AchievementStatus.UNLOCKED;
+        if (parents == null) return AchievementStatus.CAN_UNLOCK;
+
         for (Achievement parent : parents) {
-            if (parent.getStatus() == AchievementStatus.UNLOCKED) {
-                return AchievementStatus.CAN_UNLOCK;
-            }
+            if (parent.getStatus(player) == AchievementStatus.UNLOCKED) return AchievementStatus.CAN_UNLOCK;
         }
         return AchievementStatus.LOCKED;
-    }
-
-    public void trigger(EntityPlayer player) {
-        AddonHandler.logMessage(String.format("%s triggered %s", player.getEntityName(), getName()));
     }
 }

@@ -6,11 +6,12 @@ import btw.world.util.WorldData;
 import issame.achievements_core.achievements.Achievement;
 import issame.achievements_core.achievements.AchievementTab;
 import issame.achievements_core.achievements.AchievementTabList;
+import net.minecraft.client.Minecraft;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.NBTTagInt;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -74,5 +75,38 @@ public class AchievementsCore extends BTWAddon {
 
     public static void loadBlankData() {
         achievementsMap.clear();
+    }
+
+    /**
+     * @param achievement
+     * @param player
+     * @return true when Achievement threshold is passed (triggered Achievement)
+     */
+    public static boolean update(Achievement achievement, EntityPlayer player) {
+        if (!achievementsMap.containsKey(player.getEntityName())) {
+            Map<String, Integer> playerAchievements = new HashMap<>();
+            achievementsMap.put(player.getEntityName(), playerAchievements);
+        }
+
+        Map<String, Integer> playerAchievements = achievementsMap.get(player.getEntityName());
+        int count = playerAchievements.getOrDefault(achievement.getUnlocalizedName(), 0) + 1;
+
+        if (count > achievement.threshold) {
+            return false;
+        } else if (count == achievement.threshold) {
+            String msg = String.format("%s has made the achievement %s[%s]", player.getEntityName(), achievement.formatCode, achievement.getName());
+            MinecraftServer.getServer().getConfigurationManager().sendChatMsg(msg);
+        }
+        playerAchievements.put(achievement.getUnlocalizedName(), count);
+
+        return count == achievement.threshold;
+    }
+
+    public static boolean hasUnlocked(Achievement achievement, EntityPlayer player) {
+        if (!achievementsMap.containsKey(player.getEntityName())) return false;
+        Map<String, Integer> playerAchievements = achievementsMap.get(player.getEntityName());
+
+        int count = playerAchievements.getOrDefault(achievement.getUnlocalizedName(), 0);
+        return count >= achievement.threshold;
     }
 }

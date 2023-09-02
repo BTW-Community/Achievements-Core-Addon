@@ -212,7 +212,7 @@ public class GuiAchievements extends GuiScreen {
             int x2 = getAchievementPosX(parent);
             int y2 = getAchievementPosY(parent);
 
-            int color = Colors.getConnectionColor(achievement);
+            int color = Colors.getConnectionColor(achievement, mc.thePlayer);
             drawHorizontalLine(x1, x2, y1, color);
             drawVerticalLine(x2, y1, y2, color);
         }
@@ -231,7 +231,7 @@ public class GuiAchievements extends GuiScreen {
             }
 
             float brightness = 1;
-            if (achievement.getStatus() == AchievementStatus.LOCKED) {
+            if (achievement.getStatus(mc.thePlayer) == AchievementStatus.LOCKED) {
                 brightness = .3f;
             }
             GL11.glColor4f(brightness, brightness, brightness, 1);
@@ -245,9 +245,9 @@ public class GuiAchievements extends GuiScreen {
             }
 
             mc.renderEngine.bindTexture(String.format("/achievements_core/frame_set/%s.png", achievement.getFrameSet()));
-            drawTexturedModalRect(x, y, achievement.getFrameU(), achievement.getFrameV(), Achievement.SIZE, Achievement.SIZE);
+            drawTexturedModalRect(x, y, achievement.getFrameU(), achievement.getFrameV(mc.thePlayer), Achievement.SIZE, Achievement.SIZE);
 
-            if (achievement.getStatus() == AchievementStatus.LOCKED) {
+            if (achievement.getStatus(mc.thePlayer) == AchievementStatus.LOCKED) {
                 brightness = .1f;
                 GL11.glColor4f(brightness, brightness, brightness, 1);
                 renderItem.renderWithColor = false;

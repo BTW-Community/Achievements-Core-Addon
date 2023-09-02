@@ -1,5 +1,7 @@
 package issame.achievements_core.achievements;
 
+import net.minecraft.src.EntityPlayer;
+
 import static issame.achievements_core.achievements.Achievement.SIZE;
 
 public class AchievementFrame {
@@ -27,8 +29,8 @@ public class AchievementFrame {
         return u;
     }
 
-    public int getV() {
-        if (achievement.getStatus() == AchievementStatus.UNLOCKED) {
+    public int getV(EntityPlayer player) {
+        if (achievement.getStatus(player) == AchievementStatus.UNLOCKED) {
             return v + SIZE;
         }
         return v;

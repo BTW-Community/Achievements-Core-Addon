@@ -1,6 +1,7 @@
 package issame.achievements_core;
 
 import issame.achievements_core.achievements.Achievement;
+import net.minecraft.src.EntityPlayer;
 
 public class Colors {
     public static final int TITLE_COLOR = 4210752;
@@ -12,8 +13,8 @@ public class Colors {
     public static final int CONNECTION_UNLOCKED = -9408400;
     public static final int CONNECTION_CAN_UNLOCK = -10513578;
 
-    public static int getConnectionColor(Achievement achievement) {
-        switch (achievement.getStatus()) {
+    public static int getConnectionColor(Achievement achievement, EntityPlayer player) {
+        switch (achievement.getStatus(player)) {
             case LOCKED:
                 return CONNECTION_LOCKED;
             case CAN_UNLOCK:

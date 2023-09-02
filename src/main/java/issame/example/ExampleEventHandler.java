@@ -17,10 +17,10 @@ public class ExampleEventHandler {
 	@EventListener(EventType.CRAFTED)
 	public void onCrafted(EntityPlayer player, ItemStack itemstack) {
 		if (itemstack.itemID == BTWItems.pointyStick.itemID) {
-			ExampleAchievements.chiselWood.trigger(player);
+			AchievementsCore.update(ExampleAchievements.chiselWood, player);
         }
 		else if (itemstack.itemID == BTWItems.sharpStone.itemID) {
-			ExampleAchievements.chiselStone.trigger(player);
+			AchievementsCore.update(ExampleAchievements.chiselStone, player);
         }
 	}
 	/*
