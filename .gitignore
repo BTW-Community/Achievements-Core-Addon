@@ -11,7 +11,7 @@ src/btw/**
 # Ignore local Minecraft folder
 .minecraft
 
-run
+run/*
 release
 reobfuscated
 
