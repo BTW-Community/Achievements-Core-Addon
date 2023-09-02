@@ -191,7 +191,7 @@ public class GuiAchievements extends GuiScreen {
         }
 
         for (Achievement achievement : tab) {
-            if (!achievement.isHidden) {
+            if (!achievement.shouldHide(mc.thePlayer)) {
                 drawConnectionsToParent(achievement);
             }
         }
@@ -226,7 +226,7 @@ public class GuiAchievements extends GuiScreen {
 
         Achievement hovered = null;
         for (Achievement achievement : tab) {
-            if (achievement.isHidden) {
+            if (achievement.shouldHide(mc.thePlayer)) {
                 continue;
             }
 

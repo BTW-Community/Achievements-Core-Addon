@@ -39,8 +39,8 @@ public class EventDispatcher {
         handleEvent(EventType.PORTAL, player, dimension);
     }
 
-    public static void onEntityInteraction(EntityPlayer player, Entity entity) {
-        handleEvent(EventType.ENTITY_INTERACT, player, entity);
+    public static void onEntityInteraction(EntityPlayer player, Entity entity, ItemStack heldItemStack) {
+        handleEvent(EventType.ENTITY_INTERACT, player, entity, heldItemStack);
     }
 
     public static void onBlockConverted(EntityPlayer player, Block block) {

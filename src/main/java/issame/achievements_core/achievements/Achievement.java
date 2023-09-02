@@ -12,7 +12,7 @@ public class Achievement {
     private final ItemStack icon;
     private final AchievementTab tab;
     private final AchievementFrame frame = new AchievementFrame(this);
-    public boolean isHidden = false;
+    private boolean isHidden = false;
     public int threshold = 1;
     public String formatCode = "§a";
     private Achievement[] parents;
@@ -77,6 +77,10 @@ public class Achievement {
     public Achievement setHidden() {
         isHidden = true;
         return this;
+    }
+
+    public boolean shouldHide(EntityPlayer player) {
+        return isHidden && getStatus(player) != AchievementStatus.UNLOCKED;
     }
 
     public Achievement setThreshold(int threshold) {

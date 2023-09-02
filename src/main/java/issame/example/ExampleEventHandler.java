@@ -1,5 +1,6 @@
 package issame.example;
 
+import btw.entity.mob.CreeperEntity;
 import btw.entity.mob.ZombieEntity;
 import btw.item.BTWItems;
 import issame.achievements_core.AchievementsCore;
@@ -66,12 +67,11 @@ public class ExampleEventHandler {
     }
     
     @EventListener(EventType.ENTITY_INTERACT)
-    public void onEntityInteraction(EntityPlayer player, Entity entity) {
-        if (entity instanceof EntityCreeper) {
-            Item currentItem = player.getCurrentEquippedItem().getItem();
-            if (currentItem instanceof ItemShears) {
-                AchievementsCore.update(ExampleAchievements.neuterCreeper, player);
-            }
+    public void onEntityInteraction(EntityPlayer player, Entity entity, ItemStack heldItemStack) {
+        if (entity instanceof CreeperEntity
+                && ((CreeperEntity) entity).getNeuteredState() <= 0
+                && heldItemStack.getItem() instanceof ItemShears) {
+            AchievementsCore.update(ExampleAchievements.neuterCreeper, player);
         }
     }
     
