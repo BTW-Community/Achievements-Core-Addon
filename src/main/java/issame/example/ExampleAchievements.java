@@ -26,6 +26,7 @@ public class ExampleAchievements extends BTWAddon {
     public static Achievement firePotion;
     public static Achievement cureVillager;
     public static Achievement levelUpFarmer;
+    public static Achievement burn;
 
     private static ExampleAchievements instance;
 
@@ -71,6 +72,8 @@ public class ExampleAchievements extends BTWAddon {
                 .setParents(netherPortal).setFrame(2);
         levelUpFarmer = (new Achievement("levelUpFarmer", 4, 0, Block.blockEmerald, tabCustom))
                 .setParents(cureVillager).setFrame(1);
+        burn = (new Achievement("burn", 4, 2, Block.fire, tabCustom))
+                .setParents(firePotion);
 
         EventDispatcher.register(new ExampleEventHandler());
         AddonHandler.logMessage(this.getName() + " Initialization Complete.");

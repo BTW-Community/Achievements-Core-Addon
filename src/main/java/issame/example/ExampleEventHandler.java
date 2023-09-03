@@ -74,6 +74,13 @@ public class ExampleEventHandler {
             AchievementsCore.update(ExampleAchievements.neuterCreeper, player);
         }
     }
+
+    @EventListener(EventType.DEATH)
+    public void onDeath(EntityPlayer player, DamageSource damageSource) {
+        if (damageSource.isFireDamage()) {
+            AchievementsCore.update(ExampleAchievements.burn, player);
+        }
+    }
     
     @EventListener(EventType.TRADED)
     public void onTraded(EntityPlayer player, MerchantRecipe recipe) {
