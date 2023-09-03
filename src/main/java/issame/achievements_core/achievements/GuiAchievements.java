@@ -269,6 +269,7 @@ public class GuiAchievements extends GuiScreen {
             }
 
             offset = (Achievement.SIZE - TILE_SIZE) / 2;
+            GL11.glEnable(GL11.GL_LIGHTING);
             renderItem.zLevel = 100;
             renderItem.renderItemAndEffectIntoGUI(mc.fontRenderer, mc.renderEngine, achievement.getIcon(),
                     x + offset, y + offset);
@@ -309,7 +310,6 @@ public class GuiAchievements extends GuiScreen {
         int u = 0;
         int v = tabIndex == selectedTabIndex ? TAB_HEIGHT : 0;
 
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         mc.renderEngine.bindTexture("/gui/allitems.png");
         drawTexturedModalRect(x, y, u, v, TAB_WIDTH, TAB_HEIGHT);
 
