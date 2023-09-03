@@ -8,6 +8,7 @@
     "EntityItemMixin",
     "EntityPlayerMixin",
     "EntityPlayerMPMixin",
+    "ItemInWorldManagerMixin",
     "ItemStackMixin",
     "MinecraftMixin",
     "OvenBlockMixin",

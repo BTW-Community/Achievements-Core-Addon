@@ -27,6 +27,7 @@ public class ExampleAchievements extends BTWAddon {
     public static Achievement cureVillager;
     public static Achievement levelUpFarmer;
     public static Achievement burn;
+    public static Achievement workstump;
 
     private static ExampleAchievements instance;
 
@@ -62,6 +63,8 @@ public class ExampleAchievements extends BTWAddon {
                 .setParents(chiselStone);
         neuterCreeper = (new Achievement("neuterCreeper", 6, 2, BTWItems.creeperOysters, tabSimple))
                 .setParents(cookIron).setHidden();
+        workstump = (new Achievement("workstump", 6, -2, BTWBlocks.workStump, tabSimple))
+                .setParents(cookIron);
 
         AchievementTab tabCustom = new CustomAchievementTab("custom").setIcon(Item.netherStar);
         netherPortal = (new Achievement("netherPortal", 0, 0, Block.obsidian, tabCustom))

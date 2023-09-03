@@ -1,5 +1,6 @@
 package issame.example;
 
+import btw.block.blocks.WorkStumpBlock;
 import btw.entity.mob.CreeperEntity;
 import btw.entity.mob.ZombieEntity;
 import btw.item.BTWItems;
@@ -72,6 +73,13 @@ public class ExampleEventHandler {
                 && ((CreeperEntity) entity).getNeuteredState() <= 0
                 && heldItemStack.getItem() instanceof ItemShears) {
             AchievementsCore.update(ExampleAchievements.neuterCreeper, player);
+        }
+    }
+
+    @EventListener(EventType.CONVERTED_BLOCK)
+    public void onBlockConverted(EntityPlayer player, Block block, int metadata) {
+        if (block instanceof WorkStumpBlock && (metadata & 8) == 0) {
+            AchievementsCore.update(ExampleAchievements.workstump, player);
         }
     }
 

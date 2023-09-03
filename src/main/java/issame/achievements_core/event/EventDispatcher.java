@@ -43,8 +43,8 @@ public class EventDispatcher {
         handleEvent(EventType.ENTITY_INTERACT, player, entity, heldItemStack);
     }
 
-    public static void onBlockConverted(EntityPlayer player, Block block) {
-        handleEvent(EventType.CONVERTED_BLOCK, player, block);
+    public static void onBlockConverted(EntityPlayer player, Block block, int metadata) {
+        handleEvent(EventType.CONVERTED_BLOCK, player, block, metadata);
     }
 
     public static void onDeath(EntityPlayer player, DamageSource damageSource) {
