@@ -49,6 +49,22 @@ public class AchievementTab implements Iterable<Achievement> {
         return StatCollector.translateToLocal(name);
     }
 
+    public int getMinCol() {
+        return minColumn;
+    }
+
+    public int getMaxCol() {
+        return maxColumn;
+    }
+
+    public int getMinRow() {
+        return minRow;
+    }
+
+    public int getMaxRow() {
+        return maxRow;
+    }
+
     public void add(Achievement achievement) {
         achievements.add(achievement);
 
@@ -76,6 +92,7 @@ public class AchievementTab implements Iterable<Achievement> {
      * Override this method to create a custom background.
      */
     protected Icon genAchievementIcon(int x, int y) {
+        if (x == 0 && y == 0) return Block.blockDiamond.getIcon(0, 0);
         Random random = new Random();
 
         float brightness = 0.6F - y / 25.0F * 0.3F;
@@ -113,5 +130,13 @@ public class AchievementTab implements Iterable<Achievement> {
     @Override
     public Iterator<Achievement> iterator() {
         return achievements.iterator();
+    }
+
+    public int clampMapX(int mapX) {
+        return Math.max(minColumn, Math.min(maxColumn, mapX));
+    }
+
+    public int clampMapY(int mapY) {
+        return Math.max(minRow, Math.min(maxRow, mapY));
     }
 }

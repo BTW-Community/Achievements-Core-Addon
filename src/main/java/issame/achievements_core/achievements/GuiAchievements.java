@@ -30,8 +30,11 @@ public class GuiAchievements extends GuiScreen {
 
     private static final int DESC_PADDING = 3;
     private final RenderItem renderItem = new RenderItem();
-    private int mapX = 0;
-    private int mapY = 0;
+
+    private static final int mapCenterX = (3 * TILE_SIZE - PANE_WIDTH) / 2;
+    private static final int mapCenterY = (3 * TILE_SIZE - PANE_HEIGHT) / 2;
+    private int mapX = mapCenterX;
+    private int mapY = mapCenterY;
     private int prevMouseX = 0;
     private int prevMouseY = 0;
     private int selectedTabIndex = 0;
@@ -134,14 +137,26 @@ public class GuiAchievements extends GuiScreen {
     }
 
     private void updateMapPosition(int mouseX, int mouseY) {
+        AchievementTab tab = AchievementTabList.get(selectedTabIndex);
+        if (tab == null) return;
+
         if (Mouse.isButtonDown(0) && isInsideMap(mouseX, mouseY)) {
             // Move the map in the opposite direction to the mouse movement,
             // i.e. moving the mouse to the left should move the map to the right.
             mapX += prevMouseX - mouseX;
             mapY += prevMouseY - mouseY;
         }
+        // Clamp between the min and max row/column so the player doesn't lose where they are.
+        // TODO: Make this work better
+        mapX = clamp(mapX, (tab.getMinCol() - 1) * Achievement.SIZE / 2 - PANE_WIDTH, (tab.getMaxCol() - 1) * Achievement.SIZE / 2);
+        mapY = clamp(mapY, (tab.getMinRow() - 1) * Achievement.SIZE / 2 - PANE_HEIGHT, (tab.getMaxRow() - 1) * Achievement.SIZE / 2);
+
         prevMouseX = mouseX;
         prevMouseY = mouseY;
+    }
+
+    private int clamp(int val, int min, int max) {
+        return Math.max(min, Math.min(max, val));
     }
 
     private boolean isInsideMap(int xPos, int yPos) {
@@ -267,11 +282,11 @@ public class GuiAchievements extends GuiScreen {
     }
 
     private int getAchievementPosX(Achievement achievement) {
-        return (int) (achievement.getColumn() / 2.0 * Achievement.SIZE + getGuiX() - mapX);
+        return achievement.getColumn() * Achievement.SIZE / 2 + getGuiX() - mapX;
     }
 
     private int getAchievementPosY(Achievement achievement) {
-        return (int) (achievement.getRow() / 2.0 * Achievement.SIZE + getGuiY() - mapY);
+        return achievement.getRow() * Achievement.SIZE / 2 + getGuiY() - mapY;
     }
 
     private void drawUnselectedTabs() {
