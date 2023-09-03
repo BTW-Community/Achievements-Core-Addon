@@ -4,6 +4,7 @@ import btw.AddonHandler;
 import btw.BTWAddon;
 import btw.world.util.WorldData;
 import issame.achievements_core.achievements.Achievement;
+import issame.achievements_core.achievements.AchievementStatus;
 import issame.achievements_core.achievements.AchievementTab;
 import issame.achievements_core.achievements.AchievementTabList;
 import net.minecraft.client.Minecraft;
@@ -84,6 +85,8 @@ public class AchievementsCore extends BTWAddon {
      * @return true when Achievement threshold is passed (triggered Achievement)
      */
     public static boolean update(Achievement achievement, EntityPlayer player, int amount) {
+        if (achievement.getStatus(player) != AchievementStatus.CAN_UNLOCK) return false;
+
         if (!achievementsMap.containsKey(player.getEntityName())) {
             Map<String, Integer> playerAchievements = new HashMap<>();
             achievementsMap.put(player.getEntityName(), playerAchievements);
@@ -92,10 +95,9 @@ public class AchievementsCore extends BTWAddon {
         Map<String, Integer> playerAchievements = achievementsMap.get(player.getEntityName());
         int count = playerAchievements.getOrDefault(achievement.getUnlocalizedName(), 0) + amount;
 
-        if (count > achievement.threshold) {
-            return false;
-        } else if (count == achievement.threshold) {
-            String msg = String.format("%s has made the achievement %s[%s]", player.getEntityName(), achievement.formatCode, achievement.getName());
+        if (count == achievement.threshold) {
+            String msg = String.format("%s has made the achievement %s[%s]",
+                    player.getEntityName(), achievement.formatCode, achievement.getName());
             MinecraftServer.getServer().getConfigurationManager().sendChatMsg(msg);
         }
         playerAchievements.put(achievement.getUnlocalizedName(), count);
