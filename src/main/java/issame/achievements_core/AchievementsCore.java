@@ -97,7 +97,7 @@ public class AchievementsCore extends BTWAddon {
 
         if (count == achievement.threshold) {
             String msg = String.format("%s has made the achievement %s[%s]",
-                    player.getEntityName(), achievement.formatCode, achievement.getName());
+                    player.getEntityName(), achievement.getFormatString(), achievement.getName());
             MinecraftServer.getServer().getConfigurationManager().sendChatMsg(msg);
         }
         playerAchievements.put(achievement.getUnlocalizedName(), count);

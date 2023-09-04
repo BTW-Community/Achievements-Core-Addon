@@ -1,7 +1,8 @@
 package issame.achievements_core.achievements;
 
-import btw.AddonHandler;
 import issame.achievements_core.AchievementsCore;
+import issame.achievements_core.achievements.style.AchievementStyle;
+import issame.achievements_core.achievements.style.StyleDefault;
 import net.minecraft.src.*;
 
 public class Achievement {
@@ -11,18 +12,18 @@ public class Achievement {
     private final int row;
     private final ItemStack icon;
     private final AchievementTab tab;
-    private final AchievementFrame frame = new AchievementFrame(this);
+    private AchievementStyle style;
     private boolean isHidden = false;
     public int threshold = 1;
-    public String formatCode = "§a";
     private Achievement[] parents;
 
     public Achievement(String name, int column, int row, ItemStack icon, AchievementTab tab) {
-        this.name = "achievement." + name;
+        this.name = name;
         this.column = column;
         this.row = row;
         this.icon = icon;
         this.tab = tab;
+        this.style = new StyleDefault();
 
         tab.add(this);
     }
@@ -52,26 +53,25 @@ public class Achievement {
         return tab;
     }
 
-    public String getFrameSet() {
-        return frame.frameSet;
+    public String getFrameSheet() {
+        return style.getFrameSheet();
     }
 
-    public Achievement setFrameSet(String frameSet) {
-        frame.frameSet = frameSet;
+    public Achievement setStyle(AchievementStyle style) {
+        this.style = style;
         return this;
     }
 
-    public Achievement setFrame(int index) {
-        frame.setFrame(index);
-        return this;
+    public String getFormatString() {
+        return style.getFormatString();
     }
 
     public int getFrameU() {
-        return frame.getU();
+        return style.getU();
     }
 
-    public int getFrameV(EntityPlayer player) {
-        return frame.getV(player);
+    public int getFrameV(boolean hasUnlocked) {
+        return style.getV(hasUnlocked);
     }
 
     public Achievement setHidden() {
@@ -97,7 +97,7 @@ public class Achievement {
     }
 
     public String getName() {
-        return StatCollector.translateToLocal(name);
+        return StatCollector.translateToLocal("achievement." + name);
     }
 
     public String getUnlocalizedName() {
@@ -105,7 +105,7 @@ public class Achievement {
     }
 
     public String getDescription() {
-        return StatCollector.translateToLocal(name + ".desc");
+        return StatCollector.translateToLocal("achievement." + name + ".desc");
     }
 
     public AchievementStatus getStatus(EntityPlayer player) {

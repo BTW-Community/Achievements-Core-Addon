@@ -156,19 +156,14 @@ public class GuiAchievements extends GuiScreen {
     // TODO: Center better
     private int getMapCenterX() {
         AchievementTab tab = AchievementTabList.get(selectedTabIndex);
-        System.out.println(tab);
         if (tab == null) return 0;
-        int result = getMapCenter(tab.getMinCol(), tab.getMaxCol()) - getGuiX();
-        System.out.println("x: " + result);
-        return result;
+        return getMapCenter(tab.getMinCol(), tab.getMaxCol()) - getGuiX();
     }
 
     private int getMapCenterY() {
         AchievementTab tab = AchievementTabList.get(selectedTabIndex);
         if (tab == null) return 0;
-        int result = getMapCenter(tab.getMinRow(), tab.getMaxRow()) - getGuiY();
-        System.out.println("y: " + result);
-        return result;
+        return getMapCenter(tab.getMinRow(), tab.getMaxRow()) - getGuiY();
     }
 
     private int getMapCenter(int min, int max) {
@@ -279,8 +274,8 @@ public class GuiAchievements extends GuiScreen {
                 hovered = achievement;
             }
 
-            mc.renderEngine.bindTexture(String.format("/achievements_core/frame_set/%s.png", achievement.getFrameSet()));
-            drawTexturedModalRect(x, y, achievement.getFrameU(), achievement.getFrameV(mc.thePlayer), Achievement.SIZE, Achievement.SIZE);
+            mc.renderEngine.bindTexture(achievement.getFrameSheet());
+            drawTexturedModalRect(x, y, achievement.getFrameU(), achievement.getFrameV(hasUnlocked(achievement)), Achievement.SIZE, Achievement.SIZE);
 
             if (achievement.getStatus(mc.thePlayer) == AchievementStatus.LOCKED) {
                 brightness = .1f;
@@ -442,5 +437,9 @@ public class GuiAchievements extends GuiScreen {
 
     private int getGuiY() {
         return (height - PANE_HEIGHT) / 2;
+    }
+
+    private boolean hasUnlocked(Achievement achievement) {
+        return achievement.getStatus(mc.thePlayer) == AchievementStatus.UNLOCKED;
     }
 }

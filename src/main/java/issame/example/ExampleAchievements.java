@@ -6,6 +6,8 @@ import btw.block.BTWBlocks;
 import btw.item.BTWItems;
 import issame.achievements_core.achievements.Achievement;
 import issame.achievements_core.achievements.AchievementTab;
+import issame.achievements_core.achievements.style.StyleChallenge;
+import issame.achievements_core.achievements.style.StyleGoal;
 import issame.achievements_core.event.EventDispatcher;
 import net.minecraft.src.Block;
 import net.minecraft.src.Item;
@@ -54,11 +56,11 @@ public class ExampleAchievements extends BTWAddon {
         chiselStone = new Achievement("chiselStone", 4, 0, BTWItems.sharpStone, tabSimple)
                 .setParents(chiselWood);
         killPig = (new Achievement("killPig", 4, -2, Item.porkRaw, tabSimple))
-                .setParents(chiselStone).setFrame(2);
+                .setParents(chiselStone).setStyle(new StyleGoal());
         cookPork = (new Achievement("cookPork", 4, -4, Item.porkCooked, tabSimple))
-                .setParents(killPig).setFrame(1);
+                .setParents(killPig).setStyle(new StyleChallenge());
         drinkMilk = (new Achievement("drinkMilk", 4, -6, Item.bucketMilk, tabSimple))
-                .setParents(cookPork).setFrame(3);
+                .setParents(cookPork).setStyle(new StyleExample());
         cookIron = (new Achievement("cookIron", 6, 0, BTWBlocks.ironOreChunkStorage, tabSimple))
                 .setParents(chiselStone);
         neuterCreeper = (new Achievement("neuterCreeper", 6, 2, BTWItems.creeperOysters, tabSimple))
@@ -72,9 +74,9 @@ public class ExampleAchievements extends BTWAddon {
         firePotion = (new Achievement("firePotion", 0, 2, Item.potion, tabCustom))
                 .setParents(netherPortal);
         cureVillager = (new Achievement("cureVillager", 2, 0, BTWItems.soulUrn, tabCustom))
-                .setParents(netherPortal).setFrame(2);
+                .setParents(netherPortal).setStyle(new StyleGoal());
         levelUpFarmer = (new Achievement("levelUpFarmer", 4, 0, Block.blockEmerald, tabCustom))
-                .setParents(cureVillager).setFrame(1);
+                .setParents(cureVillager).setStyle(new StyleChallenge());
         burn = (new Achievement("burn", 4, 2, Block.fire, tabCustom))
                 .setParents(firePotion);
 
