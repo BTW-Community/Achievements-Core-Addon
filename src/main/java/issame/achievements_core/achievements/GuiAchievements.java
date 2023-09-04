@@ -31,10 +31,8 @@ public class GuiAchievements extends GuiScreen {
     private static final int DESC_PADDING = 3;
     private final RenderItem renderItem = new RenderItem();
 
-    private static final int mapCenterX = (3 * TILE_SIZE - PANE_WIDTH) / 2;
-    private static final int mapCenterY = (3 * TILE_SIZE - PANE_HEIGHT) / 2;
-    private int mapX = mapCenterX;
-    private int mapY = mapCenterY;
+    private int mapX = getMapCenterX();
+    private int mapY = getMapCenterY();
     private int prevMouseX = 0;
     private int prevMouseY = 0;
     private int selectedTabIndex = 0;
@@ -145,14 +143,35 @@ public class GuiAchievements extends GuiScreen {
             // i.e. moving the mouse to the left should move the map to the right.
             mapX += prevMouseX - mouseX;
             mapY += prevMouseY - mouseY;
+            // Clamp between the min and max row/column so the player doesn't lose where they are.
+            // TODO: Make this work better
+            mapX = clamp(mapX, (tab.getMinCol() - 1) * Achievement.SIZE / 2 - PANE_WIDTH, (tab.getMaxCol() - 1) * Achievement.SIZE / 2);
+            mapY = clamp(mapY, (tab.getMinRow() - 1) * Achievement.SIZE / 2 - PANE_HEIGHT, (tab.getMaxRow() - 1) * Achievement.SIZE / 2);
         }
-        // Clamp between the min and max row/column so the player doesn't lose where they are.
-        // TODO: Make this work better
-        mapX = clamp(mapX, (tab.getMinCol() - 1) * Achievement.SIZE / 2 - PANE_WIDTH, (tab.getMaxCol() - 1) * Achievement.SIZE / 2);
-        mapY = clamp(mapY, (tab.getMinRow() - 1) * Achievement.SIZE / 2 - PANE_HEIGHT, (tab.getMaxRow() - 1) * Achievement.SIZE / 2);
-
         prevMouseX = mouseX;
         prevMouseY = mouseY;
+    }
+
+    // TODO: Center better
+    private int getMapCenterX() {
+        AchievementTab tab = AchievementTabList.get(selectedTabIndex);
+        System.out.println(tab);
+        if (tab == null) return 0;
+        int result = getMapCenter(tab.getMinCol(), tab.getMaxCol()) - getGuiX();
+        System.out.println("x: " + result);
+        return result;
+    }
+
+    private int getMapCenterY() {
+        AchievementTab tab = AchievementTabList.get(selectedTabIndex);
+        if (tab == null) return 0;
+        int result = getMapCenter(tab.getMinRow(), tab.getMaxRow()) - getGuiY();
+        System.out.println("y: " + result);
+        return result;
+    }
+
+    private int getMapCenter(int min, int max) {
+        return Achievement.SIZE * ((min - max) / 2);
     }
 
     private int clamp(int val, int min, int max) {
