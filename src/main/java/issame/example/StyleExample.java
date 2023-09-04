@@ -9,6 +9,11 @@ public class StyleExample extends AchievementStyle {
     }
 
     @Override
+    public String getAnnounceMessage() {
+        return "achievement.announce.example";
+    }
+
+    @Override
     public String getFrameSheet() {
         return "/example/frame_sheet.png";
     }

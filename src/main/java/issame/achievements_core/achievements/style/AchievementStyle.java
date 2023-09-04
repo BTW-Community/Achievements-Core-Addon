@@ -14,6 +14,10 @@ public abstract class AchievementStyle {
         return "§a";
     }
 
+    public String getAnnounceMessage() {
+        return "achievement.announce.default";
+    }
+
     public int getU() {
         return 0;
     };

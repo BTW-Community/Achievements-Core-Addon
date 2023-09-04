@@ -104,6 +104,10 @@ public class Achievement {
         return name;
     }
 
+    public String getAnnounceName() {
+        return getFormatString() + "[" + getName() + "]§r";
+    }
+
     public String getDescription() {
         return StatCollector.translateToLocal("achievement." + name + ".desc");
     }
@@ -116,5 +120,10 @@ public class Achievement {
             if (parent.getStatus(player) == AchievementStatus.UNLOCKED) return AchievementStatus.CAN_UNLOCK;
         }
         return AchievementStatus.LOCKED;
+    }
+
+    public String getAnnounceMessage(EntityPlayer player) {
+        return StatCollector.translateToLocalFormatted(style.getAnnounceMessage(),
+                player.getEntityName(), getAnnounceName());
     }
 }

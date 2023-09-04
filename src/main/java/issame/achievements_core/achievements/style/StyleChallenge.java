@@ -9,6 +9,11 @@ public class StyleChallenge extends StyleDefault {
     }
 
     @Override
+    public String getAnnounceMessage() {
+        return "achievement.announce.challenge";
+    }
+
+    @Override
     public int getU() {
         return Achievement.SIZE;
     }
