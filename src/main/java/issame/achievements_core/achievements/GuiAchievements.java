@@ -72,6 +72,7 @@ public class GuiAchievements extends GuiScreen {
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glEnable(GL11.GL_LIGHTING);
 
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         drawUnselectedTabs();
 
         // This stuff makes enchantment glints work properly
