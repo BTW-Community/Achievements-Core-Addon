@@ -8,6 +8,7 @@
     "EntityItemMixin",
     "EntityPlayerMixin",
     "EntityPlayerMPMixin",
+    "GuiAchievementMixin",
     "ItemInWorldManagerMixin",
     "ItemStackMixin",
     "MinecraftMixin",
