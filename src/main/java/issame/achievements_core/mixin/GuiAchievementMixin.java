@@ -1,5 +1,6 @@
 package issame.achievements_core.mixin;
 
+import issame.achievements_core.AchievementsCore;
 import net.minecraft.src.Achievement;
 import net.minecraft.src.Gui;
 import net.minecraft.src.GuiAchievement;
@@ -12,6 +13,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class GuiAchievementMixin extends Gui {
     @Inject(method = "queueAchievementInformation(Lnet/minecraft/src/Achievement;)V", at = @At("HEAD"), cancellable = true)
     private void noOpenInventory(Achievement achievement, CallbackInfo ci) {
+        ci.cancel();
+    }
+
+    @Inject(method = "updateAchievementWindow()V", at = @At("HEAD"), cancellable = true)
+    private void updateAchievementWindow(CallbackInfo ci) {
+        AchievementsCore.popup.updateAchievementWindow();
         ci.cancel();
     }
 }

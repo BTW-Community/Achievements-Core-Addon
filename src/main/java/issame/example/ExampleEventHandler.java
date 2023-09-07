@@ -19,51 +19,51 @@ public class ExampleEventHandler {
     @EventListener(EventType.CRAFTED)
     public void onCrafted(EntityPlayer player, ItemStack itemstack) {
         if (itemstack.itemID == BTWItems.pointyStick.itemID) {
-            AchievementsCore.update(ExampleAchievements.chiselWood, player);
+            AchievementsCore.trigger(ExampleAchievements.chiselWood, player);
         }
         else if (itemstack.itemID == BTWItems.sharpStone.itemID) {
-            AchievementsCore.update(ExampleAchievements.chiselStone, player);
+            AchievementsCore.trigger(ExampleAchievements.chiselStone, player);
         }
     }
     
     @EventListener(EventType.COOKED)
     public void onCooked(EntityPlayer player, ItemStack itemstack) {
         if (itemstack.itemID == Item.porkCooked.itemID) {
-            AchievementsCore.update(ExampleAchievements.cookPork, player);
+            AchievementsCore.trigger(ExampleAchievements.cookPork, player);
         }
         else if (itemstack.itemID == BTWItems.ironNugget.itemID) {
-            AchievementsCore.update(ExampleAchievements.cookIron, player);
+            AchievementsCore.trigger(ExampleAchievements.cookIron, player);
         }
     }
     
     @EventListener(EventType.BREWED)
     public void onBrewed(EntityPlayer player, ItemStack itemstack) {
         if (itemstack.itemID == Item.potion.itemID && itemstack.getItemDamage() == 8195) {
-            AchievementsCore.update(ExampleAchievements.firePotion, player);
+            AchievementsCore.trigger(ExampleAchievements.firePotion, player);
         }
     }
     
     @EventListener(EventType.PICKUP)
     public void onPickup(EntityPlayer player, ItemStack itemstack) {
         if (itemstack.itemID == BTWItems.bark.itemID) {
-            AchievementsCore.update(ExampleAchievements.mineBark, player);
+            AchievementsCore.trigger(ExampleAchievements.mineBark, player);
         }
         else if (itemstack.itemID == Item.stick.itemID) {
-            AchievementsCore.update(ExampleAchievements.mineStick, player);
+            AchievementsCore.trigger(ExampleAchievements.mineStick, player);
         }
     }
     
     @EventListener(EventType.KILLED)
     public void onKilled(EntityPlayer player, EntityLiving entity) {
         if (entity instanceof EntityPig) {
-            AchievementsCore.update(ExampleAchievements.killPig, player);
+            AchievementsCore.trigger(ExampleAchievements.killPig, player);
         }
     }
     
     @EventListener(EventType.PORTAL)
     public void onTravelledDimension(EntityPlayer player, int dimension) {
         if (dimension == -1) {
-            AchievementsCore.update(ExampleAchievements.netherPortal, player);
+            AchievementsCore.trigger(ExampleAchievements.netherPortal, player);
         }
     }
     
@@ -72,40 +72,40 @@ public class ExampleEventHandler {
         if (entity instanceof CreeperEntity
                 && ((CreeperEntity) entity).getNeuteredState() <= 0
                 && heldItemStack.getItem() instanceof ItemShears) {
-            AchievementsCore.update(ExampleAchievements.neuterCreeper, player);
+            AchievementsCore.trigger(ExampleAchievements.neuterCreeper, player);
         }
     }
 
     @EventListener(EventType.CONVERTED_BLOCK)
     public void onBlockConverted(EntityPlayer player, Block block, int metadata) {
         if (block instanceof WorkStumpBlock && (metadata & 8) == 0) {
-            AchievementsCore.update(ExampleAchievements.workstump, player);
+            AchievementsCore.trigger(ExampleAchievements.workstump, player);
         }
     }
 
     @EventListener(EventType.DEATH)
     public void onDeath(EntityPlayer player, DamageSource damageSource) {
         if (damageSource.isFireDamage()) {
-            AchievementsCore.update(ExampleAchievements.burn, player);
+            AchievementsCore.trigger(ExampleAchievements.burn, player);
         }
     }
     
     @EventListener(EventType.TRADED)
     public void onTraded(EntityPlayer player, MerchantRecipe recipe) {
         if (recipe.getItemToBuy().itemID == Item.hoeIron.itemID) {
-            AchievementsCore.update(ExampleAchievements.levelUpFarmer, player);
+            AchievementsCore.trigger(ExampleAchievements.levelUpFarmer, player);
         }
     }
     
     @EventListener(EventType.CURED)
     public void onCured(EntityPlayer player, ZombieEntity zombieVillager) {
-        AchievementsCore.update(ExampleAchievements.cureVillager, player);
+        AchievementsCore.trigger(ExampleAchievements.cureVillager, player);
     }
     
     @EventListener(EventType.CONSUMED)
     public void onConsumed(EntityPlayer player, ItemStack foodStack) {
         if (foodStack.getItem().equals(Item.bucketMilk)) {
-            AchievementsCore.update(ExampleAchievements.drinkMilk, player);
+            AchievementsCore.trigger(ExampleAchievements.drinkMilk, player);
         }
     }
 }

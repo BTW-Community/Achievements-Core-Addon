@@ -3,10 +3,7 @@ package issame.achievements_core;
 import btw.AddonHandler;
 import btw.BTWAddon;
 import btw.world.util.WorldData;
-import issame.achievements_core.achievements.Achievement;
-import issame.achievements_core.achievements.AchievementStatus;
-import issame.achievements_core.achievements.AchievementTab;
-import issame.achievements_core.achievements.AchievementTabList;
+import issame.achievements_core.achievements.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.src.EntityPlayer;
@@ -19,7 +16,8 @@ import java.util.Map;
 
 public class AchievementsCore extends BTWAddon {
     // Key is the player name, value is a map of achievement names to values.
-    private static Map<String, Map<String, Integer>> achievementsMap = new HashMap<>();
+    private static final Map<String, Map<String, Integer>> achievementsMap = new HashMap<>();
+    public static AchievementPopup popup;
 
     private AchievementsCore() {
         super("Achievements Core", "3.0.0", "AC");
@@ -28,6 +26,7 @@ public class AchievementsCore extends BTWAddon {
     @Override
     public void initialize() {
         AddonHandler.logMessage(this.getName() + " Version " + this.getVersionString() + " Initializing...");
+        popup = new AchievementPopup(Minecraft.getMinecraft());
         AddonHandler.logMessage(this.getName() + " Initialization Complete.");
     }
 
@@ -84,7 +83,7 @@ public class AchievementsCore extends BTWAddon {
      * @param amount
      * @return true when Achievement threshold is passed (triggered Achievement)
      */
-    public static boolean update(Achievement achievement, EntityPlayer player, int amount) {
+    public static boolean trigger(Achievement achievement, EntityPlayer player, int amount) {
         if (achievement.getStatus(player) != AchievementStatus.CAN_UNLOCK) return false;
 
         if (!achievementsMap.containsKey(player.getEntityName())) {
@@ -97,14 +96,15 @@ public class AchievementsCore extends BTWAddon {
 
         if (count == achievement.threshold) {
             MinecraftServer.getServer().getConfigurationManager().sendChatMsg(achievement.getAnnounceMessage(player));
+            popup.queueTakenAchievement(achievement);
         }
         playerAchievements.put(achievement.getUnlocalizedName(), count);
 
         return count == achievement.threshold;
     }
 
-    public static boolean update(Achievement achievement, EntityPlayer player) {
-        return update(achievement, player, 1);
+    public static boolean trigger(Achievement achievement, EntityPlayer player) {
+        return trigger(achievement, player, 1);
     }
 
     public static boolean hasUnlocked(Achievement achievement, EntityPlayer player) {
