@@ -126,4 +126,17 @@ public class Achievement {
         return StatCollector.translateToLocalFormatted(style.getAnnounceMessage(),
                 player.getEntityName(), getAnnounceName());
     }
+
+    public void recursivelyTrigger(EntityPlayer player, boolean unlock) {
+        if (unlock && getStatus(player) == AchievementStatus.UNLOCKED) return;
+        if (!unlock && getStatus(player) != AchievementStatus.UNLOCKED) return;
+
+        if (unlock && parents != null) {
+            for (Achievement parent : parents) {
+                parent.recursivelyTrigger(player, unlock);
+            }
+        }
+        int amount = unlock ? threshold : 0;
+        AchievementsCore.trigger(this, player, amount, true);
+    }
 }

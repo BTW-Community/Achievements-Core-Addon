@@ -27,6 +27,7 @@ public class AchievementsCore extends BTWAddon {
     public void initialize() {
         AddonHandler.logMessage(this.getName() + " Version " + this.getVersionString() + " Initializing...");
         popup = new AchievementPopup(Minecraft.getMinecraft());
+        registerAddonCommandClientOnly(new CommandAchievement());
         AddonHandler.logMessage(this.getName() + " Initialization Complete.");
     }
 
@@ -81,10 +82,11 @@ public class AchievementsCore extends BTWAddon {
      * @param achievement
      * @param player
      * @param amount
+     * @param set forces the achievement counter to be the value of amount
      * @return true when Achievement threshold is passed (triggered Achievement)
      */
-    public static boolean trigger(Achievement achievement, EntityPlayer player, int amount) {
-        if (achievement.getStatus(player) != AchievementStatus.CAN_UNLOCK) return false;
+    public static boolean trigger(Achievement achievement, EntityPlayer player, int amount, boolean set) {
+        if (!set && achievement.getStatus(player) != AchievementStatus.CAN_UNLOCK) return false;
 
         if (!achievementsMap.containsKey(player.getEntityName())) {
             Map<String, Integer> playerAchievements = new HashMap<>();
@@ -92,19 +94,22 @@ public class AchievementsCore extends BTWAddon {
         }
 
         Map<String, Integer> playerAchievements = achievementsMap.get(player.getEntityName());
-        int count = playerAchievements.getOrDefault(achievement.getUnlocalizedName(), 0) + amount;
+        int old_count = playerAchievements.getOrDefault(achievement.getUnlocalizedName(), 0);
+        int new_count = set ? amount : old_count + amount;
 
-        if (count == achievement.threshold) {
+        if (old_count < achievement.threshold && new_count >= achievement.threshold) {
             MinecraftServer.getServer().getConfigurationManager().sendChatMsg(achievement.getAnnounceMessage(player));
             popup.queueTakenAchievement(achievement);
         }
-        playerAchievements.put(achievement.getUnlocalizedName(), count);
 
-        return count == achievement.threshold;
+        new_count = Math.max(0, Math.min(achievement.threshold, new_count));
+        playerAchievements.put(achievement.getUnlocalizedName(), new_count);
+
+        return new_count == achievement.threshold;
     }
 
     public static boolean trigger(Achievement achievement, EntityPlayer player) {
-        return trigger(achievement, player, 1);
+        return trigger(achievement, player, 1, false);
     }
 
     public static boolean hasUnlocked(Achievement achievement, EntityPlayer player) {

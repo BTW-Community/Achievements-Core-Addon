@@ -1,11 +1,8 @@
 package issame.achievements_core.achievements;
 
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class AchievementTabList {
     // Holds a list of all registered achievement categories.
@@ -29,5 +26,26 @@ public class AchievementTabList {
 
     public static Iterator<AchievementTab> iterator() {
         return tabList.iterator();
+    }
+
+    public static Achievement getAchievement(String name) {
+        for (AchievementTab tab : tabList) {
+            for (Achievement achievement : tab) {
+                if (Objects.equals(achievement.getUnlocalizedName(), name)) {
+                    return achievement;
+                }
+            }
+        }
+        return null;
+    }
+
+    public static List<String> getAllNames() {
+        List<String> names = new LinkedList<>();
+        for (AchievementTab tab : tabList) {
+            for (Achievement achievement : tab) {
+                names.add(achievement.getUnlocalizedName());
+            }
+        }
+        return names;
     }
 }
