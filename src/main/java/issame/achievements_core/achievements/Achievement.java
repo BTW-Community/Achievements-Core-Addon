@@ -5,6 +5,11 @@ import issame.achievements_core.achievements.style.AchievementStyle;
 import issame.achievements_core.achievements.style.StyleDefault;
 import net.minecraft.src.*;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class Achievement {
     public static final int SIZE = 26;
     private final String name;
@@ -42,6 +47,10 @@ public class Achievement {
 
     public Achievement[] getParents() {
         return parents;
+    }
+
+    public String getParentNames() {
+        return Arrays.stream(parents).map(Achievement::getName).collect(Collectors.joining(", "));
     }
 
     public Achievement setParents(Achievement... parents) {

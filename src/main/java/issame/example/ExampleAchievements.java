@@ -19,7 +19,7 @@ public class ExampleAchievements extends BTWAddon {
     public static Achievement mineStick;
     public static Achievement chiselWood;
     public static Achievement chiselStone;
-    public static Achievement killPig;
+    public static Achievement killPigs;
     public static Achievement cookPork;
     public static Achievement drinkMilk;
     public static Achievement cookIron;
@@ -55,10 +55,10 @@ public class ExampleAchievements extends BTWAddon {
                 .setParents(mineBark, mineStick);
         chiselStone = new Achievement("chiselStone", 4, 0, BTWItems.sharpStone, tabSimple)
                 .setParents(chiselWood);
-        killPig = (new Achievement("killPig", 4, -2, Item.porkRaw, tabSimple))
-                .setParents(chiselStone).setStyle(new StyleGoal());
+        killPigs = (new Achievement("killPig", 4, -2, Item.porkRaw, tabSimple))
+                .setParents(chiselStone).setStyle(new StyleGoal()).setThreshold(5);
         cookPork = (new Achievement("cookPork", 4, -4, Item.porkCooked, tabSimple))
-                .setParents(killPig).setStyle(new StyleChallenge());
+                .setParents(killPigs).setStyle(new StyleChallenge());
         drinkMilk = (new Achievement("drinkMilk", 4, -6, Item.bucketMilk, tabSimple))
                 .setParents(cookPork).setStyle(new StyleExample());
         cookIron = (new Achievement("cookIron", 6, 0, BTWBlocks.ironOreChunkStorage, tabSimple))

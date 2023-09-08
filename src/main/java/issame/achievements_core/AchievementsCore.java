@@ -113,10 +113,12 @@ public class AchievementsCore extends BTWAddon {
     }
 
     public static boolean hasUnlocked(Achievement achievement, EntityPlayer player) {
-        if (!achievementsMap.containsKey(player.getEntityName())) return false;
-        Map<String, Integer> playerAchievements = achievementsMap.get(player.getEntityName());
+        return getProgress(achievement, player) >= achievement.threshold;
+    }
 
-        int count = playerAchievements.getOrDefault(achievement.getUnlocalizedName(), 0);
-        return count >= achievement.threshold;
+    public static int getProgress(Achievement achievement, EntityPlayer player) {
+        if (!achievementsMap.containsKey(player.getEntityName())) return 0;
+        Map<String, Integer> playerAchievements = achievementsMap.get(player.getEntityName());
+        return playerAchievements.getOrDefault(achievement.getUnlocalizedName(), 0);
     }
 }

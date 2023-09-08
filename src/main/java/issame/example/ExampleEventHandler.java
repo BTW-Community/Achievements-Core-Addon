@@ -56,7 +56,7 @@ public class ExampleEventHandler {
     @EventListener(EventType.KILLED)
     public void onKilled(EntityPlayer player, EntityLiving entity) {
         if (entity instanceof EntityPig) {
-            AchievementsCore.trigger(ExampleAchievements.killPig, player);
+            AchievementsCore.trigger(ExampleAchievements.killPigs, player);
         }
     }
     

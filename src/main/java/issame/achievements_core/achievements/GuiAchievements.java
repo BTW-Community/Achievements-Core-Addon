@@ -1,5 +1,6 @@
 package issame.achievements_core.achievements;
 
+import issame.achievements_core.AchievementsCore;
 import issame.achievements_core.Colors;
 import net.minecraft.src.*;
 import org.lwjgl.input.Mouse;
@@ -28,7 +29,7 @@ public class GuiAchievements extends GuiScreen {
     private static final int HOVER_OFFSET_Y = -4;
     private static final int HOVER_PADDING = 3;
 
-    private static final int DESC_PADDING = 3;
+    private static final int TEXT_PADDING = 3;
     private final RenderItem renderItem = new RenderItem();
 
     private int mapX = getMapCenterX();
@@ -349,7 +350,7 @@ public class GuiAchievements extends GuiScreen {
         int guiX = (width - PANE_WIDTH) / 2;
         int guiY = (height - PANE_HEIGHT) / 2;
         fontRenderer.drawString(StatCollector.translateToLocal("gui.achievements"),
-                guiX + TILE_SIZE, guiY + TILE_SIZE / 2, Colors.TITLE_COLOR);
+                guiX + TILE_SIZE, guiY + TILE_SIZE / 2, Colors.TITLE);
     }
 
     private void drawPageButtons(int mouseX, int mouseY) {
@@ -376,21 +377,63 @@ public class GuiAchievements extends GuiScreen {
             return;
         }
 
+        /*
+        Unlocked:
+        Name
+        Description
+        Taken
+
+        Can Unlock:
+        Name
+        Description
+        (Progress)
+
+        Locked:
+        Name
+        Requires
+         */
+
         String name = hovered.getName();
-        String description = hovered.getDescription();
+        String description;
+        int descColor = Colors.DESCRIPTION;
+        String progress = null;
+        int progressColor = Colors.TAKEN;
 
         int x = mouseX + HOVER_OFFSET_X;
         int y = mouseY + HOVER_OFFSET_Y;
 
         int textWidth = Math.max(fontRenderer.getStringWidth(name), 120);
-        int textHeight = fontRenderer.splitStringWidth(description, textWidth) + fontRenderer.FONT_HEIGHT;
+        int textHeight = fontRenderer.FONT_HEIGHT;
+
+        AchievementStatus status = hovered.getStatus(mc.thePlayer);
+        if (status == AchievementStatus.LOCKED) {
+            description = StatCollector.translateToLocalFormatted("achievement.requires", hovered.getParentNames());
+            descColor = Colors.REQUIRES;
+        } else {
+            description = hovered.getDescription();
+            if (status == AchievementStatus.UNLOCKED) {
+                progress = StatCollector.translateToLocalFormatted("achievement.taken");
+            } else if (hovered.threshold > 1) {
+                String fraction = AchievementsCore.getProgress(hovered, mc.thePlayer) + "/" + hovered.threshold;
+                progress = StatCollector.translateToLocalFormatted("achievement.progress", fraction);
+                progressColor = Colors.DESCRIPTION;
+            }
+            if (progress != null) {
+                textHeight += fontRenderer.splitStringWidth(progress, textWidth) + TEXT_PADDING;
+            }
+        }
+        textHeight += fontRenderer.splitStringWidth(description, textWidth);
 
         drawGradientRect(x - HOVER_PADDING, y - HOVER_PADDING,
-                x + textWidth + HOVER_PADDING, y + textHeight + HOVER_PADDING + DESC_PADDING,
-                Colors.HOVER_COLOR, Colors.HOVER_COLOR);
-        fontRenderer.drawStringWithShadow(name, x, y, Colors.NAME_COLOUR);
-        fontRenderer.drawSplitString(description, x, y + fontRenderer.FONT_HEIGHT + DESC_PADDING,
-                textWidth, Colors.DESC_COLOUR);
+                x + textWidth + HOVER_PADDING, y + textHeight + HOVER_PADDING + TEXT_PADDING,
+                Colors.HOVER, Colors.HOVER);
+        fontRenderer.drawStringWithShadow(name, x, y, Colors.NAME);
+        fontRenderer.drawSplitString(description, x, y + fontRenderer.FONT_HEIGHT + TEXT_PADDING,
+                textWidth, descColor);
+        if (progress != null) {
+            fontRenderer.drawSplitString(progress, x, y + textHeight - fontRenderer.FONT_HEIGHT + TEXT_PADDING,
+                    textWidth, progressColor);
+        }
     }
 
     private void drawTabHoverText(int mouseX, int mouseY) {
@@ -409,9 +452,9 @@ public class GuiAchievements extends GuiScreen {
 
         drawGradientRect(x - HOVER_PADDING, y - HOVER_PADDING,
                 x + textWidth + HOVER_PADDING, y + textHeight + HOVER_PADDING,
-                Colors.HOVER_COLOR, Colors.HOVER_COLOR);
+                Colors.HOVER, Colors.HOVER);
 
-        fontRenderer.drawStringWithShadow(name, x, y, Colors.NAME_COLOUR);
+        fontRenderer.drawStringWithShadow(name, x, y, Colors.NAME);
     }
 
     private AchievementTab getHoveredTab(int mouseX, int mouseY) {

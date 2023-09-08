@@ -56,7 +56,7 @@ public class CommandAchievement extends CommandBase {
             notifyAdmins(commandSender, "commands.achievement." + op + ".success.all", player.getCommandSenderName());
         } else {
             achievement.recursivelyTrigger(player, unlock);
-            notifyAdmins(commandSender, "commands.achievement." + op + ".success.one", achievement.getName(), player.getCommandSenderName());
+            notifyAdmins(commandSender, "commands.achievement." + op + ".success.one", achievement.getUnlocalizedName(), player.getCommandSenderName());
         }
     }
 
