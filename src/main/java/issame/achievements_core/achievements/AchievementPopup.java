@@ -1,5 +1,7 @@
 package issame.achievements_core.achievements;
 
+import issame.achievements_core.Colors;
+import issame.achievements_core.achievements.style.AchievementStyle;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
@@ -18,7 +20,6 @@ public class AchievementPopup extends Gui
 
     /** Holds the latest height scaled to fit the game window. */
     private int windowHeight;
-    private String achievementGetText;
 
     /** Holds the achievement that will be displayed on the GUI. */
     private Achievement achievement;
@@ -40,7 +41,6 @@ public class AchievementPopup extends Gui
      */
     public void queueTakenAchievement(Achievement achievement)
     {
-        achievementGetText = StatCollector.translateToLocal("achievement.get");
         achievementTime = Minecraft.getSystemTime();
         this.achievement = achievement;
     }
@@ -110,7 +110,9 @@ public class AchievementPopup extends Gui
                 GL11.glDisable(GL11.GL_LIGHTING);
                 drawTexturedModalRect(var5, var6, 96, 202, 160, 32);
 
-                mc.fontRenderer.drawString(achievementGetText, var5 + 30, var6 + 7, -256);
+                AchievementStyle style = achievement.getStyle();
+                mc.fontRenderer.drawString(style.getAchievementGetMessage(),
+                        var5 + 30, var6 + 7, style.getAchievementGetColor());
                 mc.fontRenderer.drawString(achievement.getName(), var5 + 30, var6 + 18, -1);
 
                 RenderHelper.enableGUIStandardItemLighting();

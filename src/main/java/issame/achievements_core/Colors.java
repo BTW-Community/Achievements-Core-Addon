@@ -11,6 +11,9 @@ public class Colors {
     public static final int TAKEN = -7302913;
     public static final int REQUIRES = -9416624;
 
+    public static final int ACHIEVEMENT_GET = -256;
+    public static final int CHALLENGE_GET = 16549628;
+
     public static final int CONNECTION_LOCKED = -16777216;
     public static final int CONNECTION_UNLOCKED = -9408400;
     public static final int CONNECTION_CAN_UNLOCK = -10513578;

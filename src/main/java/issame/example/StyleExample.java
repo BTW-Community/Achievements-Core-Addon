@@ -4,7 +4,7 @@ import issame.achievements_core.achievements.style.AchievementStyle;
 
 public class StyleExample extends AchievementStyle {
     @Override
-    public String getFormatString() {
+    public String getAnnounceFormatString() {
         return "§4";
     }
 

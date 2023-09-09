@@ -6,8 +6,6 @@ import issame.achievements_core.achievements.style.StyleDefault;
 import net.minecraft.src.*;
 
 import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.stream.Collectors;
 
 public class Achievement {
@@ -72,7 +70,7 @@ public class Achievement {
     }
 
     public String getFormatString() {
-        return style.getFormatString();
+        return style.getAnnounceFormatString();
     }
 
     public int getFrameU() {
@@ -147,5 +145,9 @@ public class Achievement {
         }
         int amount = unlock ? threshold : 0;
         AchievementsCore.trigger(this, player, amount, true);
+    }
+
+    public AchievementStyle getStyle() {
+        return style;
     }
 }

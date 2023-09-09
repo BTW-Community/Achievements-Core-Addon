@@ -2,6 +2,9 @@ achievement.announce.default=%1$s has just earned the achievement %2$s
 achievement.announce.challenge=%1$s has completed the challenge %2$s
 achievement.announce.goal=%1$s has reached the goal %2$s
 
+achievement.get.challenge=Challenge Complete!
+achievement.get.goal=Goal Reached!
+
 achievement.progress=Progress: %s
 
 commands.achievement.usage=/achievement (give/take) (achievement_name/*) [player]
