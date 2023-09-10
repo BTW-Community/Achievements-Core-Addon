@@ -108,4 +108,9 @@ public class ExampleEventHandler {
             AchievementsCore.trigger(ExampleAchievements.drinkMilk, player);
         }
     }
+
+    @EventListener(EventType.MILK_TOSSED)
+    public void onMilkTossed(EntityPlayer player) {
+        AchievementsCore.trigger(ExampleAchievements.tossMilk, player);
+    }
 }
