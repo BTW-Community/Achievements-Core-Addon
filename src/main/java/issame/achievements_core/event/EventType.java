@@ -13,4 +13,5 @@ public enum EventType {
     TRADED,
     CURED,
     CONSUMED,
+    CAKE_POWERED
 }

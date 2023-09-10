@@ -108,4 +108,9 @@ public class ExampleEventHandler {
             AchievementsCore.trigger(ExampleAchievements.drinkMilk, player);
         }
     }
+
+    @EventListener(EventType.CAKE_POWERED)
+    public void onCakePowered(EntityPlayer player) {
+        AchievementsCore.trigger(ExampleAchievements.powerCake, player);
+    }
 }
