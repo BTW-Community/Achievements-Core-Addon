@@ -63,6 +63,10 @@ public class EventDispatcher {
         handleEvent(EventType.CONSUMED, player, foodStack);
     }
 
+    public static void onMilkTossed(EntityPlayer player) {
+        handleEvent(EventType.MILK_TOSSED, player);
+    }
+
     public static void onCakePowered(EntityPlayer player) {
         handleEvent(EventType.CAKE_POWERED, player);
     }
