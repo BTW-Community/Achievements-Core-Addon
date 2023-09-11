@@ -16,8 +16,7 @@
     "SlotBrewingStandPotionMixin",
     "SlotCraftingMixin",
     "UrnEntityMixin",
-    "VillagerEntityMixin",
-    "MilkTossMixin"
+    "VillagerEntityMixin"
   ],
   "client": [
   ],

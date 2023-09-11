@@ -2,6 +2,7 @@ package issame.achievements_core.mixin;
 
 import btw.entity.mob.villager.VillagerEntity;
 import issame.achievements_core.event.EventDispatcher;
+import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.EntityVillager;
 import net.minecraft.src.MerchantRecipe;
 import net.minecraft.src.World;
@@ -19,5 +20,15 @@ public abstract class VillagerEntityMixin extends EntityVillager {
     @Inject(method = "useRecipe(Lnet/minecraft/src/MerchantRecipe;)V", at = @At("TAIL"))
     private void useRecipe(MerchantRecipe recipe, CallbackInfo ci) {
         EventDispatcher.onTraded(this.getCustomer(), recipe);
+    }
+
+    @Inject(method = "checkForLooseMilk",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/src/World;playAuxSFX(IIIII)V"))
+    public void onMilkTossed(CallbackInfo ci) {
+        EntityPlayer player = worldObj.getClosestPlayerToEntity(this, 8);
+
+        if (player != null) {
+            EventDispatcher.onMilkTossed(player);
+        }
     }
 }
