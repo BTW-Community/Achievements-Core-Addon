@@ -32,6 +32,7 @@ public class ExampleAchievements extends BTWAddon {
     public static Achievement workstump;
     public static Achievement tossMilk;
 
+    public static Achievement powerCake;
     private static ExampleAchievements instance;
 
     public ExampleAchievements() {
@@ -52,6 +53,8 @@ public class ExampleAchievements extends BTWAddon {
         AchievementTab tabSimple = new AchievementTab("simple").setIcon(BTWBlocks.companionCube);
 
         tossMilk = new Achievement("tossMilk", -8, -8, Item.bucketMilk, tabSimple);
+
+        powerCake = new Achievement("powerCake", -4, -4, Item.cake, tabSimple);
 
         mineBark = new Achievement("mineBark", 0, -1, BTWItems.bark, tabSimple);
         mineStick = new Achievement("mineStick", 0, 1, Item.stick, tabSimple);
@@ -83,6 +86,7 @@ public class ExampleAchievements extends BTWAddon {
                 .setParents(cureVillager).setStyle(new StyleChallenge());
         burn = (new Achievement("burn", 4, 2, Block.fire, tabCustom))
                 .setParents(firePotion);
+
 
         EventDispatcher.register(new ExampleEventHandler());
         AddonHandler.logMessage(this.getName() + " Initialization Complete.");

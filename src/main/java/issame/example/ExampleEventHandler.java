@@ -113,4 +113,9 @@ public class ExampleEventHandler {
     public void onMilkTossed(EntityPlayer player) {
         AchievementsCore.trigger(ExampleAchievements.tossMilk, player);
     }
+
+        @EventListener(EventType.CAKE_POWERED)
+    public void onCakePowered(EntityPlayer player) {
+        AchievementsCore.trigger(ExampleAchievements.powerCake, player);
+    }
 }

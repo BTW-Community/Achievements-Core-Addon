@@ -67,6 +67,10 @@ public class EventDispatcher {
         handleEvent(EventType.MILK_TOSSED, player);
     }
 
+    public static void onCakePowered(EntityPlayer player) {
+        handleEvent(EventType.CAKE_POWERED, player);
+    }
+
     private static void handleEvent(EventType type, Object... args) {
         for (Object listener : listeners) {
             invokeMethods(listener, type, args);

@@ -14,4 +14,5 @@ public enum EventType {
     CURED,
     CONSUMED,
     MILK_TOSSED,
+    CAKE_POWERED
 }

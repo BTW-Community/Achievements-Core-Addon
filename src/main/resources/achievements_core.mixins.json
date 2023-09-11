@@ -16,7 +16,8 @@
     "SlotBrewingStandPotionMixin",
     "SlotCraftingMixin",
     "UrnEntityMixin",
-    "VillagerEntityMixin"
+    "VillagerEntityMixin",
+    "CakeBlockMixin"
   ],
   "client": [
   ],
