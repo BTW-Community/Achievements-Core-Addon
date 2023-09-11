@@ -16,23 +16,14 @@ public abstract class CakeBlockMixin extends BlockCake {
         super(iBlockID);
     }
 
-    @Inject(method="onNeighborBlockChange",
-            at = @At("TAIL"))
+    @Inject(method = "onNeighborBlockChange(Lnet/minecraft/src/World;IIII)V",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/src/World;playAuxSFX(IIIII)V"))
 
     private void onCakePowered(World world, int i, int j, int k, int iNeigborBlockID, CallbackInfo ci){
-        boolean bOn = ( world.getBlockMetadata( i, j, k ) & 8 ) > 0;
-        boolean bReceivingRedstone = world.isBlockGettingPowered( i, j, k );
         EntityPlayer player = world.getClosestPlayer(i,j,k,8);
 
-        if ( canBlockStay( world, i, j, k ))
-        {
-            if (bOn && bReceivingRedstone )
-            {
-                if ( player != null )
-                {
-                    EventDispatcher.onCakePowered(player);
-                }
-            }
+        if ( player != null ) {
+            EventDispatcher.onCakePowered(player);
         }
     }
 }
