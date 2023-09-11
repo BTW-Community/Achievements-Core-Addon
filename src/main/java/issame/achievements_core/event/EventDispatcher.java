@@ -63,6 +63,10 @@ public class EventDispatcher {
         handleEvent(EventType.CONSUMED, player, foodStack);
     }
 
+    public static void onMilkTossed(EntityPlayer player) {
+        handleEvent(EventType.MILK_TOSSED, player);
+    }
+
     private static void handleEvent(EventType type, Object... args) {
         for (Object listener : listeners) {
             invokeMethods(listener, type, args);

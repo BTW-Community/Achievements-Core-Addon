@@ -30,6 +30,7 @@ public class ExampleAchievements extends BTWAddon {
     public static Achievement levelUpFarmer;
     public static Achievement burn;
     public static Achievement workstump;
+    public static Achievement tossMilk;
 
     private static ExampleAchievements instance;
 
@@ -49,6 +50,9 @@ public class ExampleAchievements extends BTWAddon {
         AddonHandler.logMessage(this.getName() + " Version " + this.getVersionString() + " Initializing...");
 
         AchievementTab tabSimple = new AchievementTab("simple").setIcon(BTWBlocks.companionCube);
+
+        tossMilk = new Achievement("tossMilk", -8, -8, Item.bucketMilk, tabSimple);
+
         mineBark = new Achievement("mineBark", 0, -1, BTWItems.bark, tabSimple);
         mineStick = new Achievement("mineStick", 0, 1, Item.stick, tabSimple);
         chiselWood = new Achievement("chiselWood", 2, 0, BTWItems.pointyStick, tabSimple)
