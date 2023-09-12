@@ -71,6 +71,10 @@ public class EventDispatcher {
         handleEvent(EventType.CAKE_POWERED, player);
     }
 
+    public static void onReturnedToGhast(EntityPlayer player) {
+        handleEvent(EventType.GHAST_RETURNED, player);
+    }
+
     private static void handleEvent(EventType type, Object... args) {
         for (Object listener : listeners) {
             invokeMethods(listener, type, args);
