@@ -33,6 +33,7 @@ public class ExampleAchievements extends BTWAddon {
     public static Achievement tossMilk;
 
     public static Achievement powerCake;
+    public static Achievement returnGhast;
     private static ExampleAchievements instance;
 
     public ExampleAchievements() {
@@ -53,6 +54,8 @@ public class ExampleAchievements extends BTWAddon {
         AchievementTab tabSimple = new AchievementTab("simple").setIcon(BTWBlocks.companionCube);
 
         tossMilk = new Achievement("tossMilk", -8, -8, Item.bucketMilk, tabSimple);
+
+        returnGhast = new Achievement("returnGhast", -6, -6, Item.fireballCharge, tabSimple);
 
         powerCake = new Achievement("powerCake", -4, -4, Item.cake, tabSimple);
 

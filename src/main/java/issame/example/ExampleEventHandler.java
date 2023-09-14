@@ -114,8 +114,13 @@ public class ExampleEventHandler {
         AchievementsCore.trigger(ExampleAchievements.tossMilk, player);
     }
 
-        @EventListener(EventType.CAKE_POWERED)
+    @EventListener(EventType.CAKE_POWERED)
     public void onCakePowered(EntityPlayer player) {
         AchievementsCore.trigger(ExampleAchievements.powerCake, player);
+    }
+
+    @EventListener(EventType.GHAST_RETURNED)
+    public void onReturnedToGhast(EntityPlayer player) {
+        AchievementsCore.trigger(ExampleAchievements.returnGhast, player);
     }
 }
