@@ -18,7 +18,10 @@
     "UrnEntityMixin",
     "VillagerEntityMixin",
     "CakeBlockMixin",
-    "EntityGhastMixin"
+    "EntityGhastMixin",
+    "ItemArmorMixin",
+    "ContainerMixin",
+    "PlayerContainerMixin"
   ],
   "client": [
   ],

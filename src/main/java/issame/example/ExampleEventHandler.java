@@ -123,4 +123,32 @@ public class ExampleEventHandler {
     public void onReturnedToGhast(EntityPlayer player) {
         AchievementsCore.trigger(ExampleAchievements.returnGhast, player);
     }
+
+    @EventListener(EventType.ARMOR_EQUIPPED)
+    public void onArmorEquipped(EntityPlayer player, ItemStack helmetStack, ItemStack chestStack, ItemStack legsStack, ItemStack bootsStack) {
+
+        if ((helmetStack != null && helmetStack.itemID == Item.helmetIron.itemID) &&
+                (chestStack != null && chestStack.itemID == Item.plateIron.itemID) &&
+                (legsStack != null && legsStack.itemID == Item.legsIron.itemID) &&
+                (bootsStack != null && bootsStack.itemID == Item.bootsIron.itemID))
+        {
+            AchievementsCore.trigger(ExampleAchievements.equipIronArmor, player);
+        }
+
+        if ((helmetStack != null && helmetStack.itemID == Item.helmetGold.itemID) &&
+                (chestStack != null && chestStack.itemID == Item.plateGold.itemID) &&
+                (legsStack != null && legsStack.itemID == Item.legsGold.itemID) &&
+                (bootsStack != null && bootsStack.itemID == Item.bootsGold.itemID))
+        {
+            AchievementsCore.trigger(ExampleAchievements.equipGoldArmor, player);
+        }
+
+        if ((helmetStack != null && helmetStack.itemID == Item.helmetDiamond.itemID) &&
+                (chestStack != null && chestStack.itemID == Item.plateDiamond.itemID) &&
+                (legsStack != null && legsStack.itemID == Item.legsDiamond.itemID) &&
+                (bootsStack != null && bootsStack.itemID == Item.bootsDiamond.itemID))
+        {
+            AchievementsCore.trigger(ExampleAchievements.equipDiamondArmor, player);
+        }
+    }
 }

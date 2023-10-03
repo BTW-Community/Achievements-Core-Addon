@@ -31,9 +31,12 @@ public class ExampleAchievements extends BTWAddon {
     public static Achievement burn;
     public static Achievement workstump;
     public static Achievement tossMilk;
-
     public static Achievement powerCake;
     public static Achievement returnGhast;
+    public static Achievement equipIronArmor;
+    public static Achievement equipGoldArmor;
+    public static Achievement equipDiamondArmor;
+
     private static ExampleAchievements instance;
 
     public ExampleAchievements() {
@@ -54,6 +57,10 @@ public class ExampleAchievements extends BTWAddon {
         AchievementTab tabSimple = new AchievementTab("simple").setIcon(BTWBlocks.companionCube);
 
         tossMilk = new Achievement("tossMilk", -8, -8, Item.bucketMilk, tabSimple);
+
+        equipIronArmor = new Achievement("equipIronArmor", -8, -10, Item.helmetIron, tabSimple);
+        equipGoldArmor = new Achievement("equipGoldArmor", -8, -12, Item.helmetGold, tabSimple);
+        equipDiamondArmor = new Achievement("equipDiamondArmor", -8, -14, Item.helmetDiamond, tabSimple);
 
         returnGhast = new Achievement("returnGhast", -6, -6, Item.fireballCharge, tabSimple);
 
