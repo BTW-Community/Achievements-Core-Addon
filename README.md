@@ -12,30 +12,41 @@ An example addon has been created to help you create your own achievements: [Exa
   - BREWED  (taking an item out of a brewing stand)
   - PICKUP  (picking up an item)
   - KILLED  (killing an entity)
-  - POTAL  (travelling between dimensions)
+  - PORTAL  (travelling between dimensions)
   - ENTITY_INTERACT  (right-clicking an entity)
   - CONVERTED_BLOCK  (converting a block, i.e. creating a work stump)
   - DEATH  (getting killed)
   - TRADED  (trading with a villager)
+  - CURED  (curing a zombie villager)
+  - CONSUMED  (eating something/using a progressive crafting item)
+  - MILK_TOSSED  (tossing milk)
+  - CAKE_POWERED (powering a cake)
+  - GHAST_RETURNED (killing a ghast with their own fire charge)
+  - ARMOR_EQUIPPED (equipping armor items)
 </details>
 
 If you would like to see more events, please create an Issue on GitHub or feel free to contribute one yourself.
 
 ## Compatibility
 <details>
-  <summary>Modified classes</summary>
+  <summary>Mixins</summary>
   
-  - Achievement (Client|Server)
-  - AchievementList (Client|Server)
-  - EntityItem (Client|Server)
-  - EntityPlayer (Client|Server)
-  - EntityPlayerMP (Client|Server)
-  - EntityPlayerSP (Client)
-  - FCBlockCampfire (Client|Server)
-  - FCBlockFurnaceBrick (Client|Server)
-  - FCEntityVillager (Client|Server)
-  - GuiAchievements (Client)
-  - ItemInWorldManager (Client|Server)
-  - SlotBrewingStandPotion (Client|Server)
-  - SlotCrafting (Client|Server)
+  - CakeBlock
+  - CampfireBlock
+  - Container
+  - EntityGhast
+  - EntityItem
+  - EntityPlayer
+  - EntityPlayerMP
+  - GuiAchievement
+  - ItemArmor
+  - ItemInWorldManager
+  - ItemStack
+  - Minecraft
+  - OvenBlock
+  - PlayerContainer
+  - SlotBrewingStandPotion
+  - SlotCraftingMixin
+  - UrnEntity
+  - VillagerEntity
 </details>

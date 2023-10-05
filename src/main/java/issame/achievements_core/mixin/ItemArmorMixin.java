@@ -14,12 +14,20 @@ public abstract class ItemArmorMixin extends Item {
     }
 
     @Inject(method = "onItemRightClick",
-            at = @At(value = "TAIL"))
+            at = @At(value = "HEAD"))
     private void onArmorEquipped(ItemStack itemstack, World world, EntityPlayer player, CallbackInfoReturnable<ItemStack> cir){
-        EventDispatcher.onArmorEquipped(player,
-                player.inventory.armorInventory[3],
-                player.inventory.armorInventory[2],
-                player.inventory.armorInventory[1],
-                player.inventory.armorInventory[0]);
+        int slot = EntityLiving.getArmorPosition(itemstack) - 1;
+        ItemStack currentArmorInSlot = player.getCurrentArmor(slot);
+
+        if (currentArmorInSlot == null)
+        {
+            //System.out.println("ARMOR ITEM RIGHT-CLICKED: CHECKING ACHIEVEMENTS");
+
+            EventDispatcher.onArmorEquipped(player,
+                    player.inventory.armorInventory[3],
+                    player.inventory.armorInventory[2],
+                    player.inventory.armorInventory[1],
+                    player.inventory.armorInventory[0]);
+        }
     }
 }
