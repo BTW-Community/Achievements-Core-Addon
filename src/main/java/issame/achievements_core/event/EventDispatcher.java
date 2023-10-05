@@ -75,6 +75,10 @@ public class EventDispatcher {
         handleEvent(EventType.GHAST_RETURNED, player);
     }
 
+    public static void onArmorEquipped(EntityPlayer player, ItemStack helmetStack, ItemStack chestStack, ItemStack legsStack, ItemStack bootsStack) {
+        handleEvent(EventType.ARMOR_EQUIPPED, player, helmetStack, chestStack, legsStack, bootsStack);
+    }
+
     private static void handleEvent(EventType type, Object... args) {
         for (Object listener : listeners) {
             invokeMethods(listener, type, args);
@@ -102,4 +106,6 @@ public class EventDispatcher {
         EventListener annotation = method.getAnnotation(EventListener.class);
         return annotation != null && annotation.value() == type;
     }
+
+
 }
